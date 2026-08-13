@@ -1,9 +1,11 @@
 ---
 title: "Clinical Programming in R"
 subtitle: "From Raw Data to Evidence"
+author: "Edoardo Mancini"
 format:
   revealjs:
     theme: simple
+    css: custom.css
     slide-number: true
     code-line-numbers: false
     highlight-style: github
@@ -143,34 +145,11 @@ statistical analysis.
 
 The final output that goes to regulators and publications.
 
-:::::: columns
-::: {.column width="33%"}
-**Tables**
-
--   Demographics summary
--   Adverse events by system organ class
--   Lab shifts
-:::
-
-::: {.column width="33%"}
-**Listings**
-
--   Individual patient data
--   Narratives for serious AEs
-:::
-
-::: {.column width="33%"}
-**Graphs**
-
--   Biomarker over time
--   Kaplan–Meier survival
--   Forest plots
-:::
-::::::
-
-::: fragment
-Common R packages: `{ggplot2}`, `{gtsummary}`, `{rtables}`, `{Tplyr}`
-:::
+|              | Contents                                          | Common R packages              |
+|--------------|---------------------------------------------------|-------------------------------|
+| **Tables**   | Demographics, AE counts by SOC, lab shifts        | `{gtsummary}`, `{rtables}`    |
+| **Listings** | Individual patient data, AE narratives            | `{flextable}`, `{gt}`         |
+| **Graphs**   | Biomarkers over time, KM curves, forest plots     | `{ggplot2}`                   |
 
 ------------------------------------------------------------------------
 
@@ -270,21 +249,34 @@ one measurement for one subject at one timepoint.
 
 Key columns you will use today:
 
-| Column      | Contents                              | Example                      |
-|-------------|---------------------------------------|------------------------------|
+| Column      | Contents                              | Example                         |
+|-------------|---------------------------------------|---------------------------------|
 | `VSTESTCD`  | Short code for the test               | `"SYSBP"`, `"DIABP"`, `"PULSE"` |
-| `VSSTRESN`  | Numeric result                        | `118`, `76`                  |
-| `VSSTRESU`  | Unit of measurement                   | `"mmHg"`                     |
-| `VSSTAT`    | Completion status                     | `"NOT DONE"` if skipped      |
-| `VISIT`     | Visit name                            | `"BASELINE"`, `"WEEK 2"`     |
-| `VSTPTNUM`  | Timepoint number within a visit       | identifies replicates         |
+| `VSSTRESN`  | Numeric result                        | `118`, `76`                     |
+| `VSSTRESU`  | Unit of measurement                   | `"mmHg"`                        |
+| `VSSTAT`    | Completion status                     | `"NOT DONE"` if skipped         |
+| `VISIT`     | Visit name                            | `"BASELINE"`, `"WEEK 2"`        |
+| `VSTPTNUM`  | Timepoint number within a visit       | identifies replicates           |
+
+------------------------------------------------------------------------
+
+## Watch out: `VSSTAT == "NOT DONE"`
 
 ::: callout-warning
 When `VSSTAT == "NOT DONE"`, the measurement was planned but **not
-collected** — the numeric result is blank. Always exclude these records
-before computing derived parameters like MAP, otherwise the calculation
-will produce `NA`.
+collected** — `VSSTRESN` is blank.
+
+Always exclude these records before computing derived parameters like MAP,
+otherwise the calculation will produce `NA`.
 :::
+
+```{r}
+# Correct: exclude NOT DONE records
+filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
+```
+
+You will apply this filter in **Exercise 2a** when calling
+`derive_param_map()`.
 
 ------------------------------------------------------------------------
 
@@ -318,10 +310,10 @@ Today you will use:
 
 ------------------------------------------------------------------------
 
-## Admiral: `exprs()` and `by_vars`
+## `{admiral}`: `exprs()` and `by_vars`
 
 `exprs()` captures column names as **unevaluated R expressions** —
-admiral's equivalent of dplyr's `vars()`.
+`{admiral}`'s equivalent of dplyr's `vars()`.
 
 ```{r}
 # Think of them as equivalent ideas:
@@ -344,7 +336,7 @@ exprs(STUDYID, USUBJID, !!!adsl_vars,               VISIT)
 ```
 
 ::: callout-tip
-You will see `exprs()` and `by_vars` in every admiral function today.
+You will see `exprs()` and `by_vars` in every `{admiral}` function today.
 The pattern is always the same — list the columns that make a row
 unique in the context of that derivation.
 :::
@@ -407,7 +399,7 @@ adsl <- adsl %>%
 ```
 
 ::: callout-tip
-`exprs()` is admiral's way of passing a list of column names as
+`exprs()` is `{admiral}`'s way of passing a list of column names as
 expressions.
 :::
 
@@ -426,7 +418,7 @@ from two collected parameters (SBP and DBP).
 
 $$\text{MAP} = \frac{2 \times \text{DBP} + \text{SBP}}{3}$$
 
-Admiral provides a dedicated function for this common derivation:
+`{admiral}` provides a dedicated function for this common derivation:
 
 ```{r}
 advs <- advs %>%
@@ -441,16 +433,14 @@ advs <- advs %>%
 
 ::: callout-note
 `by_vars` defines the variables that uniquely identify one timepoint for
-one subject. Admiral uses these to find the SBP and DBP rows that
+one subject. `{admiral}` uses these to find the SBP and DBP rows that
 belong together before computing MAP. The new MAP row inherits these
 same `by_vars` values.
 :::
 
 ::: callout-warning
-`filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)` removes records where
-the vital sign was **not collected**. Without this, "NOT DONE" rows
-(which have no numeric result) would be passed to the MAP formula and
-produce `NA`. Most normal records have `VSSTAT` as `NA` — the `| is.na(VSSTAT)` keeps them.
+Without `filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)`, uncollected
+measurements are passed to the formula and produce `NA`.
 :::
 
 ------------------------------------------------------------------------
@@ -479,7 +469,7 @@ advs %>% filter(PARAMCD == "MAP") %>% nrow()
 
 ## Custom Parameters: `derive_param_computed()`
 
-For **any** formula not built into admiral, use
+For **any** formula not built into `{admiral}`, use
 `derive_param_computed()`.
 
 Source parameter values are referenced as `AVAL.<PARAMCD>`:
@@ -499,7 +489,7 @@ advs <- advs %>%
 ```
 
 ::: callout-tip
-`parameters` tells admiral which PARAMCD rows to "pivot wide" so you
+`parameters` tells `{admiral}` which PARAMCD rows to "pivot wide" so you
 can reference `AVAL.SYSBP` and `AVAL.DIABP` in the formula. One new
 row is created for each subject × timepoint where both are present.
 :::
@@ -701,7 +691,7 @@ Key things to notice:
 :::
 
 ::: {.column width="50%"}
-**admiral patterns you used:**
+**`{admiral}` patterns you used:**
 
 -   `mutate()` + `case_when()` — categorise any continuous variable
 -   `derive_var_merged_exist_flag()` — cross-dataset Y/N flags
@@ -716,7 +706,7 @@ Key things to notice:
 
 **Pharmaverse** — the R ecosystem for clinical reporting:
 
--   [`admiral`](https://pharmaverse.github.io/admiral/) — ADaM datasets
+-   [`{admiral}`](https://pharmaverse.github.io/admiral/) — ADaM datasets
 -   [`pharmaversesdtm`](https://pharmaverse.github.io/pharmaversesdtm/)
     — example SDTM data
 -   [`gtsummary`](https://www.danieldsjoberg.com/gtsummary/) — summary
