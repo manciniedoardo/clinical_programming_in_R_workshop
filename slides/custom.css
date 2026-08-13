@@ -1,0 +1,4 @@
+/* Reduce the base font size for the whole deck so content fits comfortably */
+.reveal {
+  font-size: 27px;
+}
