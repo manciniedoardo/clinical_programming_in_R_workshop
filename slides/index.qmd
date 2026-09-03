@@ -1,6 +1,6 @@
 ---
 title: "Clinical Programming in R"
-subtitle: "From Raw Data to Evidence"
+subtitle: "Workshop for Ukraine"
 author: "Edoardo Mancini"
 format:
   revealjs:
@@ -9,7 +9,7 @@ format:
     slide-number: true
     code-line-numbers: false
     highlight-style: github
-    footer: "Clinical Programming in R — Workshop"
+    footer: "Clinical Programming in R — Workshop for Ukraine - Edoardo Mancini"
 execute:
   echo: true
   eval: false
@@ -18,83 +18,94 @@ editor:
     wrap: 72
 ---
 
-## Welcome {.center}
+## Welcome!
 
-**Who is this workshop for?**
-
--   R users with no clinical trial experience required
--   Curious about how medicines get approved?
-
+::: fragment
 **What we'll do today:**
 
-1.  Understand the clinical trial data pipeline
+1.  Understand the clinical trial data flow
 2.  Derive analysis variables on real-format study data
-3.  Build publication-quality visualisations
-
-::: callout-note
-All code and data are provided — focus on the concepts and the
-`{admiral}` functions.
+3.  Build a publication-quality visualisation
 :::
 
+::: fragment
+::: {.callout-note title="Workshop materials"}
+For slides, template and data, please see the workshop GitHub repo [here](https://github.com/manciniedoardo/clinical_programming_in_R_workshop).
+:::
+:::
+
+::: fragment
+Please install the following packages in R while we go through the background section:
+```{r, eval=FALSE}
+install.packages("pharmaversesdtm") # test data
+install.packages("admiral") # tools for ADaM programming
+install.packages("ggplot2") # plots
+```
+:::
 ------------------------------------------------------------------------
 
 ## Agenda
 
-| Time | Topic                                   |
-|------|-----------------------------------------|
-| 0:00 | The clinical data journey               |
-| 0:20 | ADSL and ADVS datasets                  |
-| 0:35 | **Exercise 1** — ADSL derivations       |
-| 1:00 | **Exercise 2** — ADVS: deriving MAP     |
-| 1:30 | **Exercise 3** — Plotting MAP over time |
-| 1:55 | Wrap-up and next steps                  |
-
-------------------------------------------------------------------------
-
-## The Clinical Trial Data Journey
-
-```{mermaid}
-flowchart LR
-  A[🏥 Raw Data] --> B[📋 SDTM]
-  B --> C[📊 ADaM]
-  C --> D[📈 TLGs]
-```
-
-Each step **standardises and enriches** the data before analysis.
+We have a lot to cover!
 
 ::: fragment
-| Layer    | What it contains                                   |
-|----------|----------------------------------------------------|
-| **Raw**  | Data as collected (labs, eDiary, EDC forms…)       |
-| **SDTM** | One domain per data type, standard variable names  |
-| **ADaM** | Analysis-ready: derived variables, linked datasets |
-| **TLGs** | Tables, Listings, Graphs submitted to regulators   |
+| Time | Topic                                         |
+|------|-----------------------------------------------|
+| 0:00 | Background: The clinical trial data journey   |
+| 0:20 | Focus for today: ADSL and ADVS datasets       |
+| 0:35 | **Exercise 1** — ADSL derivations             |
+| 1:00 | **Exercise 2** — ADVS: deriving MAP           |
+| 1:30 | **Exercise 3** — Plotting MAP over time       |
+| 1:55 | Wrap-up and next steps                        |
 :::
 
 ------------------------------------------------------------------------
 
-## Raw Data — Where it all begins
+## Background: The Clinical Trial Data Journey
 
+::: fragment
+The journey of a data point from a patient to a regulator's report is long and complex! it can loosely be categorised into four stages:
+:::
+
+::: fragment
+![](images/clinical_trial_data_flow.png){width="90%" fig-align="center"}
+:::
+
+::: fragment
+[*Let's go through these stages one by one...*]({style="color:blue;"})
+:::
+
+------------------------------------------------------------------------
+
+## 1. Raw Data — Where it all begins!
+
+::: fragment
 Data enters a clinical trial from many sources:
 
--   **eDiary / CRF**: patient-reported outcomes, investigator forms
+-   **eDiary / CRF (case report form)**: clinician- or patient-reported data (e.g. adverse events, concomitant medications, etc)
 -   **Central labs**: blood tests, urinalysis
 -   **Wearables / devices**: ECG, vital signs monitors
+:::
 
 ::: fragment
-Raw data is messy:
-
+:::{.callout-caution title="Raw data is messy!"}
 -   Different units, different date formats
 -   Inconsistent coding (a "heart attack" might be "MI", "myocardial
-    infarction", or "cardiac event")
+infarction", or "cardiac event")
 -   Missing or partial dates
+:::
+:::
+
+::: fragment
+[*So we process raw data into...*]({style="color:blue;"})
 :::
 
 ------------------------------------------------------------------------
 
-## SDTM — Standardising the data
+## 2. SDTM — Standardising the data
 
-**SDTM** (Study Data Tabulation Model) groups data into **domains**:
+::: fragment
+**SDTM** (Study Data Tabulation Model) groups similar, related data into **domains**. Here are some below.
 
 | Domain | Contents               |
 |--------|------------------------|
@@ -104,59 +115,334 @@ Raw data is messy:
 | `AE`   | Adverse Events         |
 | `EX`   | Exposure (drug dosing) |
 
-::: fragment
-Key features:
-
--   One row per observation
--   Standard variable names across all studies
--   **CDISC standard** — required by FDA / EMA for submissions
+E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset.
 :::
+
+::: fragment
+:::{.callout-tip title="Key features of SDTM"}
+- One row per observation, e.g.:
+- In `DM`: one row per patient
+- In `LB`: one row per patient per lab test per visit;
+- In `AE`: one row per patient per adverse event
+- Standard variable names across all studies
+- Standardised units
+- Data is coded where appropriate (e.g. "Heart attack", "Cardiac arrest" → "Myocardial Infarction").
+:::
+:::
+
+::: fragment
+[*Let's see some examples...*]({style="color:blue;"})
+:::
+
 
 ------------------------------------------------------------------------
 
-## ADaM — Analysis-ready datasets
-
-**ADaM** (Analysis Data Model) transforms SDTM into datasets ready for
-statistical analysis.
+## SDTM in action: DM & EX
 
 ::::: columns
-::: {.column width="50%"}
-**What gets added:**
+::: {.column width="40%"}
+::: fragment
+**DM (demographics)** — one row per patient
 
--   Analysis values (`AVAL`, `BASE`, `CHG`)
--   Derived parameters (e.g. MAP from SBP + DBP)
--   Study day (`ADY`), visit labels (`AVISIT`)
--   Population flags (`SAFFL`, `EFFFL`)
--   Cross-dataset joins (AEs linked to baseline labs)
+```{r}
+#| eval: true
+#| echo: false
+#| class-output: "small-table"
+library(pharmaversesdtm)
+library(dplyr)
+library(knitr)
+
+vars <- c("USUBJID", "AGE", "RACE", "COUNTRY", "ARM")
+labs <- sapply(dm[vars], attr, "label")
+dm %>%
+  select(all_of(vars)) %>%
+  head(10) %>%
+  kable(format = "html",
+        col.names = paste0(vars, "<br><em>", labs, "</em>"),
+        escape = FALSE,
+        table.attr = 'style="font-size:0.65em"')
+```
+:::
 :::
 
-::: {.column width="50%"}
-**Two key structures:**
+::: {.column width="6%"}
+:::
 
--   **ADSL** — one row per **subject**
--   **BDS** — one row per **subject × parameter × visit** (e.g. ADVS,
-    ADLB, ADAE)
+::: {.column width="54%"}
+::: fragment
+**EX (Drug exposure)** — one row per patient per dosing
+
+```{r}
+#| eval: true
+#| echo: false
+#| class-output: "small-table"
+vars <- c("USUBJID", "EXTRT", "VISIT", "EXSTDTC", "EXDOSE")
+labs <- sapply(ex[vars], attr, "label")
+ex %>%
+select(all_of(vars)) %>%
+head(10) %>%
+kable(format = "html",
+col.names = paste0(vars, "<br><em>", labs, "</em>"),
+escape = FALSE,
+table.attr = 'style="font-size:0.65em"')
+```
+:::
 :::
 :::::
 
 ------------------------------------------------------------------------
 
-## TLGs — Making it meaningful
+## SDTM in action: AE & VS
 
-The final output that goes to regulators and publications.
+::::: columns
+::: {.column width="46%"}
+::: fragment
+**AE (Adverse events)** — one row per patient per adverse event
 
-|              | Contents                                          | Common R packages              |
+```{r}
+#| eval: true
+#| echo: false
+vars <- c("USUBJID", "AEDECOD", "AESER", "AESEV", "AESTDTC")
+labs <- sapply(ae[vars], attr, "label") %>% 
+  stringr::str_replace("/", "/ ")
+
+ae %>%
+  select(all_of(vars)) %>%
+  head(9) %>%
+  kable(format = "html",
+        col.names = paste0(vars, "<br><em>", labs, "</em>"),
+        escape = FALSE,
+        table.attr = 'style="font-size:0.65em"')
+```
+:::
+:::
+
+::: {.column width="4%"}
+:::
+
+::: {.column width="50%"}
+::: fragment
+**VS (Vital signs)** — one row per patient per vital sign measurement
+
+```{r}
+#| eval: true
+#| echo: false
+vs_vars <- c("USUBJID", "VSTESTCD", "VSORRES", "VSORRESU", "VISIT")
+vs_labs <- sapply(vs[vs_vars], attr, "label")
+vs %>%
+  mutate(VISIT = stringr::str_replace(VISIT, "SCREENING", "SCREEN")) %>% 
+  filter(
+  (VSTESTCD %in% c("HEIGHT")) | (VSTESTCD %in% c("PULSE") & VSPOS %in% c("STANDING")) & VSELTM %in% c("PT1M"),
+  !stringr::str_detect(VISIT, "AMBUL")
+  ) %>%
+select(all_of(vs_vars)) %>%
+head(16) %>%
+kable(format = "html",
+col.names = paste0(vs_vars, "<br><em>", vs_labs, "</em>"),
+escape = FALSE,
+table.attr = 'style="font-size:0.65em"')
+```
+:::
+:::
+:::::
+
+::: fragment
+[*But what if we want to combine data from different domains or compute new variables for analysis?*]({style="color:blue;"})
+:::
+
+------------------------------------------------------------------------
+
+## 3. ADaM — Analysis-ready datasets
+
+::: fragment
+**ADaM** (Analysis Data Model) transforms and combines SDTM into datasets ready for
+statistical analysis.
+
+The step from SDTM to ADaM can involve complex programming, as we are trying to __set up the data to answer the questions about safety and efficacy that the clinical trial is posing__, and this often involves combining domains.
+:::
+
+::: fragment
+:::{.callout-note title="A typical example"}
+We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in ADAE (Adverse Event Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph.
+:::
+:::
+
+::: fragment
+:::{.callout-tip title="Key features of ADaM"}
+- Analysis values and computation of change from baseline
+- Derived rows (e.g. deriving mean arterial pressure from systolic and diastolic BP)
+- Population flags (e.g. Safety population `SAFFL`, flagging all patients who have received a dose of study drug).
+:::
+:::
+
+::: fragment
+Today, we'll start directly from the ADaM-building stage. For the first part of our exercises, we will be working with two ADaM datasets - `ADSL` (Subject level ADaM, derived from `DM`) and `ADVS` (Vital Signs ADaM, derived from `VS`).
+:::
+
+::: fragment
+[*But first, let's see what some typical ADAMs (ADSL, ADVS and ADAE) might look like...*]({style="color:blue;"})
+:::
+
+------------------------------------------------------------------------
+
+## ADaM in action: ADSL
+
+::: fragment
+**ADSL (Subject-level analysis dataset)** — one row per subject (derived from `DM`, `DS`, `AE`, etc.)
+```{r}
+#| eval: true
+#| echo: false
+library(pharmaverseadam)
+
+vars <- c("USUBJID", "AGE", "SEX", "RACE", "TRT01A", "AGEGR1", "SAFFL", "RANDDT", "TRTSDTM", "TRTEDTM", "DTHDT")
+labs <- sapply(adsl[vars], attr, "label")
+adsl %>%
+  select(all_of(vars)) %>%
+  head(10) %>%
+  kable(format = "html",
+        col.names = paste0(vars, "<br><em>", labs, "</em>"),
+        escape = FALSE,
+        table.attr = 'style="font-size:0.65em"')
+```
+:::
+------------------------------------------------------------------------
+
+## ADaM in action: ADAE
+
+::: fragment
+**ADAE (Adverse Events Analysis Dataset) ** — one row per patient per adverse event (derived from `AE` + `ADSL` + `EX`)
+
+```{r}
+#| eval: true
+#| echo: false
+
+set.seed(1)
+adae %>%
+  select(USUBJID, TRT01A, TRTSDTM, AEDECOD, AESTDTC, AESEV, AESER, ASTDY, TRTEMFL, LDOSEDTM) %>%
+  mutate(LDOSEDTM = LDOSEDTM - floor(5*runif(1))) %>%
+  head(5) %>%
+  kable(format = "html",
+        col.names = c(
+          "USUBJID<br><em>Unique Subject Identifier</em>",
+          "TRT01A<br><em>Actual Treatment for Period 01</em>",
+          "TRTSDTM<br><em>Treatment Start Datetime</em>",
+          "AEDECOD<br><em>Dictionary-Derived Term</em>",
+          "AESTDTC<br><em>Start Date/Time of Adverse Event</em>",
+          "AESER<br><em>Serious Event</em>",
+          "AESEV<br><em>Severity/ Intensity</em>",
+          "ASTDY<br><em>Analysis Start Relative Day</em>",
+          "TRTEMFL<br><em>Treatment Emergent Flag</em>",
+          "LDOSEDTM<br><em>(Dummy) Last Dose Datetime</em>"
+        ),
+        escape = FALSE,
+        table.attr = 'style="font-size:0.65em"')
+```
+:::
+
+------------------------------------------------------------------------
+
+## ADaM in action: ADVS
+
+::: fragment
+**ADVS (Vital Signs Analysis Dataset)** — one row per patient per parameter per visit (derived from `VS` and `ADSL`)
+
+```{r}
+#| eval: true
+#| echo: false
+
+library(admiral)
+vars <- c("USUBJID", "TRT01A", "PARAMCD", "PARAM", "DTYPE", "AVISIT", "AVISITN", "ABLFL", "AVAL", "BASE", "CHG")
+labs <- sapply(advs[vars], attr, "label")
+advs %>%
+  mutate(VISIT = stringr::str_replace(VISIT, "SCREENING", "SCREEN")) %>% 
+  filter(
+  !is.na(AVISIT),
+  (VSTESTCD %in% c("SYSBP", "DIABP") & VSPOS %in% c("STANDING")) & VSELTM %in% c("PT1M"),
+  !stringr::str_detect(VISIT, "AMBUL"),
+  AVISITN %in% c(0,2,4)
+  ) %>% 
+  admiral::derive_param_computed(
+    by_vars = exprs(USUBJID, TRT01A, ABLFL, AVISIT, AVISITN),
+    parameters = c("SYSBP", "DIABP"),
+    set_values_to = exprs(
+      AVAL    = (AVAL.SYSBP + AVAL.DIABP) / 2,
+      PARAMCD = "MAP",
+      PARAM = "Mean Arterial Pressure",
+      DTYPE = "DERIVED"
+    )
+  ) %>% 
+  select(-BASE, -CHG) %>% 
+  admiral::derive_var_base(by_vars = exprs(USUBJID, PARAMCD)) %>% 
+  admiral::derive_var_chg() %>% 
+  select(all_of(vars)) %>%
+  arrange(USUBJID, AVISITN) %>%
+  head(9) %>%
+  arrange(AVISITN) -> df
+
+is_map <- df$PARAMCD == "MAP"
+df <- df %>% mutate(across(everything(), as.character))
+df[is_map, ] <- df[is_map, ] %>%
+  mutate(across(everything(),
+    ~paste0('<span style="background:#fff3cd;display:block;padding:1px 3px">', .x, '</span>')))
+
+df %>%
+  kable(format = "html",
+        col.names = paste0(vars, "<br><em>", labs, "</em>"),
+        escape = FALSE,
+        table.attr = 'style="font-size:0.65em" id="advs-showcase"')
+```
+:::
+
+::: fragment
+[*And with these ADaMs, we can finally produce...*]({style="color:blue;"})
+:::
+
+------------------------------------------------------------------------
+
+## 4. TLGs — Answering questions!
+
+:::fragment
+The final TLGs (tables, listings and graphs) that answer questions about the trial's safety and efficacy. These are provided to regulators and used in publications.
+:::
+
+::: fragment
+:::{.callout-tip title="There are lots of packages to choose from!"}
+Many different R packages can be used to produce TLGs. Here are some TLG examples and the packages you could use to make them.
+
+|              | Example Contents                                  | Common R packages             |
 |--------------|---------------------------------------------------|-------------------------------|
-| **Tables**   | Demographics, AE counts by SOC, lab shifts        | `{gtsummary}`, `{rtables}`    |
+| **Tables**   | Demographics, AE counts, lab shifts               | `{gtsummary}`, `{rtables}`    |
 | **Listings** | Individual patient data, AE narratives            | `{flextable}`, `{gt}`         |
 | **Graphs**   | Biomarkers over time, KM curves, forest plots     | `{ggplot2}`                   |
+:::
+:::
+
+::: fragment
+In today's workshop's last exercise, we will focus on creating a vital signs plot.
+:::
+
+::: fragment
+[*But first, let's see a typical table and plot for a clinical trial...*]({style="color:blue;"})
+:::
+
+------------------------------------------------------------------------
+
+## TLG Example: AE Table
+
+![](images/example_ae_table.png){width="90%" fig-align="center"}
+
+------------------------------------------------------------------------
+
+## TLG Example: Pharmacokinetic Plot
+
+![](images/example_pk_plot.png){width="90%" fig-align="center"}
 
 ------------------------------------------------------------------------
 
 ## Our Study Data
 
 We are using the **CDISC Pilot Study** — a realistic synthetic dataset
-maintained by the pharmaverse.
+maintained by the [pharmaverse](https://pharmaverse.org/).
 
 ```{r}
 library(pharmaversesdtm)
@@ -170,7 +456,7 @@ glimpse(dm)
 
 -   `adsl.RDS` — Subject-level dataset (one row per patient)
 -   `advs.RDS` — Vital signs dataset (one row per subject × parameter ×
-    visit)
+visit)
 :::
 
 ------------------------------------------------------------------------
@@ -303,7 +589,7 @@ Today you will use:
 
 -   `mutate()` + `case_when()` — categorise continuous variables
 -   `derive_var_merged_exist_flag()` — create Y/N flags from another
-    dataset
+dataset
 -   `derive_param_map()` — derive Mean Arterial Pressure
 -   `derive_param_computed()` — derive any custom computed parameter
 :::
@@ -453,7 +739,7 @@ Use the hint in the template. Key things to fill in:
 
 -   `by_vars` — already shown in the hint, copy it exactly
 -   `set_values_to = exprs(PARAMCD = "MAP")` — this links to the lookup
-    table
+table
 -   `filter` — exclude "NOT DONE" records
 
 ::: fragment
@@ -666,11 +952,11 @@ advs <- advs %>%
 Key things to notice:
 
 -   Both plots use the **same code structure** — only the
-    `filter(PARAMCD == ...)` changes
+`filter(PARAMCD == ...)` changes
 -   The **age group filter** (from Exercise 1) is applied in the
-    `advs_plot` join step
+`advs_plot` join step
 -   Different MAP formulas give **slightly different values** — same
-    trend, different scale
+trend, different scale
 
 ------------------------------------------------------------------------
 
@@ -708,13 +994,13 @@ Key things to notice:
 
 -   [`{admiral}`](https://pharmaverse.github.io/admiral/) — ADaM datasets
 -   [`pharmaversesdtm`](https://pharmaverse.github.io/pharmaversesdtm/)
-    — example SDTM data
+— example SDTM data
 -   [`gtsummary`](https://www.danieldsjoberg.com/gtsummary/) — summary
-    tables
+tables
 -   [`tfrmt`](https://gsk-biostatistics.github.io/tfrmt/) — clinical
-    table formatting
+table formatting
 -   [`rtables`](https://roche.github.io/rtables/) — production-grade
-    table engine
+table engine
 
 **CDISC standards:**
 
