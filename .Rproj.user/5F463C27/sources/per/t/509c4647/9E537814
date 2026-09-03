@@ -1,0 +1,26 @@
+{
+    "id": "9E537814",
+    "path": "~/Personal/clinical_programming_in_R_workshop/renv.lock",
+    "project_path": "renv.lock",
+    "type": "json",
+    "hash": "2753031896",
+    "contents": "",
+    "dirty": false,
+    "created": 1786630318916.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "37,12",
+        "scrollLine": "21"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1786635990,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1786635990,
+    "read_only": false,
+    "read_only_alternatives": []
+}

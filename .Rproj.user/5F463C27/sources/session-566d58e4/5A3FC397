@@ -1,0 +1,32 @@
+{
+    "id": "5A3FC397",
+    "path": "~/Personal/clinical_programming_in_R_workshop/slides/slides.qmd",
+    "project_path": "slides/slides.qmd",
+    "type": "quarto_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1788447833985.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "rmdVisualMode": "false",
+        "rmdVisualCollapsedChunks": "",
+        "rmdVisualModeLocation": "324:0",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1",
+        "cursorPosition": "424,3",
+        "scrollLine": "421",
+        "docOutlineSize": "292"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1788464890,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1788464890,
+    "read_only": false,
+    "read_only_alternatives": []
+}
