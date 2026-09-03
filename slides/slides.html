@@ -188,9 +188,6 @@
       margin-right: 0; 
     }
   </style>
-  <script src="slides_files/libs/quarto-diagram/mermaid.min.js"></script>
-  <script src="slides_files/libs/quarto-diagram/mermaid-init.js"></script>
-  <link href="slides_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -198,7 +195,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Clinical Programming in R</h1>
-  <p class="subtitle">From Raw Data to Evidence</p>
+  <p class="subtitle">Workshop for Ukraine</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -209,35 +206,46 @@ Edoardo Mancini
 </div>
 
 </section>
-<section id="welcome" class="slide level2 center">
-<h2>Welcome</h2>
-<p><strong>Who is this workshop for?</strong></p>
-<ul>
-<li>R users with no clinical trial experience required</li>
-<li>Curious about how medicines get approved?</li>
-</ul>
+<section id="welcome" class="slide level2">
+<h2>Welcome!</h2>
+<div class="fragment">
 <p><strong>What we’ll do today:</strong></p>
 <ol type="1">
-<li>Understand the clinical trial data pipeline</li>
+<li>Understand the clinical trial data flow</li>
 <li>Derive analysis variables on real-format study data</li>
-<li>Build publication-quality visualisations</li>
+<li>Build a publication-quality visualisation</li>
 </ol>
+</div>
+<div class="fragment">
+<div title="Workshop materials">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Note</strong></p>
+<p><strong>Workshop materials</strong></p>
 </div>
 <div class="callout-content">
-<p>All code and data are provided — focus on the concepts and the <code>{admiral}</code> functions.</p>
+<p>For slides, template and data, please see the workshop GitHub repo <a href="https://github.com/manciniedoardo/clinical_programming_in_R_workshop">here</a>.</p>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Please install the following packages in R while we go through the background section:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pharmaversesdtm"</span>) <span class="co"># test data</span></span>
+<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"admiral"</span>) <span class="co"># tools for ADaM programming</span></span>
+<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>) <span class="co"># plots</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>
 <section id="agenda" class="slide level2">
 <h2>Agenda</h2>
+<p>We have a lot to cover!</p>
+<div class="fragment">
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -248,11 +256,11 @@ Edoardo Mancini
 <tbody>
 <tr class="odd">
 <td>0:00</td>
-<td>The clinical data journey</td>
+<td>Background: The clinical trial data journey</td>
 </tr>
 <tr class="even">
 <td>0:20</td>
-<td>ADSL and ADVS datasets</td>
+<td>Focus for today: ADSL and ADVS datasets</td>
 </tr>
 <tr class="odd">
 <td>0:35</td>
@@ -272,74 +280,63 @@ Edoardo Mancini
 </tr>
 </tbody>
 </table>
+</div>
 </section>
-<section id="the-clinical-trial-data-journey" class="slide level2">
-<h2>The Clinical Trial Data Journey</h2>
-<div class="cell" data-reveal="true" data-layout-align="default">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
-<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a>  A[🏥 Raw Data] --&gt; B[📋 SDTM]</span>
-<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a>  B --&gt; C[📊 ADaM]</span>
-<span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a>  C --&gt; D[📈 TLGs]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>Each step <strong>standardises and enriches</strong> the data before analysis.</p>
+<section id="background-the-clinical-trial-data-journey" class="slide level2">
+<h2>Background: The Clinical Trial Data Journey</h2>
 <div class="fragment">
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Layer</th>
-<th>What it contains</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Raw</strong></td>
-<td>Data as collected (labs, eDiary, EDC forms…)</td>
-</tr>
-<tr class="even">
-<td><strong>SDTM</strong></td>
-<td>One domain per data type, standard variable names</td>
-</tr>
-<tr class="odd">
-<td><strong>ADaM</strong></td>
-<td>Analysis-ready: derived variables, linked datasets</td>
-</tr>
-<tr class="even">
-<td><strong>TLGs</strong></td>
-<td>Tables, Listings, Graphs submitted to regulators</td>
-</tr>
-</tbody>
-</table>
+<p>The journey of a data point from a patient to a regulator’s report is long and complex! it can loosely be categorised into four stages:</p>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/clinical_trial_data_flow.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D"><em>Let’s go through these stages one by one…</em></a></p>
 </div>
 </section>
 <section id="raw-data-where-it-all-begins" class="slide level2">
-<h2>Raw Data — Where it all begins</h2>
+<h2>1. Raw Data — Where it all begins!</h2>
+<div class="fragment">
 <p>Data enters a clinical trial from many sources:</p>
 <ul>
-<li><strong>eDiary / CRF</strong>: patient-reported outcomes, investigator forms</li>
+<li><strong>eDiary / CRF (case report form)</strong>: clinician- or patient-reported data (e.g.&nbsp;adverse events, concomitant medications, etc)</li>
 <li><strong>Central labs</strong>: blood tests, urinalysis</li>
 <li><strong>Wearables / devices</strong>: ECG, vital signs monitors</li>
 </ul>
+</div>
 <div class="fragment">
-<p>Raw data is messy:</p>
+<div title="Raw data is messy!">
+<div class="callout callout-caution callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Raw data is messy!</strong></p>
+</div>
+<div class="callout-content">
 <ul>
 <li>Different units, different date formats</li>
 <li>Inconsistent coding (a “heart attack” might be “MI”, “myocardial infarction”, or “cardiac event”)</li>
 <li>Missing or partial dates</li>
 </ul>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D"><em>So we process raw data into…</em></a></p>
+</div>
 </section>
 <section id="sdtm-standardising-the-data" class="slide level2">
-<h2>SDTM — Standardising the data</h2>
-<p><strong>SDTM</strong> (Study Data Tabulation Model) groups data into <strong>domains</strong>:</p>
+<h2>2. SDTM — Standardising the data</h2>
+<div class="fragment">
+<p><strong>SDTM</strong> (Study Data Tabulation Model) groups similar, related data into <strong>domains</strong>. Here are some below.</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -370,39 +367,1035 @@ Edoardo Mancini
 </tr>
 </tbody>
 </table>
+<p>E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset.</p>
+</div>
 <div class="fragment">
-<p>Key features:</p>
+<div title="Key features of SDTM">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Key features of SDTM</strong></p>
+</div>
+<div class="callout-content">
 <ul>
-<li>One row per observation</li>
+<li>One row per observation, e.g.:</li>
+<li>In <code>DM</code>: one row per patient</li>
+<li>In <code>LB</code>: one row per patient per lab test per visit;</li>
+<li>In <code>AE</code>: one row per patient per adverse event</li>
 <li>Standard variable names across all studies</li>
-<li><strong>CDISC standard</strong> — required by FDA / EMA for submissions</li>
+<li>Standardised units</li>
+<li>Data is coded where appropriate (e.g.&nbsp;“Heart attack”, “Cardiac arrest” → “Myocardial Infarction”).</li>
 </ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D"><em>Let’s see some examples…</em></a></p>
+</div>
+</section>
+<section id="sdtm-in-action-dm-ex" class="slide level2">
+<h2>SDTM in action: DM &amp; EX</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="fragment">
+<p><strong>DM (demographics)</strong> — one row per patient</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="font-size:0.65em">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">USUBJID<br>
+<em>Unique Subject Identifier</em></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AGE<br>
+<em>Age</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">RACE<br>
+<em>Race</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">COUNTRY<br>
+<em>Country</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ARM<br>
+<em>Description of Planned Arm</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Placebo</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Placebo</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1028</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Xanomeline High Dose</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1033</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Xanomeline Low Dose</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1034</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Xanomeline High Dose</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1047</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Placebo</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1057</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Screen Failure</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1097</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Xanomeline Low Dose</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1111</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Xanomeline Low Dose</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1115</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">USA</td>
+<td style="text-align: left;">Xanomeline Low Dose</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:6%;">
+
+</div><div class="column" style="width:54%;">
+<div class="fragment">
+<p><strong>EX (Drug exposure)</strong> — one row per patient per dosing</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="font-size:0.65em">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">USUBJID<br>
+<em>Unique Subject Identifier</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">EXTRT<br>
+<em>Name of Actual Treatment</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">VISIT<br>
+<em>Visit Name</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">EXSTDTC<br>
+<em>Start Date/Time of Treatment</em></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">EXDOSE<br>
+<em>Dose per Administration</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PLACEBO</td>
+<td style="text-align: left;">BASELINE</td>
+<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PLACEBO</td>
+<td style="text-align: left;">WEEK 2</td>
+<td style="text-align: left;">2014-01-17</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PLACEBO</td>
+<td style="text-align: left;">WEEK 24</td>
+<td style="text-align: left;">2014-06-19</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">PLACEBO</td>
+<td style="text-align: left;">BASELINE</td>
+<td style="text-align: left;">2012-08-05</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">PLACEBO</td>
+<td style="text-align: left;">WEEK 2</td>
+<td style="text-align: left;">2012-08-28</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1028</td>
+<td style="text-align: left;">XANOMELINE</td>
+<td style="text-align: left;">BASELINE</td>
+<td style="text-align: left;">2013-07-19</td>
+<td style="text-align: right;">54</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1028</td>
+<td style="text-align: left;">XANOMELINE</td>
+<td style="text-align: left;">WEEK 2</td>
+<td style="text-align: left;">2013-08-02</td>
+<td style="text-align: right;">81</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1028</td>
+<td style="text-align: left;">XANOMELINE</td>
+<td style="text-align: left;">WEEK 24</td>
+<td style="text-align: left;">2014-01-07</td>
+<td style="text-align: right;">54</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1033</td>
+<td style="text-align: left;">XANOMELINE</td>
+<td style="text-align: left;">BASELINE</td>
+<td style="text-align: left;">2014-03-18</td>
+<td style="text-align: right;">54</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1034</td>
+<td style="text-align: left;">XANOMELINE</td>
+<td style="text-align: left;">BASELINE</td>
+<td style="text-align: left;">2014-07-01</td>
+<td style="text-align: right;">54</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="sdtm-in-action-ae-vs" class="slide level2">
+<h2>SDTM in action: AE &amp; VS</h2>
+<div class="columns">
+<div class="column" style="width:46%;">
+<div class="fragment">
+<p><strong>AE (Adverse events)</strong> — one row per patient per adverse event</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="font-size:0.65em">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">USUBJID<br>
+<em>Unique Subject Identifier</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AEDECOD<br>
+<em>Dictionary-Derived Term</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AESER<br>
+<em>Serious Event</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AESEV<br>
+<em>Severity/ Intensity</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AESTDTC<br>
+<em>Start Date/ Time of Adverse Event</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">APPLICATION SITE ERYTHEMA</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">2014-01-03</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">APPLICATION SITE PRURITUS</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">2014-01-03</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">DIARRHOEA</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">2014-01-09</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">ATRIOVENTRICULAR BLOCK SECOND DEGREE</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">2012-08-26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">ERYTHEMA</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">2012-08-07</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">ERYTHEMA</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MODERATE</td>
+<td style="text-align: left;">2012-08-07</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">ERYTHEMA</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">2012-08-07</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1028</td>
+<td style="text-align: left;">APPLICATION SITE ERYTHEMA</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">2013-07-21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1028</td>
+<td style="text-align: left;">APPLICATION SITE PRURITUS</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">2013-08-08</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:4%;">
+
+</div><div class="column" style="width:50%;">
+<div class="fragment">
+<p><strong>VS (Vital signs)</strong> — one row per patient per vital sign measurement</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="font-size:0.65em">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">USUBJID<br>
+<em>Unique Subject Identifier</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">VSTESTCD<br>
+<em>Vital Signs Test Short Name</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">VSORRES<br>
+<em>Result or Finding in Original Units</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">VSORRESU<br>
+<em>Original Units</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">VISIT<br>
+<em>Visit Name</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">HEIGHT</td>
+<td style="text-align: left;">58.0</td>
+<td style="text-align: left;">IN</td>
+<td style="text-align: left;">SCREEN 1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">62</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">SCREEN 1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">60</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">SCREEN 2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">59</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">BASELINE</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">61</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">62</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">56</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">60</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">53</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">55</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">59</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">57</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">61</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">WEEK 26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">HEIGHT</td>
+<td style="text-align: left;">64.0</td>
+<td style="text-align: left;">IN</td>
+<td style="text-align: left;">SCREEN 1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">78</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">SCREEN 1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">PULSE</td>
+<td style="text-align: left;">91</td>
+<td style="text-align: left;">BEATS/MIN</td>
+<td style="text-align: left;">SCREEN 2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D"><em>But what if we want to combine data from different domains or compute new variables for analysis?</em></a></p>
 </div>
 </section>
 <section id="adam-analysis-ready-datasets" class="slide level2">
-<h2>ADaM — Analysis-ready datasets</h2>
-<p><strong>ADaM</strong> (Analysis Data Model) transforms SDTM into datasets ready for statistical analysis.</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>What gets added:</strong></p>
+<h2>3. ADaM — Analysis-ready datasets</h2>
+<div class="fragment">
+<p><strong>ADaM</strong> (Analysis Data Model) transforms and combines SDTM into datasets ready for statistical analysis.</p>
+<p>The step from SDTM to ADaM can involve complex programming, as we are trying to <strong>set up the data to answer the questions about safety and efficacy that the clinical trial is posing</strong>, and this often involves combining domains.</p>
+</div>
+<div class="fragment">
+<div title="A typical example">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>A typical example</strong></p>
+</div>
+<div class="callout-content">
+<p>We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in ADAE (Adverse Event Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div title="Key features of ADaM">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Key features of ADaM</strong></p>
+</div>
+<div class="callout-content">
 <ul>
-<li>Analysis values (<code>AVAL</code>, <code>BASE</code>, <code>CHG</code>)</li>
-<li>Derived parameters (e.g.&nbsp;MAP from SBP + DBP)</li>
-<li>Study day (<code>ADY</code>), visit labels (<code>AVISIT</code>)</li>
-<li>Population flags (<code>SAFFL</code>, <code>EFFFL</code>)</li>
-<li>Cross-dataset joins (AEs linked to baseline labs)</li>
+<li>Analysis values and computation of change from baseline</li>
+<li>Derived rows (e.g.&nbsp;deriving mean arterial pressure from systolic and diastolic BP)</li>
+<li>Population flags (e.g.&nbsp;Safety population <code>SAFFL</code>, flagging all patients who have received a dose of study drug).</li>
 </ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Two key structures:</strong></p>
-<ul>
-<li><strong>ADSL</strong> — one row per <strong>subject</strong></li>
-<li><strong>BDS</strong> — one row per <strong>subject × parameter × visit</strong> (e.g.&nbsp;ADVS, ADLB, ADAE)</li>
-</ul>
-</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Today, we’ll start directly from the ADaM-building stage. For the first part of our exercises, we will be working with two ADaM datasets - <code>ADSL</code> (Subject level ADaM, derived from <code>DM</code>) and <code>ADVS</code> (Vital Signs ADaM, derived from <code>VS</code>).</p>
+</div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D"><em>But first, let’s see what some typical ADAMs (ADSL, ADVS and ADAE) might look like…</em></a></p>
+</div>
 </section>
-<section id="tlgs-making-it-meaningful" class="slide level2">
-<h2>TLGs — Making it meaningful</h2>
-<p>The final output that goes to regulators and publications.</p>
+<section id="adam-in-action-adsl" class="slide level2">
+<h2>ADaM in action: ADSL</h2>
+<div class="fragment">
+<p><strong>ADSL (Subject-level analysis dataset)</strong> — one row per subject (derived from <code>DM</code>, <code>DS</code>, <code>AE</code>, etc.)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="font-size:0.65em">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">USUBJID<br>
+<em>Unique Subject Identifier</em></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">AGE<br>
+<em>Age</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">SEX<br>
+<em>Sex</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">RACE<br>
+<em>Race</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">TRT01A<br>
+<em>Actual Treatment for Period 01</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AGEGR1<br>
+<em>Pooled Age Group 1</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">SAFFL<br>
+<em>Safety Population Flag</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">RANDDT<br>
+<em>Date of Randomization</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">TRTSDTM<br>
+<em>Datetime of First Exposure to Treatment</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">TRTEDTM<br>
+<em>Datetime of Last Exposure to Treatment</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">DTHDT<br>
+<em>Date of Death</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">18-64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: left;">2014-07-02 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: left;">M</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">18-64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2012-08-05</td>
+<td style="text-align: left;">2012-08-05</td>
+<td style="text-align: left;">2012-09-01 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1028</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: left;">M</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Xanomeline High Dose</td>
+<td style="text-align: left;">&gt;64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2013-07-19</td>
+<td style="text-align: left;">2013-07-19</td>
+<td style="text-align: left;">2014-01-14 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1033</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: left;">M</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Xanomeline Low Dose</td>
+<td style="text-align: left;">&gt;64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2014-03-18</td>
+<td style="text-align: left;">2014-03-18</td>
+<td style="text-align: left;">2014-03-31 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1034</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Xanomeline High Dose</td>
+<td style="text-align: left;">&gt;64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2014-07-01</td>
+<td style="text-align: left;">2014-07-01</td>
+<td style="text-align: left;">2014-12-30 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1047</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">&gt;64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2013-02-12</td>
+<td style="text-align: left;">2013-02-12</td>
+<td style="text-align: left;">2013-03-09 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1057</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Screen Failure</td>
+<td style="text-align: left;">18-64</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1097</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">M</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Xanomeline Low Dose</td>
+<td style="text-align: left;">&gt;64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2014-01-01</td>
+<td style="text-align: left;">2014-01-01</td>
+<td style="text-align: left;">2014-07-09 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1111</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Xanomeline Low Dose</td>
+<td style="text-align: left;">&gt;64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2012-09-07</td>
+<td style="text-align: left;">2012-09-07</td>
+<td style="text-align: left;">2012-09-16 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1115</td>
+<td style="text-align: right;">84</td>
+<td style="text-align: left;">M</td>
+<td style="text-align: left;">WHITE</td>
+<td style="text-align: left;">Xanomeline Low Dose</td>
+<td style="text-align: left;">&gt;64</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2012-11-30</td>
+<td style="text-align: left;">2012-11-30</td>
+<td style="text-align: left;">2013-01-23 23:59:59</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="adam-in-action-adae" class="slide level2">
+<h2>ADaM in action: ADAE</h2>
+<div class="fragment">
+<p><strong>ADAE (Adverse Events Analysis Dataset) </strong> — one row per patient per adverse event (derived from <code>AE</code> + <code>ADSL</code> + <code>EX</code>)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="font-size:0.65em">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">USUBJID<br>
+<em>Unique Subject Identifier</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">TRT01A<br>
+<em>Actual Treatment for Period 01</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">TRTSDTM<br>
+<em>Treatment Start Datetime</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AEDECOD<br>
+<em>Dictionary-Derived Term</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AESTDTC<br>
+<em>Start Date/Time of Adverse Event</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AESER<br>
+<em>Serious Event</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AESEV<br>
+<em>Severity/ Intensity</em></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">ASTDY<br>
+<em>Analysis Start Relative Day</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">TRTEMFL<br>
+<em>Treatment Emergent Flag</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">LDOSEDTM<br>
+<em>(Dummy) Last Dose Datetime</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: left;">APPLICATION SITE ERYTHEMA</td>
+<td style="text-align: left;">2014-01-03</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2014-01-02 23:59:59</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: left;">APPLICATION SITE PRURITUS</td>
+<td style="text-align: left;">2014-01-03</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2014-01-02 23:59:59</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: left;">DIARRHOEA</td>
+<td style="text-align: left;">2014-01-09</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2014-01-08 23:59:59</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">2012-08-05</td>
+<td style="text-align: left;">ERYTHEMA</td>
+<td style="text-align: left;">2012-08-07</td>
+<td style="text-align: left;">MODERATE</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2012-08-06 23:59:59</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1023</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">2012-08-05</td>
+<td style="text-align: left;">ERYTHEMA</td>
+<td style="text-align: left;">2012-08-07</td>
+<td style="text-align: left;">MILD</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">2012-08-06 23:59:59</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="adam-in-action-advs" class="slide level2">
+<h2>ADaM in action: ADVS</h2>
+<div class="fragment">
+<p><strong>ADVS (Vital Signs Analysis Dataset)</strong> — one row per patient per parameter per visit (derived from <code>VS</code> and <code>ADSL</code>)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table id="advs-showcase" class="caption-top" style="font-size:0.65em">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">USUBJID<br>
+<em>Unique Subject Identifier</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">TRT01A<br>
+<em>Actual Treatment for Period 01</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">PARAMCD<br>
+<em>Parameter Code</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">PARAM<br>
+<em>Parameter</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">DTYPE<br>
+<em>Derivation Type</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AVISIT<br>
+<em>Analysis Visit</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AVISITN<br>
+<em>Analysis Visit (N)</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ABLFL<br>
+<em>Baseline Record Flag</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AVAL<br>
+<em>Analysis Value</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">BASE<br>
+<em>Baseline Value</em></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">CHG<br>
+<em>Change from Baseline</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">DIABP</td>
+<td style="text-align: left;">Diastolic Blood Pressure (mmHg)</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Baseline</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">51</td>
+<td style="text-align: left;">51</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">SYSBP</td>
+<td style="text-align: left;">Systolic Blood Pressure (mmHg)</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Baseline</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">121</td>
+<td style="text-align: left;">121</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">01-701-1015</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">MAP</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">DERIVED</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Baseline</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">0</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">86</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">86</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">0</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">DIABP</td>
+<td style="text-align: left;">Diastolic Blood Pressure (mmHg)</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Week 2</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">50</td>
+<td style="text-align: left;">51</td>
+<td style="text-align: left;">-1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">SYSBP</td>
+<td style="text-align: left;">Systolic Blood Pressure (mmHg)</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Week 2</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">121</td>
+<td style="text-align: left;">121</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">01-701-1015</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">MAP</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">DERIVED</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Week 2</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">2</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">NA</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">85.5</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">86</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">-0.5</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">DIABP</td>
+<td style="text-align: left;">Diastolic Blood Pressure (mmHg)</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Week 4</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">55</td>
+<td style="text-align: left;">51</td>
+<td style="text-align: left;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">01-701-1015</td>
+<td style="text-align: left;">Placebo</td>
+<td style="text-align: left;">SYSBP</td>
+<td style="text-align: left;">Systolic Blood Pressure (mmHg)</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Week 4</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">137</td>
+<td style="text-align: left;">121</td>
+<td style="text-align: left;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">01-701-1015</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">MAP</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">DERIVED</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Week 4</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">4</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">NA</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">96</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">86</span></td>
+<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">10</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D"><em>And with these ADaMs, we can finally produce…</em></a></p>
+</div>
+</section>
+<section id="tlgs-answering-questions" class="slide level2">
+<h2>4. TLGs — Answering questions!</h2>
+<div class="fragment">
+<p>The final TLGs (tables, listings and graphs) that answer questions about the trial’s safety and efficacy. These are provided to regulators and used in publications.</p>
+</div>
+<div class="fragment">
+<div title="There are lots of packages to choose from!">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>There are lots of packages to choose from!</strong></p>
+</div>
+<div class="callout-content">
+<p>Many different R packages can be used to produce TLGs. Here are some TLG examples and the packages you could use to make them.</p>
 <table class="caption-top">
 <colgroup>
 <col style="width: 14%">
@@ -412,14 +1405,14 @@ Edoardo Mancini
 <thead>
 <tr class="header">
 <th></th>
-<th>Contents</th>
+<th>Example Contents</th>
 <th>Common R packages</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><strong>Tables</strong></td>
-<td>Demographics, AE counts by SOC, lab shifts</td>
+<td>Demographics, AE counts, lab shifts</td>
 <td><code>{gtsummary}</code>, <code>{rtables}</code></td>
 </tr>
 <tr class="even">
@@ -434,10 +1427,29 @@ Edoardo Mancini
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>In today’s workshop’s last exercise, we will focus on creating a vital signs plot.</p>
+</div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D"><em>But first, let’s see a typical table and plot for a clinical trial…</em></a></p>
+</div>
 </section>
+<section id="tlg-example-ae-table" class="slide level2">
+<h2>TLG Example: AE Table</h2>
+
+<img data-src="images/example_ae_table.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
+<section id="tlg-example-pharmacokinetic-plot" class="slide level2">
+<h2>TLG Example: Pharmacokinetic Plot</h2>
+
+<img data-src="images/example_pk_plot.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
 <section id="our-study-data" class="slide level2">
 <h2>Our Study Data</h2>
-<p>We are using the <strong>CDISC Pilot Study</strong> — a realistic synthetic dataset maintained by the pharmaverse.</p>
+<p>We are using the <strong>CDISC Pilot Study</strong> — a realistic synthetic dataset maintained by the <a href="https://pharmaverse.org/">pharmaverse</a>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pharmaversesdtm)</span>
 <span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
@@ -1076,7 +2088,7 @@ Edoardo Mancini
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
-<p>Clinical Programming in R — Workshop</p>
+<p>Clinical Programming in R — Workshop for Ukraine - Edoardo Mancini</p>
 </div>
 </div></div>
 
