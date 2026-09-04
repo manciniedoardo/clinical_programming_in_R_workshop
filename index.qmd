@@ -18,6 +18,26 @@ editor:
     wrap: 72
 ---
 
+## About Me
+
+::::: columns
+::: {.column width="40%"}
+![](images/edoardomancini.jpg){width="90%" fig-align="center"}
+:::
+
+::: {.column width="60%"}
+I am a Senior Data Scientist working at Roche in the UK. My work
+involves leading statistical programming activities in early and
+late-stage clinical trials. I am also a passionate advocate for R and
+Open Source, and am able to pursue these interests in my current role
+as maintainer for the `{admiral}` R package.
+
+Outside of work, I enjoy playing chess, reading, and running.
+:::
+:::::
+
+------------------------------------------------------------------------
+
 ## Welcome!
 
 ::: fragment
@@ -61,7 +81,11 @@ We have a lot to cover!
 
 ------------------------------------------------------------------------
 
-## Background: The Clinical Trial Data Journey
+## Background: The Clinical Trial Data Journey {.center background-color="#E8F4FD"}
+
+------------------------------------------------------------------------
+
+## The Clinical Trial Data Journey
 
 ::: fragment
 The journey of a data point from a patient to a regulator's report is long and complex! it can loosely be categorised into four stages:
@@ -436,6 +460,10 @@ In today's workshop's last exercise, we will focus on creating a vital signs plo
 ## TLG Example: Pharmacokinetic Plot
 
 ![](images/example_pk_plot.png){width="90%" fig-align="center"}
+
+------------------------------------------------------------------------
+
+## Test Data & Packages {.center background-color="#E8F4FD"}
 
 ------------------------------------------------------------------------
 
@@ -957,6 +985,10 @@ Key things to notice:
 `advs_plot` join step
 -   Different MAP formulas give **slightly different values** — same
 trend, different scale
+
+------------------------------------------------------------------------
+
+## Wrap-up & Next Steps {.center background-color="#E8F4FD"}
 
 ------------------------------------------------------------------------
 
