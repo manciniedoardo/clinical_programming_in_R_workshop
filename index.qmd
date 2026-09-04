@@ -52,8 +52,8 @@ We have a lot to cover!
 | Time | Topic                                         |
 |------|-----------------------------------------------|
 | 0:00 | Background: The clinical trial data journey   |
-| 0:20 | Focus for today: ADSL and ADVS datasets       |
-| 0:35 | **Exercise 1** — ADSL derivations             |
+| 0:15 | Test data and the packages we'll be using     |
+| 0:20 | **Exercise 1** — ADSL derivations             |
 | 1:00 | **Exercise 2** — ADVS: deriving MAP           |
 | 1:30 | **Exercise 3** — Plotting MAP over time       |
 | 1:55 | Wrap-up and next steps                        |
@@ -121,9 +121,9 @@ E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset
 ::: fragment
 :::{.callout-tip title="Key features of SDTM"}
 - One row per observation, e.g.:
-- In `DM`: one row per patient
-- In `LB`: one row per patient per lab test per visit;
-- In `AE`: one row per patient per adverse event
+  - In `DM`: one row per patient
+  - In `LB`: one row per patient per lab test per visit;
+  - In `AE`: one row per patient per adverse event
 - Standard variable names across all studies
 - Standardised units
 - Data is coded where appropriate (e.g. "Heart attack", "Cardiac arrest" → "Myocardial Infarction").
@@ -142,7 +142,7 @@ E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset
 ::::: columns
 ::: {.column width="40%"}
 ::: fragment
-**DM (demographics)** — one row per patient
+**DM (Demographics)** — one row per patient
 
 ```{r}
 #| eval: true
@@ -170,7 +170,7 @@ dm %>%
 
 ::: {.column width="54%"}
 ::: fragment
-**EX (Drug exposure)** — one row per patient per dosing
+**EX (Drug Exposure)** — one row per patient per dosing
 
 ```{r}
 #| eval: true
@@ -197,7 +197,7 @@ table.attr = 'style="font-size:0.65em"')
 ::::: columns
 ::: {.column width="46%"}
 ::: fragment
-**AE (Adverse events)** — one row per patient per adverse event
+**AE (Adverse Events)** — one row per patient per adverse event
 
 ```{r}
 #| eval: true
@@ -222,7 +222,7 @@ ae %>%
 
 ::: {.column width="50%"}
 ::: fragment
-**VS (Vital signs)** — one row per patient per vital sign measurement
+**VS (Vital Signs)** — one row per patient per vital sign measurement
 
 ```{r}
 #| eval: true
@@ -288,7 +288,7 @@ Today, we'll start directly from the ADaM-building stage. For the first part of 
 ## ADaM in action: ADSL
 
 ::: fragment
-**ADSL (Subject-level analysis dataset)** — one row per subject (derived from `DM`, `DS`, `AE`, etc.)
+**ADSL (Subject-Level Analysis Dataset)** — one row per subject (derived from `DM`, `DS`, `AE`, etc.)
 ```{r}
 #| eval: true
 #| echo: false
