@@ -12,10 +12,6 @@ dm <- pharmaversesdtm::dm
 ex <- pharmaversesdtm::ex
 vs <- pharmaversesdtm::vs
 
-dm <- convert_blanks_to_na(dm)
-ex <- convert_blanks_to_na(ex)
-vs <- convert_blanks_to_na(vs)
-
 # User-defined functions ----
 format_agegr1 <- function(x) {
   case_when(
@@ -69,16 +65,16 @@ adsl <- dm %>%
     missing_value = "N"
   ) %>%
   mutate(
-    AGEGR1 = format_agegr1(AGE),
-    DOMAIN = NULL
-  )
-
-# Exercise 1a: Derive AGEGR2 ----
-adsl <- adsl %>%
-  mutate(
+    AGEGR1 = case_when(
+      AGE < 18             ~ "<18",
+      between(AGE, 18, 64) ~ "18-64",
+      AGE > 64             ~ ">64",
+      TRUE                 ~ NA_character_
+    ),
+    # Exercise 1a: Derive AGEGR2 
     AGEGR2 = case_when(
-      AGE < 40             ~ "<40",
-      between(AGE, 40, 65) ~ "40-65",
+      AGE < 55             ~ "<40",
+      between(AGE, 55, 65) ~ "55-65",
       AGE > 65             ~ ">65",
       TRUE                 ~ NA_character_
     )

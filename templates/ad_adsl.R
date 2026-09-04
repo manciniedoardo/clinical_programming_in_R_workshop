@@ -40,22 +40,6 @@ ex <- pharmaversesdtm::ex
 #   VSSTRESN  - numeric result of the measurement (e.g. 118)
 vs <- pharmaversesdtm::vs
 
-# SAS-imported datasets often use "" for missing instead of NA — convert them.
-dm <- convert_blanks_to_na(dm)
-ex <- convert_blanks_to_na(ex)
-vs <- convert_blanks_to_na(vs)
-
-# User-defined functions ----
-# format_agegr1() shows the pattern you will follow in Exercise 1a.
-format_agegr1 <- function(x) {
-  case_when(
-    x < 18             ~ "<18",
-    between(x, 18, 64) ~ "18-64",
-    x > 64             ~ ">64",
-    TRUE               ~ NA_character_
-  )
-}
-
 # Derivations ----
 
 # derive_vars_dtm() converts a character date/time column to a numeric datetime.
@@ -140,32 +124,29 @@ adsl <- dm %>%
     false_value   = "N",           # subject has EX records but none meet condition
     missing_value = "N"            # subject has no EX records at all
   ) %>%
-
-  ## Grouping variables and tidy-up ----
+  ## Grouping variables ----
   mutate(
-    AGEGR1 = format_agegr1(AGE),  # age group using the function defined above
-    DOMAIN = NULL                  # remove DOMAIN (not needed in ADSL output)
+    AGEGR1 = case_when(
+      AGE < 18             ~ "<18",
+      between(AGE, 18, 64) ~ "18-64",
+      AGE > 64             ~ ">64",
+      TRUE                 ~ NA_character_
+    )
   )
-
 
 # Exercise 1a: Derive a new age group variable (AGEGR2) ----
 # ---------------------------------------------------------------
 # Create AGEGR2 with the following groups:
-#   AGE < 40          -> "<40"
-#   40 <= AGE <= 65   -> "40-65"
+#   AGE < 55          -> "<55"
+#   55 <= AGE <= 65   -> "55-65"
 #   AGE > 65          -> ">65"
 #
 # AGE is already in the dataset (from DM).
 # Hint: follow the format_agegr1() pattern above using mutate() and case_when()
 # between(x, lo, hi) is TRUE when lo <= x <= hi
 
-adsl <- adsl %>%
-  mutate(
-    AGEGR2 = case_when(
-      # YOUR CODE HERE
-    )
-  )
-
+adsl <- adsl # %>%
+# add AGEGR2 code here
 
 # Exercise 1b: Derive high systolic BP flag (HISOBPFL) ----
 # ---------------------------------------------------------------

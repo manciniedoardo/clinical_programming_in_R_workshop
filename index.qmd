@@ -61,22 +61,27 @@ install.packages("pharmaversesdtm") # test data
 install.packages("admiral") # tools for ADaM programming
 install.packages("ggplot2") # plots
 ```
+You may also want to clone the GitHub repository to your local session, or at least have it open in a browser tab to follow the slides and access the template code.
 :::
 ------------------------------------------------------------------------
 
 ## Agenda
 
+::: fragment
 We have a lot to cover!
 
+| Time | Topic                                                         |
+|------|---------------------------------------------------------------|
+| 0:00 | Background: The clinical trial data journey                   |
+| 0:15 | Exercise Setup, Test data and the packages we'll be using     |
+| 0:20 | **Exercise 1** — ADSL derivations                             |
+| 1:00 | **Exercise 2** — ADVS: deriving MAP                           |
+| 1:30 | **Exercise 3** — Plotting MAP over time                       |
+| 1:55 | Wrap-up and next steps                                        |
+:::
+
 ::: fragment
-| Time | Topic                                         |
-|------|-----------------------------------------------|
-| 0:00 | Background: The clinical trial data journey   |
-| 0:15 | Test data and the packages we'll be using     |
-| 0:20 | **Exercise 1** — ADSL derivations             |
-| 1:00 | **Exercise 2** — ADVS: deriving MAP           |
-| 1:30 | **Exercise 3** — Plotting MAP over time       |
-| 1:55 | Wrap-up and next steps                        |
+The background section will give you enough context to be able to do the three exercises, hopefully without overloading you with too much information!
 :::
 
 ------------------------------------------------------------------------
@@ -329,6 +334,7 @@ adsl %>%
         table.attr = 'style="font-size:0.65em"')
 ```
 :::
+
 ------------------------------------------------------------------------
 
 ## ADaM in action: ADAE
@@ -463,62 +469,184 @@ In today's workshop's last exercise, we will focus on creating a vital signs plo
 
 ------------------------------------------------------------------------
 
-## Test Data & Packages {.center background-color="#E8F4FD"}
+## Exercise Setup, Test Data & Packages {.center background-color="#E8F4FD"}
 
 ------------------------------------------------------------------------
 
-## Our Study Data
+## Exercise Setup and Test Data
 
-We are using the **CDISC Pilot Study** — a realistic synthetic dataset
-maintained by the [pharmaverse](https://pharmaverse.org/).
+::: fragment
+Welcome to the interactive part of the workshop! Here we will focus on:
+
+- Creating two ADaM datasets, `ADSL` (Subject-level) and `ADVS` (Vital Signs) - *Exercises 1 and 2*;
+- Creating a plot of Mean Arterial Pressure over time using these datasets - *Exercise 3*.
+:::
+
+::: fragment
+We will be using test data today. The source for the test data is the `{pharmaversesdtm}` package. This is the same test data that has been used for the examples in the background section. 
+:::
+
+::: fragment
+:::{.callout-tip title="Where does this data come from?"}
+`{pharmaversesdtm}` is one of the package maintained by members of the [pharmaverse](https://pharmaverse.org/), which is an Open-Source effort to set up a toolset for End-to-End clinical reporting in R. You can access the test datasets like so:
 
 ```{r}
 library(pharmaversesdtm)
 
-# Demographics (SDTM)
-glimpse(dm)
+# Demographics
+pharmaversesdtm::dm
+
+# Vital signs
+pharmaversesdtm::vs
 ```
+:::
+:::
 
 ::: fragment
-**Pre-built datasets in `data/`:**
-
--   `adsl.RDS` — Subject-level dataset (one row per patient)
--   `advs.RDS` — Vital signs dataset (one row per subject × parameter ×
-visit)
+Luckily, you won't have to create anything from scratch: the `templates` folder in the [GitHub repo](https://github.com/manciniedoardo/clinical_programming_in_R_workshop) contains starting programs on which the exercises are based.
 :::
 
 ------------------------------------------------------------------------
 
-## What is ADSL?
+## Packages
 
-**One row per subject** — the backbone of every analysis.
+::: fragment
+As well as the {tidyverse} suite of packages, today we will be using another pharmaverse package, `{admiral}`, to help us create our ADaM datasets.
 
-::::: columns
-::: {.column width="55%"}
-**Key variables:**
-
-| Variable             | Description                |
-|----------------------|----------------------------|
-| `USUBJID`            | Unique subject identifier  |
-| `AGE`, `SEX`, `RACE` | Demographics               |
-| `TRT01A`             | Actual treatment arm       |
-| `TRTSDT` / `TRTEDT`  | Treatment start / end date |
-| `AGEGR1`             | Age group (categorical)    |
-| `SAFFL`              | Safety population flag     |
-:::
-
-::: {.column width="45%"}
 ```{r}
-library(dplyr)
-load("data/adsl.RDS")
-
-adsl %>%
-  select(USUBJID, AGE, SEX,
-         AGEGR1, TRT01A) %>%
-  head(4)
+library(admiral)
 ```
 :::
-:::::
+
+::: fragment
+:::{.callout-note title="Where does this data come from?"}
+**Core idea:** `{admiral}` `derive_*()` functions can be chained together with `{dplyr}` functions in a series of blocks, each modifying a dataset in some way, e.g. adding variables or rows.
+
+Take a look at the two blocks below:
+```{r}
+adsl_start <- dm %>%
+  ## Derive treatment arm variables
+  mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
+  ## Derive treatment start datetime / date 
+  derive_vars_merged(
+    dataset_add = ex,
+    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDTM),
+    by_vars = exprs(STUDYID, USUBJID),
+    new_vars = exprs(TRTSDTM = EXSTDTM),
+    order = exprs(EXSTDTM, EXSEQ),
+    mode = "first",             
+  )
+```
+Notice in particular the use of `exprs()` to pass column names, and `by_vars` to split the dataset into groups.
+:::
+:::
+
+::: fragment
+We'll be using `{ggplot2}` for our plot... but you're all probably familiar with that already!
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 1: Working with ADSL {.center background-color="#E8F4FD"}
+
+------------------------------------------------------------------------
+
+## Exercise 1: Working with ADSL
+
+::: fragment
+[Let's remind ourselves of what we can find in the `ADSL` dataset.]({style="color:blue;"})
+:::
+
+::: fragment 
+`ADSL` contains **one row per patient** - so the number of rows of the dataset is equal to the total number of patients in the trial.
+:::
+
+::: fragment
+Here are some of the key variables in the `ADSL` dataset:
+
+| Variable             | Description                                                                |
+|----------------------|----------------------------------------------------------------------------|
+| `USUBJID`            | Unique subject identifier (i.e. an anonymous code that labels the patient) |
+| `AGE`, `SEX`, `RACE` | Demographics                                                               |
+| `TRT01A`             | Actual treatment arm (i.e. what drug the patient is taking)                |
+| `TRTSDT` / `TRTEDT`  | Treatment start / end date                                                 |
+| `AGEGR1`             | Age group (categorical)                                                    |
+| `SAFFL`              | Safety population flag (i.e. if the patient has been dosed yet)            |
+:::
+
+::: fragment
+[Let's open `templates/ad_adsl.R` and see how a simple ADSL is created.]({style="color:blue;"})
+::: 
+
+------------------------------------------------------------------------
+
+## Exercise 1a — New Age Group (AGEGR2)
+::: fragment
+**Task:** Add a variable `AGEGR2` with the following categories:
+
+| Condition       | Value     |
+|-----------------|-----------|
+| `AGE < 55`      | `"<55"`   |
+| `55 ≤ AGE ≤ 65` | `"55-65"` |
+| `AGE > 65`      | `">65"`   |
+
+How many patients are in each `AGEGR2` group?
+:::
+
+::: fragment
+:::{.callout-tip title="Tip"}
+- Follow the same pattern as `AGEGR1`
+- `between(x, lo, hi)` is equivalent to `x >= lo & x <= hi`.
+:::
+:::
+
+::: fragment
+Solution:
+```{r}
+adsl <- adsl %>%
+  mutate(
+    AGEGR2 = case_when(
+      AGE < 55             ~ "<55",
+      between(AGE, 55, 65) ~ "55-65",
+      AGE > 65             ~ ">65",
+      TRUE                 ~ NA_character_
+    )
+  )
+
+adsl %>% 
+  group_by(AGEGR2) %>% 
+  summarise(Count = n())
+```
+::: 
+
+------------------------------------------------------------------------
+
+## Exercise 1b — High Systolic BP Flag (HISOBPFL)
+
+**Task:** Flag patients who have *any* systolic BP \> 160 mmHg:
+`HISOBPFL = "Y"` / `"N"`
+
+```{r}
+# derive_var_merged_exist_flag() checks a condition in another dataset
+# and merges the result back as a Y/N flag
+
+adsl <- adsl %>%
+  derive_var_merged_exist_flag(
+    dataset_add   = vs,               # look in the raw VS data
+    by_vars       = exprs(STUDYID, USUBJID),
+    new_var       = HISOBPFL,         # new column name
+    condition     = VSTESTCD == "SYSBP" & VSSTRESN > 160,
+    false_value   = "N",
+    missing_value = "N"
+  )
+```
+
+::: callout-tip
+`exprs()` is `{admiral}`'s way of passing a list of column names as
+expressions.
+:::
+
+------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
@@ -592,132 +720,6 @@ filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
 You will apply this filter in **Exercise 2a** when calling
 `derive_param_map()`.
 
-------------------------------------------------------------------------
-
-## The {admiral} package
-
-`{admiral}` is the pharmaverse package for building ADaM datasets in R.
-
-```{r}
-library(admiral)
-```
-
-**Core idea:** a chain of `derive_*()` functions, each adding variables
-or rows.
-
-```{r}
-adsl <- dm %>%
-  derive_vars_dt(new_vars_prefix = "TRTS", dtc = RFSTDTC) %>%
-  derive_var_merged_exist_flag(...) %>%
-  mutate(AGEGR1 = case_when(...))
-```
-
-::: fragment
-Today you will use:
-
--   `mutate()` + `case_when()` — categorise continuous variables
--   `derive_var_merged_exist_flag()` — create Y/N flags from another
-dataset
--   `derive_param_map()` — derive Mean Arterial Pressure
--   `derive_param_computed()` — derive any custom computed parameter
-:::
-
-------------------------------------------------------------------------
-
-## `{admiral}`: `exprs()` and `by_vars`
-
-`exprs()` captures column names as **unevaluated R expressions** —
-`{admiral}`'s equivalent of dplyr's `vars()`.
-
-```{r}
-# Think of them as equivalent ideas:
-# dplyr:   group_by(df, STUDYID, USUBJID)
-# admiral: by_vars = exprs(STUDYID, USUBJID)
-```
-
-`by_vars` defines the **grouping key** for a derivation — the set of
-columns that uniquely identify one "unit" (e.g. one subject × one
-timepoint).
-
-The `!!!` (triple-bang) **splices** a pre-defined list into `exprs()`:
-
-```{r}
-adsl_vars <- exprs(TRTSDT, TRTEDT, TRT01A, TRT01P)
-
-# These two lines are exactly equivalent:
-exprs(STUDYID, USUBJID, TRTSDT, TRTEDT, TRT01A, TRT01P, VISIT)
-exprs(STUDYID, USUBJID, !!!adsl_vars,               VISIT)
-```
-
-::: callout-tip
-You will see `exprs()` and `by_vars` in every `{admiral}` function today.
-The pattern is always the same — list the columns that make a row
-unique in the context of that derivation.
-:::
-
-------------------------------------------------------------------------
-
-## Exercise 1: Working with ADSL {.center background-color="#E8F4FD"}
-
-Open **`templates/ad_adsl.R`**
-
-------------------------------------------------------------------------
-
-## Exercise 1a — New Age Group (AGEGR2)
-
-**Task:** Add a variable `AGEGR2` with the following groups:
-
-| Condition       | Value     |
-|-----------------|-----------|
-| `AGE < 40`      | `"<40"`   |
-| `40 ≤ AGE ≤ 65` | `"40-65"` |
-| `AGE > 65`      | `">65"`   |
-
-```{r}
-# Hint: follow the same pattern as AGEGR1
-adsl <- adsl %>%
-  mutate(
-    AGEGR2 = case_when(
-      AGE < 40             ~ "<40",
-      between(AGE, 40, 65) ~ "40-65",
-      AGE > 65             ~ ">65",
-      TRUE                 ~ NA_character_
-    )
-  )
-```
-
-::: callout-tip
-`between(x, lo, hi)` is equivalent to `x >= lo & x <= hi`
-:::
-
-------------------------------------------------------------------------
-
-## Exercise 1b — High Systolic BP Flag (HISOBPFL)
-
-**Task:** Flag patients who have *any* systolic BP \> 160 mmHg:
-`HISOBPFL = "Y"` / `"N"`
-
-```{r}
-# derive_var_merged_exist_flag() checks a condition in another dataset
-# and merges the result back as a Y/N flag
-
-adsl <- adsl %>%
-  derive_var_merged_exist_flag(
-    dataset_add   = vs,               # look in the raw VS data
-    by_vars       = exprs(STUDYID, USUBJID),
-    new_var       = HISOBPFL,         # new column name
-    condition     = VSTESTCD == "SYSBP" & VSSTRESN > 160,
-    false_value   = "N",
-    missing_value = "N"
-  )
-```
-
-::: callout-tip
-`exprs()` is `{admiral}`'s way of passing a list of column names as
-expressions.
-:::
-
-------------------------------------------------------------------------
 
 ## Exercise 2: Working with ADVS {.center background-color="#E8F4FD"}
 

@@ -254,12 +254,13 @@ Edoardo Mancini
 <span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"admiral"</span>) <span class="co"># tools for ADaM programming</span></span>
 <span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>) <span class="co"># plots</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>You may also want to clone the GitHub repository to your local session, or at least have it open in a browser tab to follow the slides and access the template code.</p>
 </div>
 </section>
 <section id="agenda" class="slide level2">
 <h2>Agenda</h2>
-<p>We have a lot to cover!</p>
 <div class="fragment">
+<p>We have a lot to cover!</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -274,7 +275,7 @@ Edoardo Mancini
 </tr>
 <tr class="even">
 <td>0:15</td>
-<td>Test data and the packages we’ll be using</td>
+<td>Exercise Setup, Test data and the packages we’ll be using</td>
 </tr>
 <tr class="odd">
 <td>0:20</td>
@@ -294,6 +295,9 @@ Edoardo Mancini
 </tr>
 </tbody>
 </table>
+</div>
+<div class="fragment">
+<p>The background section will give you enough context to be able to do the three exercises, hopefully without overloading you with too much information!</p>
 </div>
 </section>
 <section id="background-the-clinical-trial-data-journey" class="slide level2 center" data-background-color="#E8F4FD">
@@ -1466,33 +1470,113 @@ Edoardo Mancini
 <h2>TLG Example: Pharmacokinetic Plot</h2>
 
 <img data-src="images/example_pk_plot.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
-<section id="test-data-packages" class="slide level2 center" data-background-color="#E8F4FD">
-<h2>Test Data &amp; Packages</h2>
+<section id="exercise-setup-test-data-packages" class="slide level2 center" data-background-color="#E8F4FD">
+<h2>Exercise Setup, Test Data &amp; Packages</h2>
 </section>
-<section id="our-study-data" class="slide level2">
-<h2>Our Study Data</h2>
-<p>We are using the <strong>CDISC Pilot Study</strong> — a realistic synthetic dataset maintained by the <a href="https://pharmaverse.org/">pharmaverse</a>.</p>
+<section id="exercise-setup-and-test-data" class="slide level2">
+<h2>Exercise Setup and Test Data</h2>
+<div class="fragment">
+<p>Welcome to the interactive part of the workshop! Here we will focus on:</p>
+<ul>
+<li>Creating two ADaM datasets, <code>ADSL</code> (Subject-level) and <code>ADVS</code> (Vital Signs) - <em>Exercises 1 and 2</em>;</li>
+<li>Creating a plot of Mean Arterial Pressure over time using these datasets - <em>Exercise 3</em>.</li>
+</ul>
+</div>
+<div class="fragment">
+<p>We will be using test data today. The source for the test data is the <code>{pharmaversesdtm}</code> package. This is the same test data that has been used for the examples in the background section.</p>
+</div>
+<div class="fragment">
+<div title="Where does this data come from?">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Where does this data come from?</strong></p>
+</div>
+<div class="callout-content">
+<p><code>{pharmaversesdtm}</code> is one of the package maintained by members of the <a href="https://pharmaverse.org/">pharmaverse</a>, which is an Open-Source effort to set up a toolset for End-to-End clinical reporting in R. You can access the test datasets like so:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pharmaversesdtm)</span>
 <span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Demographics (SDTM)</span></span>
-<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(dm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Demographics</span></span>
+<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a>pharmaversesdtm<span class="sc">::</span>dm</span>
+<span id="cb2-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Vital signs</span></span>
+<span id="cb2-7"><a href="" aria-hidden="true" tabindex="-1"></a>pharmaversesdtm<span class="sc">::</span>vs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="fragment">
-<p><strong>Pre-built datasets in <code>data/</code>:</strong></p>
-<ul>
-<li><code>adsl.RDS</code> — Subject-level dataset (one row per patient)</li>
-<li><code>advs.RDS</code> — Vital signs dataset (one row per subject × parameter × visit)</li>
-</ul>
+<p>Luckily, you won’t have to create anything from scratch: the <code>templates</code> folder in the <a href="https://github.com/manciniedoardo/clinical_programming_in_R_workshop">GitHub repo</a> contains starting programs on which the exercises are based.</p>
 </div>
 </section>
-<section id="what-is-adsl" class="slide level2">
-<h2>What is ADSL?</h2>
-<p><strong>One row per subject</strong> — the backbone of every analysis.</p>
-<div class="columns">
-<div class="column" style="width:55%;">
-<p><strong>Key variables:</strong></p>
+<section id="packages" class="slide level2">
+<h2>Packages</h2>
+<div class="fragment">
+<p>As well as the {tidyverse} suite of packages, today we will be using another pharmaverse package, <code>{admiral}</code>, to help us create our ADaM datasets.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(admiral)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="fragment">
+<div title="Where does this data come from?">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Where does this data come from?</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>Core idea:</strong> <code>{admiral}</code> <code>derive_*()</code> functions can be chained together with <code>{dplyr}</code> functions in a series of blocks, each modifying a dataset in some way, e.g.&nbsp;adding variables or rows.</p>
+<p>Take a look at the two blocks below:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl_start <span class="ot">&lt;-</span> dm <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Derive treatment arm variables</span></span>
+<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TRT01P =</span> ARM, <span class="at">TRT01A =</span> ACTARM) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Derive treatment start datetime / date </span></span>
+<span id="cb4-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_vars_merged</span>(</span>
+<span id="cb4-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataset_add =</span> ex,</span>
+<span id="cb4-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter_add =</span> (EXDOSE <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">|</span> (EXDOSE <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> <span class="fu">str_detect</span>(EXTRT, <span class="st">"PLACEBO"</span>))) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(EXSTDTM),</span>
+<span id="cb4-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
+<span id="cb4-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">new_vars =</span> <span class="fu">exprs</span>(<span class="at">TRTSDTM =</span> EXSTDTM),</span>
+<span id="cb4-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">exprs</span>(EXSTDTM, EXSEQ),</span>
+<span id="cb4-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">"first"</span>,             </span>
+<span id="cb4-12"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>We’ll be using <code>{ggplot2}</code> for our plot… but you’re all probably familiar with that already!</p>
+</div>
+</section>
+<section id="exercise-1-working-with-adsl" class="slide level2 center" data-background-color="#E8F4FD">
+<h2>Exercise 1: Working with ADSL</h2>
+</section>
+<section id="exercise-1-working-with-adsl-1" class="slide level2">
+<h2>Exercise 1: Working with ADSL</h2>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D">Let’s remind ourselves of what we can find in the <code>ADSL</code> dataset.</a></p>
+</div>
+<div class="fragment">
+<p><code>ADSL</code> contains <strong>one row per patient</strong> - so the number of rows of the dataset is equal to the total number of patients in the trial.</p>
+</div>
+<div class="fragment">
+<p>Here are some of the key variables in the <code>ADSL</code> dataset:</p>
 <table class="caption-top">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 77%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Variable</th>
@@ -1502,7 +1586,7 @@ Edoardo Mancini
 <tbody>
 <tr class="odd">
 <td><code>USUBJID</code></td>
-<td>Unique subject identifier</td>
+<td>Unique subject identifier (i.e.&nbsp;an anonymous code that labels the patient)</td>
 </tr>
 <tr class="even">
 <td><code>AGE</code>, <code>SEX</code>, <code>RACE</code></td>
@@ -1510,7 +1594,7 @@ Edoardo Mancini
 </tr>
 <tr class="odd">
 <td><code>TRT01A</code></td>
-<td>Actual treatment arm</td>
+<td>Actual treatment arm (i.e.&nbsp;what drug the patient is taking)</td>
 </tr>
 <tr class="even">
 <td><code>TRTSDT</code> / <code>TRTEDT</code></td>
@@ -1522,21 +1606,114 @@ Edoardo Mancini
 </tr>
 <tr class="even">
 <td><code>SAFFL</code></td>
-<td>Safety population flag</td>
+<td>Safety population flag (i.e.&nbsp;if the patient has been dosed yet)</td>
 </tr>
 </tbody>
 </table>
-</div><div class="column" style="width:45%;">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb3-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/adsl.RDS"</span>)</span>
-<span id="cb3-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(USUBJID, AGE, SEX,</span>
-<span id="cb3-6"><a href="" aria-hidden="true" tabindex="-1"></a>         AGEGR1, TRT01A) <span class="sc">%&gt;%</span></span>
-<span id="cb3-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div></div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D">Let’s open <code>templates/ad_adsl.R</code> and see how a simple ADSL is created.</a></p>
+</div>
+</section>
+<section id="exercise-1a-new-age-group-agegr2" class="slide level2">
+<h2>Exercise 1a — New Age Group (AGEGR2)</h2>
+<div class="fragment">
+<p><strong>Task:</strong> Add a variable <code>AGEGR2</code> with the following groups:</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Condition</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AGE &lt; 55</code></td>
+<td><code>"&lt;55"</code></td>
+</tr>
+<tr class="even">
+<td><code>55 ≤ AGE ≤ 65</code></td>
+<td><code>"55-65"</code></td>
+</tr>
+<tr class="odd">
+<td><code>AGE &gt; 65</code></td>
+<td><code>"&gt;65"</code></td>
+</tr>
+</tbody>
+</table>
+<p>How many patients are in each <code>AGEGR2</code> group?</p>
+<div title="Tip">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Follow the same pattern as <code>AGEGR1</code></li>
+<li><code>between(x, lo, hi)</code> is equivalent to <code>x &gt;= lo &amp; x &lt;= hi</code>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Solution:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: follow the same pattern as AGEGR1</span></span>
+<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGEGR2 =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-5"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&lt;</span> <span class="dv">55</span>             <span class="sc">~</span> <span class="st">"&lt;55"</span>,</span>
+<span id="cb5-6"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(AGE, <span class="dv">55</span>, <span class="dv">65</span>) <span class="sc">~</span> <span class="st">"55-65"</span>,</span>
+<span id="cb5-7"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&gt;</span> <span class="dv">65</span>             <span class="sc">~</span> <span class="st">"&gt;65"</span>,</span>
+<span id="cb5-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                 <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb5-9"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-10"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-11"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> </span>
+<span id="cb5-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AGEGR2) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-14"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="exercise-1b-high-systolic-bp-flag-hisobpfl" class="slide level2">
+<h2>Exercise 1b — High Systolic BP Flag (HISOBPFL)</h2>
+<p><strong>Task:</strong> Flag patients who have <em>any</em> systolic BP &gt; 160 mmHg: <code>HISOBPFL = "Y"</code> / <code>"N"</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># derive_var_merged_exist_flag() checks a condition in another dataset</span></span>
+<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># and merges the result back as a Y/N flag</span></span>
+<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_var_merged_exist_flag</span>(</span>
+<span id="cb6-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataset_add   =</span> vs,               <span class="co"># look in the raw VS data</span></span>
+<span id="cb6-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
+<span id="cb6-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">new_var       =</span> HISOBPFL,         <span class="co"># new column name</span></span>
+<span id="cb6-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition     =</span> VSTESTCD <span class="sc">==</span> <span class="st">"SYSBP"</span> <span class="sc">&amp;</span> VSSTRESN <span class="sc">&gt;</span> <span class="dv">160</span>,</span>
+<span id="cb6-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">false_value   =</span> <span class="st">"N"</span>,</span>
+<span id="cb6-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_value =</span> <span class="st">"N"</span></span>
+<span id="cb6-12"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p><code>exprs()</code> is <code>{admiral}</code>’s way of passing a list of column names as expressions.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
 </section>
 <section id="what-is-advs" class="slide level2">
 <h2>What is ADVS?</h2>
@@ -1584,13 +1761,13 @@ Edoardo Mancini
 </table>
 </div><div class="column" style="width:45%;">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/advs.RDS"</span>)</span>
-<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"SYSBP"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(USUBJID, PARAMCD,</span>
-<span id="cb4-6"><a href="" aria-hidden="true" tabindex="-1"></a>         AVAL, ADY, AVISIT) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/advs.RDS"</span>)</span>
+<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"SYSBP"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(USUBJID, PARAMCD,</span>
+<span id="cb7-6"><a href="" aria-hidden="true" tabindex="-1"></a>         AVAL, ADY, AVISIT) <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div></div>
 </section>
@@ -1662,150 +1839,10 @@ Edoardo Mancini
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct: exclude NOT DONE records</span></span>
-<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">=</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct: exclude NOT DONE records</span></span>
+<span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a>filter <span class="ot">=</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You will apply this filter in <strong>Exercise 2a</strong> when calling <code>derive_param_map()</code>.</p>
-</section>
-<section id="the-admiral-package" class="slide level2">
-<h2>The {admiral} package</h2>
-<p><code>{admiral}</code> is the pharmaverse package for building ADaM datasets in R.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(admiral)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><strong>Core idea:</strong> a chain of <code>derive_*()</code> functions, each adding variables or rows.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> dm <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_vars_dt</span>(<span class="at">new_vars_prefix =</span> <span class="st">"TRTS"</span>, <span class="at">dtc =</span> RFSTDTC) <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_var_merged_exist_flag</span>(...) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AGEGR1 =</span> <span class="fu">case_when</span>(...))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="fragment">
-<p>Today you will use:</p>
-<ul>
-<li><code>mutate()</code> + <code>case_when()</code> — categorise continuous variables</li>
-<li><code>derive_var_merged_exist_flag()</code> — create Y/N flags from another dataset</li>
-<li><code>derive_param_map()</code> — derive Mean Arterial Pressure</li>
-<li><code>derive_param_computed()</code> — derive any custom computed parameter</li>
-</ul>
-</div>
-</section>
-<section id="admiral-exprs-and-by_vars" class="slide level2">
-<h2><code>{admiral}</code>: <code>exprs()</code> and <code>by_vars</code></h2>
-<p><code>exprs()</code> captures column names as <strong>unevaluated R expressions</strong> — <code>{admiral}</code>’s equivalent of dplyr’s <code>vars()</code>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Think of them as equivalent ideas:</span></span>
-<span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># dplyr:   group_by(df, STUDYID, USUBJID)</span></span>
-<span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># admiral: by_vars = exprs(STUDYID, USUBJID)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><code>by_vars</code> defines the <strong>grouping key</strong> for a derivation — the set of columns that uniquely identify one “unit” (e.g.&nbsp;one subject × one timepoint).</p>
-<p>The <code>!!!</code> (triple-bang) <strong>splices</strong> a pre-defined list into <code>exprs()</code>:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl_vars <span class="ot">&lt;-</span> <span class="fu">exprs</span>(TRTSDT, TRTEDT, TRT01A, TRT01P)</span>
-<span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># These two lines are exactly equivalent:</span></span>
-<span id="cb9-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">exprs</span>(STUDYID, USUBJID, TRTSDT, TRTEDT, TRT01A, TRT01P, VISIT)</span>
-<span id="cb9-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,               VISIT)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Tip</strong></p>
-</div>
-<div class="callout-content">
-<p>You will see <code>exprs()</code> and <code>by_vars</code> in every <code>{admiral}</code> function today. The pattern is always the same — list the columns that make a row unique in the context of that derivation.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="exercise-1-working-with-adsl" class="slide level2 center" data-background-color="#E8F4FD">
-<h2>Exercise 1: Working with ADSL</h2>
-<p>Open <strong><code>templates/ad_adsl.R</code></strong></p>
-</section>
-<section id="exercise-1a-new-age-group-agegr2" class="slide level2">
-<h2>Exercise 1a — New Age Group (AGEGR2)</h2>
-<p><strong>Task:</strong> Add a variable <code>AGEGR2</code> with the following groups:</p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Condition</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>AGE &lt; 40</code></td>
-<td><code>"&lt;40"</code></td>
-</tr>
-<tr class="even">
-<td><code>40 ≤ AGE ≤ 65</code></td>
-<td><code>"40-65"</code></td>
-</tr>
-<tr class="odd">
-<td><code>AGE &gt; 65</code></td>
-<td><code>"&gt;65"</code></td>
-</tr>
-</tbody>
-</table>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: follow the same pattern as AGEGR1</span></span>
-<span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGEGR2 =</span> <span class="fu">case_when</span>(</span>
-<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&lt;</span> <span class="dv">40</span>             <span class="sc">~</span> <span class="st">"&lt;40"</span>,</span>
-<span id="cb10-6"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(AGE, <span class="dv">40</span>, <span class="dv">65</span>) <span class="sc">~</span> <span class="st">"40-65"</span>,</span>
-<span id="cb10-7"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&gt;</span> <span class="dv">65</span>             <span class="sc">~</span> <span class="st">"&gt;65"</span>,</span>
-<span id="cb10-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                 <span class="sc">~</span> <span class="cn">NA_character_</span></span>
-<span id="cb10-9"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-10"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Tip</strong></p>
-</div>
-<div class="callout-content">
-<p><code>between(x, lo, hi)</code> is equivalent to <code>x &gt;= lo &amp; x &lt;= hi</code></p>
-</div>
-</div>
-</div>
-</section>
-<section id="exercise-1b-high-systolic-bp-flag-hisobpfl" class="slide level2">
-<h2>Exercise 1b — High Systolic BP Flag (HISOBPFL)</h2>
-<p><strong>Task:</strong> Flag patients who have <em>any</em> systolic BP &gt; 160 mmHg: <code>HISOBPFL = "Y"</code> / <code>"N"</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># derive_var_merged_exist_flag() checks a condition in another dataset</span></span>
-<span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># and merges the result back as a Y/N flag</span></span>
-<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_var_merged_exist_flag</span>(</span>
-<span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataset_add   =</span> vs,               <span class="co"># look in the raw VS data</span></span>
-<span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
-<span id="cb11-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">new_var       =</span> HISOBPFL,         <span class="co"># new column name</span></span>
-<span id="cb11-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition     =</span> VSTESTCD <span class="sc">==</span> <span class="st">"SYSBP"</span> <span class="sc">&amp;</span> VSSTRESN <span class="sc">&gt;</span> <span class="dv">160</span>,</span>
-<span id="cb11-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">false_value   =</span> <span class="st">"N"</span>,</span>
-<span id="cb11-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_value =</span> <span class="st">"N"</span></span>
-<span id="cb11-12"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Tip</strong></p>
-</div>
-<div class="callout-content">
-<p><code>exprs()</code> is <code>{admiral}</code>’s way of passing a list of column names as expressions.</p>
-</div>
-</div>
-</div>
 </section>
 <section id="exercise-2-working-with-advs" class="slide level2 center" data-background-color="#E8F4FD">
 <h2>Exercise 2: Working with ADVS</h2>
@@ -1817,14 +1854,14 @@ Edoardo Mancini
 <p><span class="math display">\[\text{MAP} = \frac{2 \times \text{DBP} + \text{SBP}}{3}\]</span></p>
 <p><code>{admiral}</code> provides a dedicated function for this common derivation:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_map</span>(</span>
-<span id="cb12-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
-<span id="cb12-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
-<span id="cb12-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(<span class="at">PARAMCD =</span> <span class="st">"MAP"</span>),</span>
-<span id="cb12-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">get_unit_expr =</span> VSSTRESU,</span>
-<span id="cb12-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter        =</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span>
-<span id="cb12-8"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_map</span>(</span>
+<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
+<span id="cb9-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
+<span id="cb9-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(<span class="at">PARAMCD =</span> <span class="st">"MAP"</span>),</span>
+<span id="cb9-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">get_unit_expr =</span> VSSTRESU,</span>
+<span id="cb9-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter        =</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span>
+<span id="cb9-8"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
@@ -1865,8 +1902,8 @@ Edoardo Mancini
 <div class="fragment">
 <p><strong>Check your work:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"MAP"</span>) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
-<span id="cb13-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Should be &gt; 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"MAP"</span>) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
+<span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Should be &gt; 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>
@@ -1875,17 +1912,17 @@ Edoardo Mancini
 <p>For <strong>any</strong> formula not built into <code>{admiral}</code>, use <code>derive_param_computed()</code>.</p>
 <p>Source parameter values are referenced as <code>AVAL.&lt;PARAMCD&gt;</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_computed</span>(</span>
-<span id="cb14-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
-<span id="cb14-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
-<span id="cb14-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">parameters    =</span> <span class="fu">c</span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>),   <span class="co"># which params to combine</span></span>
-<span id="cb14-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(</span>
-<span id="cb14-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">AVAL    =</span> (AVAL.SYSBP <span class="sc">+</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">2</span>,  <span class="co"># your formula</span></span>
-<span id="cb14-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">PARAMCD =</span> <span class="st">"MAPV2"</span></span>
-<span id="cb14-9"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="co"># PARAM is added at the end by the param_lookup merge</span></span>
-<span id="cb14-10"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb14-11"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_computed</span>(</span>
+<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
+<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
+<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">parameters    =</span> <span class="fu">c</span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>),   <span class="co"># which params to combine</span></span>
+<span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(</span>
+<span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">AVAL    =</span> (AVAL.SYSBP <span class="sc">+</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">2</span>,  <span class="co"># your formula</span></span>
+<span id="cb11-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">PARAMCD =</span> <span class="st">"MAPV2"</span></span>
+<span id="cb11-9"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="co"># PARAM is added at the end by the param_lookup merge</span></span>
+<span id="cb11-10"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-11"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -1928,16 +1965,16 @@ Edoardo Mancini
 <section id="ggplot2-quick-reference" class="slide level2">
 <h2>ggplot2 Quick Reference</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> X_VAR, <span class="at">y =</span> Y_VAR, <span class="at">colour =</span> GROUP)) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb15-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb15-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb15-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">title  =</span> <span class="st">"My Plot Title"</span>,</span>
-<span id="cb15-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">x      =</span> <span class="st">"X axis label"</span>,</span>
-<span id="cb15-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">y      =</span> <span class="st">"Y axis label"</span>,</span>
-<span id="cb15-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Legend title"</span></span>
-<span id="cb15-9"><a href="" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb15-10"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> X_VAR, <span class="at">y =</span> Y_VAR, <span class="at">colour =</span> GROUP)) <span class="sc">+</span></span>
+<span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb12-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb12-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">title  =</span> <span class="st">"My Plot Title"</span>,</span>
+<span id="cb12-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">x      =</span> <span class="st">"X axis label"</span>,</span>
+<span id="cb12-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">y      =</span> <span class="st">"Y axis label"</span>,</span>
+<span id="cb12-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Legend title"</span></span>
+<span id="cb12-9"><a href="" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -1962,82 +1999,82 @@ Edoardo Mancini
 <p><strong>Task:</strong> Create two plots of mean MAP/MAPV2 over time, restricted to patients aged <strong>&gt;65</strong>.</p>
 <p><strong>Step 1 — Summarise</strong> (one mean per visit × treatment arm):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="" aria-hidden="true" tabindex="-1"></a>map_summary <span class="ot">&lt;-</span> advs_plot <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"MAP"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AVISITN, AVISIT, TRTA) <span class="sc">%&gt;%</span></span>
-<span id="cb16-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_aval =</span> <span class="fu">mean</span>(AVAL, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="" aria-hidden="true" tabindex="-1"></a>map_summary <span class="ot">&lt;-</span> advs_plot <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"MAP"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AVISITN, AVISIT, TRTA) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_aval =</span> <span class="fu">mean</span>(AVAL, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Step 2 — Plot:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
-<span id="cb17-2"><a href="" aria-hidden="true" tabindex="-1"></a>                        <span class="at">colour =</span> TRTA, <span class="at">group =</span> TRTA)) <span class="sc">+</span></span>
-<span id="cb17-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb17-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
-<span id="cb17-5"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Age group: &gt;65 years"</span>,</span>
-<span id="cb17-6"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
-<span id="cb17-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
+<span id="cb14-2"><a href="" aria-hidden="true" tabindex="-1"></a>                        <span class="at">colour =</span> TRTA, <span class="at">group =</span> TRTA)) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
+<span id="cb14-5"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Age group: &gt;65 years"</span>,</span>
+<span id="cb14-6"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Repeat for <code>PARAMCD == "MAPV2"</code>.</p>
 </section>
 <section id="solution-exercise-1a-agegr2" class="slide level2">
 <h2>Solution: Exercise 1a — AGEGR2</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb18-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGEGR2 =</span> <span class="fu">case_when</span>(</span>
-<span id="cb18-4"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&lt;</span> <span class="dv">40</span>             <span class="sc">~</span> <span class="st">"&lt;40"</span>,</span>
-<span id="cb18-5"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(AGE, <span class="dv">40</span>, <span class="dv">65</span>) <span class="sc">~</span> <span class="st">"40-65"</span>,</span>
-<span id="cb18-6"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&gt;</span> <span class="dv">65</span>             <span class="sc">~</span> <span class="st">"&gt;65"</span>,</span>
-<span id="cb18-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                 <span class="sc">~</span> <span class="cn">NA_character_</span></span>
-<span id="cb18-8"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb18-9"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb18-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> <span class="fu">count</span>(AGEGR2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb15-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGEGR2 =</span> <span class="fu">case_when</span>(</span>
+<span id="cb15-4"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&lt;</span> <span class="dv">40</span>             <span class="sc">~</span> <span class="st">"&lt;40"</span>,</span>
+<span id="cb15-5"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(AGE, <span class="dv">40</span>, <span class="dv">65</span>) <span class="sc">~</span> <span class="st">"40-65"</span>,</span>
+<span id="cb15-6"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&gt;</span> <span class="dv">65</span>             <span class="sc">~</span> <span class="st">"&gt;65"</span>,</span>
+<span id="cb15-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                 <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb15-8"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-9"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> <span class="fu">count</span>(AGEGR2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="solution-exercise-1b-hisobpfl" class="slide level2">
 <h2>Solution: Exercise 1b — HISOBPFL</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_var_merged_exist_flag</span>(</span>
-<span id="cb19-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataset_add   =</span> vs,</span>
-<span id="cb19-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
-<span id="cb19-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">new_var       =</span> HISOBPFL,</span>
-<span id="cb19-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition     =</span> VSTESTCD <span class="sc">==</span> <span class="st">"SYSBP"</span> <span class="sc">&amp;</span> VSSTRESN <span class="sc">&gt;</span> <span class="dv">160</span>,</span>
-<span id="cb19-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">false_value   =</span> <span class="st">"N"</span>,</span>
-<span id="cb19-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_value =</span> <span class="st">"N"</span></span>
-<span id="cb19-9"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-11"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> <span class="fu">count</span>(HISOBPFL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_var_merged_exist_flag</span>(</span>
+<span id="cb16-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataset_add   =</span> vs,</span>
+<span id="cb16-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
+<span id="cb16-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">new_var       =</span> HISOBPFL,</span>
+<span id="cb16-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition     =</span> VSTESTCD <span class="sc">==</span> <span class="st">"SYSBP"</span> <span class="sc">&amp;</span> VSSTRESN <span class="sc">&gt;</span> <span class="dv">160</span>,</span>
+<span id="cb16-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">false_value   =</span> <span class="st">"N"</span>,</span>
+<span id="cb16-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_value =</span> <span class="st">"N"</span></span>
+<span id="cb16-9"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> <span class="fu">count</span>(HISOBPFL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="solution-exercise-2a-map" class="slide level2">
 <h2>Solution: Exercise 2a — MAP</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_map</span>(</span>
-<span id="cb20-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
-<span id="cb20-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
-<span id="cb20-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(<span class="at">PARAMCD =</span> <span class="st">"MAP"</span>),</span>
-<span id="cb20-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">get_unit_expr =</span> VSSTRESU,</span>
-<span id="cb20-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter        =</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span>
-<span id="cb20-8"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_map</span>(</span>
+<span id="cb17-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
+<span id="cb17-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
+<span id="cb17-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(<span class="at">PARAMCD =</span> <span class="st">"MAP"</span>),</span>
+<span id="cb17-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">get_unit_expr =</span> VSSTRESU,</span>
+<span id="cb17-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter        =</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span>
+<span id="cb17-8"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="solution-exercise-2b-mapv2" class="slide level2">
 <h2>Solution: Exercise 2b — MAPV2</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_computed</span>(</span>
-<span id="cb21-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
-<span id="cb21-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
-<span id="cb21-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">parameters    =</span> <span class="fu">c</span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>),</span>
-<span id="cb21-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(</span>
-<span id="cb21-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">AVAL    =</span> (AVAL.SYSBP <span class="sc">+</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">2</span>,</span>
-<span id="cb21-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">PARAMCD =</span> <span class="st">"MAPV2"</span></span>
-<span id="cb21-9"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="co"># PARAM is added later by the param_lookup merge</span></span>
-<span id="cb21-10"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb21-11"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_computed</span>(</span>
+<span id="cb18-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
+<span id="cb18-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
+<span id="cb18-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">parameters    =</span> <span class="fu">c</span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>),</span>
+<span id="cb18-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(</span>
+<span id="cb18-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">AVAL    =</span> (AVAL.SYSBP <span class="sc">+</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb18-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">PARAMCD =</span> <span class="st">"MAPV2"</span></span>
+<span id="cb18-9"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="co"># PARAM is added later by the param_lookup merge</span></span>
+<span id="cb18-10"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-11"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="solution-exercise-3-the-plots" class="slide level2">

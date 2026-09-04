@@ -30,7 +30,7 @@ library(stringr)
 #   VISITNUM  - numeric visit number
 #   VSTPT     - timepoint description within a visit (e.g. "AFTER LYING DOWN")
 #   VSTPTNUM  - numeric timepoint identifier (used to distinguish replicates)
-vs   <- pharmaversesdtm::vs %>% convert_blanks_to_na()
+vs   <- pharmaversesdtm::vs
 
 # ADSL — built in Exercise 1; provides treatment dates and subject-level variables.
 load(file.path("data", "adsl.RDS"))  # loads object named 'adsl'

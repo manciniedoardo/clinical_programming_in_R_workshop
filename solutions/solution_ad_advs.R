@@ -8,7 +8,7 @@ library(lubridate)
 library(stringr)
 
 # Load source datasets ----
-vs   <- pharmaversesdtm::vs %>% convert_blanks_to_na()
+vs   <- pharmaversesdtm::vs
 load(file.path("data", "adsl.RDS"))  # loads 'adsl' built in Exercise 1
 
 # Parameter lookup table ----
