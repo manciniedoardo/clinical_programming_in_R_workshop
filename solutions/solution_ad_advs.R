@@ -9,11 +9,14 @@ library(stringr)
 
 # Load source datasets ----
 vs   <- pharmaversesdtm::vs
-load(file.path("data", "adsl.RDS"))  # loads 'adsl' built in Exercise 1
+load(file.path("data", "adsl.rda"))  # loads 'adsl' built in Exercise 1
 
 # Parameter lookup table ----
 param_lookup <- tibble::tribble(
   ~VSTESTCD, ~PARAMCD,                            ~PARAM,
+  "HEIGHT",  "HEIGHT",                    "Height (cm)",
+  "WEIGHT",  "WEIGHT",                    "Weight (kg)",
+  "TEMP",    "TEMP",                     "Temp (deg C)",
   "SYSBP",   "SYSBP",  "Systolic Blood Pressure (mmHg)",
   "DIABP",   "DIABP", "Diastolic Blood Pressure (mmHg)",
   "PULSE",   "PULSE",          "Pulse Rate (beats/min)",
@@ -42,7 +45,7 @@ advs <- vs %>%
   ) %>%
   mutate(AVAL = VSSTRESN)
 
-# Exercise 2a: Derive MAP ----
+# Derive MAP ----
 # Formula: MAP = (2 × DBP + SBP) / 3
 advs <- advs %>%
   derive_param_map(
@@ -51,11 +54,8 @@ advs <- advs %>%
     set_values_to = exprs(PARAMCD = "MAP"),
     get_unit_expr = VSSTRESU,
     filter        = VSSTAT != "NOT DONE" | is.na(VSSTAT)
-  )
-
-# Exercise 2b: Derive MAPV2 ----
-# Formula: MAPV2 = (SBP + DBP) / 2  (arithmetic mean — illustrative alternative)
-advs <- advs %>%
+  ) %>% 
+# Exercise 2a: Derive MAPV2 ----
   derive_param_computed(
     by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
                           VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
@@ -95,4 +95,4 @@ advs <- advs %>%
 advs %>% filter(PARAMCD %in% c("MAP", "MAPV2")) %>% count(PARAMCD)
 
 # Save output ----
-save(advs, file = file.path("data", "advs.RDS"), compress = "bzip2")
+save(advs, file = file.path("data", "advs.rda"), compress = "bzip2")

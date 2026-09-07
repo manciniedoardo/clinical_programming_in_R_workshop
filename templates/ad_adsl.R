@@ -66,6 +66,9 @@ ex_ext <- ex %>%
 
 adsl <- dm %>%
 
+  ## Drop DOMAIN variable ----
+  select(-DOMAIN) %>% 
+  
   ## Derive treatment arm variables ----
   # TRT01P - Planned treatment arm for Period 1 (copy of ARM)
   # TRT01A - Actual treatment arm for Period 1 (copy of ACTARM)

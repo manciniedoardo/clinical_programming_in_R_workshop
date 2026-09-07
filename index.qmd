@@ -166,7 +166,7 @@ E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset
 
 ------------------------------------------------------------------------
 
-## SDTM in action: DM & EX
+## SDTM in action: `DM` & `EX`
 
 ::::: columns
 ::: {.column width="40%"}
@@ -221,7 +221,7 @@ table.attr = 'style="font-size:0.65em"')
 
 ------------------------------------------------------------------------
 
-## SDTM in action: AE & VS
+## SDTM in action: `AE` & `VS`
 
 ::::: columns
 ::: {.column width="46%"}
@@ -314,7 +314,7 @@ Today, we'll start directly from the ADaM-building stage. For the first part of 
 
 ------------------------------------------------------------------------
 
-## ADaM in action: ADSL
+## ADaM in action: `ADSL`
 
 ::: fragment
 **ADSL (Subject-Level Analysis Dataset)** — one row per subject (derived from `DM`, `DS`, `AE`, etc.)
@@ -337,7 +337,7 @@ adsl %>%
 
 ------------------------------------------------------------------------
 
-## ADaM in action: ADAE
+## ADaM in action: `ADAE`
 
 ::: fragment
 **ADAE (Adverse Events Analysis Dataset) ** — one row per patient per adverse event (derived from `AE` + `ADSL` + `EX`)
@@ -371,7 +371,7 @@ adae %>%
 
 ------------------------------------------------------------------------
 
-## ADaM in action: ADVS
+## ADaM in action: `ADVS`
 
 ::: fragment
 **ADVS (Vital Signs Analysis Dataset)** — one row per patient per parameter per visit (derived from `VS` and `ADSL`)
@@ -547,11 +547,11 @@ We'll be using `{ggplot2}` for our plot... but you're all probably familiar with
 
 ------------------------------------------------------------------------
 
-## Exercise 1: Working with ADSL {.center background-color="#E8F4FD"}
+## Exercise 1: Working with `ADSL` {.center background-color="#E8F4FD"}
 
 ------------------------------------------------------------------------
 
-## Exercise 1: Working with ADSL
+## Exercise 1: Working with `ADSL`
 
 ::: fragment
 [Let's remind ourselves of what we can find in the `ADSL` dataset.]({style="color:blue;"})
@@ -575,12 +575,12 @@ Here are some of the key variables in the `ADSL` dataset:
 :::
 
 ::: fragment
-[Let's open `templates/ad_adsl.R` and see how a simple ADSL is created.]({style="color:blue;"})
+[Let's open `templates/ad_adsl.R` and see how a simple `ADSL` is created...]({style="color:blue;"})
 ::: 
 
 ------------------------------------------------------------------------
 
-## Exercise 1a — New Age Group (AGEGR2)
+## Exercise 1a — New Age Group (`AGEGR2`)
 ::: fragment
 **Task:** Your statistician is interested to learn the age ranges of the patients in your trial to understand whether the ranges of interest are appropriately represented. To support that request, add a variable `AGEGR2` to `ADSL` with the following categories:
 
@@ -596,13 +596,13 @@ How many patients are in each `AGEGR2` group?
 :::
 
 ::: fragment
-:::{.callout-tip title="Tip"}
-- Follow the same pattern as `AGEGR1`
+:::{.callout-tip title="Hints"}
+- Follow the same pattern as `AGEGR1`.
 :::
 :::
 
 ::: fragment
-Solution:
+**Solution:**
 ```{r}
 adsl <- adsl %>%
   mutate(
@@ -624,307 +624,22 @@ adsl %>%
 
 ------------------------------------------------------------------------
 
-## Exercise 1b — High Systolic BP Flag (HISOBPFL)
-
-**Task:** Flag patients who have *any* systolic BP \> 160 mmHg:
-`HISOBPFL = "Y"` / `"N"`
-
-```{r}
-# derive_var_merged_exist_flag() checks a condition in another dataset
-# and merges the result back as a Y/N flag
-
-adsl <- adsl %>%
-  derive_var_merged_exist_flag(
-    dataset_add   = vs,               # look in the raw VS data
-    by_vars       = exprs(STUDYID, USUBJID),
-    new_var       = HISOBPFL,         # new column name
-    condition     = VSTESTCD == "SYSBP" & VSSTRESN > 160,
-    false_value   = "N",
-    missing_value = "N"
-  )
-```
-
-::: callout-tip
-`exprs()` is `{admiral}`'s way of passing a list of column names as
-expressions.
-:::
-
-------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
-## What is ADVS?
-
-**One row per subject × parameter × visit** (BDS structure).
-
-::::: columns
-::: {.column width="55%"}
-**Key variables:**
-
-| Variable             | Description                     |
-|----------------------|---------------------------------|
-| `PARAMCD`            | Parameter code (e.g. `"SYSBP"`) |
-| `PARAM`              | Parameter label                 |
-| `AVAL`               | Analysis value                  |
-| `ADT`                | Analysis date                   |
-| `ADY`                | Study day                       |
-| `AVISITN` / `AVISIT` | Visit number / label            |
-| `TRTA`               | Treatment arm                   |
-:::
-
-::: {.column width="45%"}
-```{r}
-load("data/advs.RDS")
-
-advs %>%
-  filter(PARAMCD == "SYSBP") %>%
-  select(USUBJID, PARAMCD,
-         AVAL, ADY, AVISIT) %>%
-  head(4)
-```
-:::
-:::::
-
-------------------------------------------------------------------------
-
-## The VS SDTM Domain
-
-ADVS is built from the **VS** (Vital Signs) SDTM domain. Each row is
-one measurement for one subject at one timepoint.
-
-Key columns you will use today:
-
-| Column      | Contents                              | Example                         |
-|-------------|---------------------------------------|---------------------------------|
-| `VSTESTCD`  | Short code for the test               | `"SYSBP"`, `"DIABP"`, `"PULSE"` |
-| `VSSTRESN`  | Numeric result                        | `118`, `76`                     |
-| `VSSTRESU`  | Unit of measurement                   | `"mmHg"`                        |
-| `VSSTAT`    | Completion status                     | `"NOT DONE"` if skipped         |
-| `VISIT`     | Visit name                            | `"BASELINE"`, `"WEEK 2"`        |
-| `VSTPTNUM`  | Timepoint number within a visit       | identifies replicates           |
-
-------------------------------------------------------------------------
-
-## Watch out: `VSSTAT == "NOT DONE"`
-
-::: callout-warning
-When `VSSTAT == "NOT DONE"`, the measurement was planned but **not
-collected** — `VSSTRESN` is blank.
-
-Always exclude these records before computing derived parameters like MAP,
-otherwise the calculation will produce `NA`.
-:::
-
-```{r}
-# Correct: exclude NOT DONE records
-filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
-```
-
-You will apply this filter in **Exercise 2a** when calling
-`derive_param_map()`.
-
-
-## Exercise 2: Working with ADVS {.center background-color="#E8F4FD"}
-
-Open **`templates/ad_advs.R`**
-
-------------------------------------------------------------------------
-
-## Deriving Parameters: `derive_param_map()`
-
-Mean Arterial Pressure is a **derived parameter** — it is calculated
-from two collected parameters (SBP and DBP).
-
-$$\text{MAP} = \frac{2 \times \text{DBP} + \text{SBP}}{3}$$
-
-`{admiral}` provides a dedicated function for this common derivation:
-
-```{r}
-advs <- advs %>%
-  derive_param_map(
-    by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
-                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-    set_values_to = exprs(PARAMCD = "MAP"),
-    get_unit_expr = VSSTRESU,
-    filter        = VSSTAT != "NOT DONE" | is.na(VSSTAT)
-  )
-```
-
-::: callout-note
-`by_vars` defines the variables that uniquely identify one timepoint for
-one subject. `{admiral}` uses these to find the SBP and DBP rows that
-belong together before computing MAP. The new MAP row inherits these
-same `by_vars` values.
-:::
-
-::: callout-warning
-Without `filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)`, uncollected
-measurements are passed to the formula and produce `NA`.
-:::
-
-------------------------------------------------------------------------
-
-## Exercise 2a — Derive MAP
-
-**Task:** Add MAP rows to the `advs` dataset using `derive_param_map()`.
-
-Use the hint in the template. Key things to fill in:
-
--   `by_vars` — already shown in the hint, copy it exactly
--   `set_values_to = exprs(PARAMCD = "MAP")` — this links to the lookup
-table
--   `filter` — exclude "NOT DONE" records
+## Exercise 1b — High Systolic Blood Pressus Flag (`HISOBPFL`)
 
 ::: fragment
-**Check your work:**
+**Task:** Your safety scientist is interested in patients who have high systolic blood pressure (SBP) readings and may want to see some future TLGs generated for only those patients. Ahead of this requirement, create a new variable `HISOBPFL` in `ADSL` that flags patients who have *any* SBP measurement \> 160 mmHg. The flag should be `"Y"` if the patient has at least one SBP reading > 160, and `"N"` otherwise.
 
-```{r}
-advs %>% filter(PARAMCD == "MAP") %>% nrow()
-# Should be > 0
-```
+How many patients have a high SBP reading?
 :::
 
-------------------------------------------------------------------------
-
-## Custom Parameters: `derive_param_computed()`
-
-For **any** formula not built into `{admiral}`, use
-`derive_param_computed()`.
-
-Source parameter values are referenced as `AVAL.<PARAMCD>`:
-
-```{r}
-advs <- advs %>%
-  derive_param_computed(
-    by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
-                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-    parameters    = c("SYSBP", "DIABP"),   # which params to combine
-    set_values_to = exprs(
-      AVAL    = (AVAL.SYSBP + AVAL.DIABP) / 2,  # your formula
-      PARAMCD = "MAPV2"
-      # PARAM is added at the end by the param_lookup merge
-    )
-  )
-```
-
-::: callout-tip
-`parameters` tells `{admiral}` which PARAMCD rows to "pivot wide" so you
-can reference `AVAL.SYSBP` and `AVAL.DIABP` in the formula. One new
-row is created for each subject × timepoint where both are present.
+::: fragment
+:::{.callout-tip title="Hints"}
+- `admiral::derive_var_merged_exist_flag()` is your friend! The function creates a flag in a dataset based on whether records exist in another dataset. Check out the function's documentation and examples with `?derive_var_merged_exist_flag`.
+:::
 :::
 
-------------------------------------------------------------------------
-
-## Exercise 2b — Derive MAPV2 (custom formula)
-
-**Task:** Derive an alternative MAP using the arithmetic mean:
-
-$$\text{MAPV2} = \frac{\text{SBP} + \text{DBP}}{2}$$
-
-Use `derive_param_computed()` with `parameters = c("SYSBP", "DIABP")`.
-
-Inside `set_values_to`: - `AVAL = (AVAL.SYSBP + AVAL.DIABP) / 2` -
-`PARAMCD = "MAPV2"` - `PARAM = "Mean Arterial Pressure V2 (mmHg)"`
-
-::: callout-note
-This formula is intentionally simplified for the exercise. In practice,
-you would use a clinically validated alternative formula.
-:::
-
-------------------------------------------------------------------------
-
-## Exercise 3: Visualisation {.center background-color="#E8F4FD"}
-
-Open **`templates/g_vs_map.R`**
-
-------------------------------------------------------------------------
-
-## ggplot2 Quick Reference
-
-```{r}
-ggplot(data, aes(x = X_VAR, y = Y_VAR, colour = GROUP)) +
-  geom_line() +
-  geom_point(size = 2) +
-  labs(
-    title  = "My Plot Title",
-    x      = "X axis label",
-    y      = "Y axis label",
-    colour = "Legend title"
-  ) +
-  theme_bw()
-```
-
-::::: columns
-::: {.column width="50%"}
-**Common geoms:**
-
--   `geom_line()` — line graph
--   `geom_point()` — scatter / dot
--   `geom_bar()` — bar chart
--   `geom_boxplot()` — box plot
-:::
-
-::: {.column width="50%"}
-**Common themes:**
-
--   `theme_bw()` — white background
--   `theme_minimal()` — minimal grid
--   `theme_classic()` — no grid lines
-:::
-:::::
-
-------------------------------------------------------------------------
-
-## Exercise 3 — MAP Over Time
-
-**Task:** Create two plots of mean MAP/MAPV2 over time, restricted to
-patients aged **\>65**.
-
-**Step 1 — Summarise** (one mean per visit × treatment arm):
-
-```{r}
-map_summary <- advs_plot %>%
-  filter(PARAMCD == "MAP") %>%
-  group_by(AVISITN, AVISIT, TRTA) %>%
-  summarise(mean_aval = mean(AVAL, na.rm = TRUE), .groups = "drop")
-```
-
-**Step 2 — Plot:**
-
-```{r}
-ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
-                        colour = TRTA, group = TRTA)) +
-  geom_line() + geom_point(size = 2) +
-  labs(title = "Mean Arterial Pressure Over Time",
-       subtitle = "Age group: >65 years",
-       x = "Visit (week)", y = "Mean MAP (mmHg)", colour = "Treatment") +
-  theme_bw()
-```
-
-Repeat for `PARAMCD == "MAPV2"`.
-
-------------------------------------------------------------------------
-
-## Solution: Exercise 1a — AGEGR2
-
-```{r}
-adsl <- adsl %>%
-  mutate(
-    AGEGR2 = case_when(
-      AGE < 40             ~ "<40",
-      between(AGE, 40, 65) ~ "40-65",
-      AGE > 65             ~ ">65",
-      TRUE                 ~ NA_character_
-    )
-  )
-
-adsl %>% count(AGEGR2)
-```
-
-------------------------------------------------------------------------
-
-## Solution: Exercise 1b — HISOBPFL
-
+::: fragment
+**Solution:**
 ```{r}
 adsl <- adsl %>%
   derive_var_merged_exist_flag(
@@ -936,12 +651,69 @@ adsl <- adsl %>%
     missing_value = "N"
   )
 
+# Check results:
 adsl %>% count(HISOBPFL)
+
+# Answer: 87 patients have an SBP > 160 mmHg
 ```
+::: 
 
 ------------------------------------------------------------------------
 
-## Solution: Exercise 2a — MAP
+## Exercise 2: Working with `ADVS` {.center background-color="#E8F4FD"}
+
+------------------------------------------------------------------------
+
+## Exercise 2: Working with `ADVS`
+
+::: fragment
+:::{.callout-note title="ADSL"}
+- This exercise will use the `ADS`L dataset you created in Exercise 1. You can also download it from the GitHub repo if you haven't completed the exercise.
+:::
+:::
+
+::: fragment
+[Let's remind ourselves of what we can find in the `ADVS` dataset.]({style="color:blue;"})
+:::
+
+::: fragment 
+`ADVS` contains **one row per patient per visit per vital sign measurement** - so each patient has multiple rows the the dataset 
+(e.g pulse/blood pressure/weight at baseline, blood pressure at Week 2, Week 4, etc.).
+:::
+
+::: fragment
+Here are some of the key variables in the `ADVS` dataset:
+
+::: {.small-table}
+| Variable             | Description                | Example                          |
+|----------------------|----------------------------|----------------------------------|
+| `USUBJID`            | Unique subject identifier  | `01-718-1371`                    |
+| `PARAMCD`            | Short code for the test    | `"SYSBP"`, `"DIABP"`, `"PULSE"`  |
+| `PARAM  `            | Long name for the test     | `"Systolic blood pressue (mmHg)` |
+| `AVISIT`             | Analysis Visit             | `"BASELINE"`, `"WEEK 2"`         |
+| `VSTPT`              | Timepoint for measurement  | `"AFTER LYING DOWN FOR 5 MINUTES"`, `"AFTER STANDING FOR 1 MINUTE"`, `"AFTER STANDING FOR 3 MINUTES" `         |
+| `AVAL`               | Numeric result of the test | `118`, `76`, `NA`                |
+| `AVALU`              | Unit of measurement        | `"mmHg"`, `"beats/min"`          |
+| `VSSTAT`             | Completion status          | `"NOT DONE"` if skipped          |
+:::
+:::
+
+::: fragment
+[Unlike `ADSL`, `ADVS` can have whole new (derived) rows with measurements constructed as a combination of other measurements...]({style="color:blue;"})
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 2: Working with `ADVS`
+
+::: fragment
+As we saw before, Mean Arterial Pressure is a **derived parameter** — it is calculated
+from two collected parameters (SBP and DBP):
+
+$$\text{MAP} = \frac{2 \times \text{DBP} + \text{SBP}}{3}$$
+:::
+::: fragment
+Since MAP is a common measurement to compute, `{admiral}` provides a dedicated function for this common derivation:
 
 ```{r}
 advs <- advs %>%
@@ -953,43 +725,127 @@ advs <- advs %>%
     filter        = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   )
 ```
+:::
+
+::: fragment
+:::{.callout-note title="Note for later"}
+`derive_param_map()` is a wrapper to the more generic `derive_param_computed()`.
+:::
+::: callout-warning
+Without `filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)`, uncollected
+measurements are passed to the formula and produce `NA`.
+:::
+:::
+
+::: fragment
+[Let's open `templates/ad_advs.R` and see how a simple `ADVS` is created - in particular the derivation of the mean arterial pressure...]({style="color:blue;"})
+::: 
 
 ------------------------------------------------------------------------
 
-## Solution: Exercise 2b — MAPV2
+## Exercise 2a — Derive `MAPV2` (custom formula)
+
+::: fragment
+**Task:** A particularly enterprising safety scientist on your trial wants to test out a new formula for deriving MAP using the arithmetic mean:
+
+$$\text{MAPV2} = \frac{\text{SBP} + \text{DBP}}{2}$$
+Ahead of analysis, add a `"MAPV2"` parameter to the dataset that calculates this new MAP at each timepoint using `admiral::derive_param_computed()` with `parameters = c("SYSBP", "DIABP")`.
+
+Which patient has the highest MAP and at what visit?
+:::
+
+::: fragment
+:::{.callout-tip title="Tip"}
+- Example 1a in the reference page `?derive_param_computed` shows how to compute generic MAP using `derive_param_computed()`.
+- You can copy the `by_vars` and `filter` arguments from the `derive_param_map()` call for the standard MAP.
+- Remember to update the parameter lookup table at the top of the script!
+:::
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 2a — Derive MAPV2 (custom formula)
+
+::: fragment
+**Solution:** 
 
 ```{r}
-advs <- advs %>%
+param_lookup <- tibble::tribble(
+  ~VSTESTCD, ~PARAMCD,                            ~PARAM,
+  "HEIGHT",  "HEIGHT",                    "Height (cm)",
+  "WEIGHT",  "WEIGHT",                    "Weight (kg)",
+  "TEMP",    "TEMP",                     "Temp (deg C)",
+  "SYSBP",   "SYSBP",  "Systolic Blood Pressure (mmHg)",
+  "DIABP",   "DIABP", "Diastolic Blood Pressure (mmHg)",
+  "PULSE",   "PULSE",          "Pulse Rate (beats/min)",
+  "MAP",      "MAP",    "Mean Arterial Pressure (mmHg)",
+  "MAPV2",  "MAPV2",  "Mean Arterial Pressure V2 (mmHg)" # new line
+)
+
+advs <- advs %>% 
   derive_param_computed(
     by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
-                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-    parameters    = c("SYSBP", "DIABP"),
+                        VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+   parameters    = c("SYSBP", "DIABP"),
     set_values_to = exprs(
       AVAL    = (AVAL.SYSBP + AVAL.DIABP) / 2,
       PARAMCD = "MAPV2"
-      # PARAM is added later by the param_lookup merge
     )
   )
+
+# Highest MAP is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)
 ```
+:::
+
+::: fragment
+[Now let's put everything into practice with a visualisation!]({style="color:blue;"})
+:::
 
 ------------------------------------------------------------------------
 
-## Solution: Exercise 3 — The Plots
+## Exercise 3: A Simple Visualisation {.center background-color="#E8F4FD"}
+
+Open **`templates/g_vs_map.R`**
+
+## Exercise 3: A Simple Visualisation
+
+::: fragment
+:::{.callout-note title="ADSL"}
+- This exercise will use the `ADVS` dataset you created in Exercise 1. You can also download it from the GitHub repo if you haven't completed the exercise.
+:::
+:::
+
+::: fragment
+**Task:** Create two plots of mean `"MAP"`/`"MAPV2"` over time (use visit number `AVISITN`), split by treatment arm ,(`TRT01A"`) and restricted to patients aged **\>65**. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (`HISOBPFL == "Y"`) and those who do not (`HISOBPFL == "N"`).
+
+You'll need to pre-process `ADVS` as follows first to compute the data points for the plot:
 
 ```{r}
-#| echo: false
-#| eval: false
-# (Facilitator: run solutions/g_vs_map.R to show the plots live)
+map_summary <- advs %>%
+  filter(PARAMCD == "MAP" & AGEGR2 %in% c("55-65") & !is.na(AVISITN)) %>%
+  group_by(AVISITN, AVISIT, TRT01A) %>%
+  summarise(mean_aval = mean(AVAL, na.rm = TRUE), .groups = "drop")
+```
+:::
+
+
+::: fragment
+**Solution:**
+```{r}
+ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
+                        colour = TRTA, group = TRTA)) +
+  geom_line() + geom_point(size = 2) +
+  labs(title = "Mean Arterial Pressure Over Time",
+       subtitle = "Age group: >65 years",
+       x = "Visit (week)", y = "Mean MAP (mmHg)", colour = "Treatment") +
+  theme_bw()
 ```
 
-Key things to notice:
+Repeat for `PARAMCD == "MAPV2"`.
+:::
 
--   Both plots use the **same code structure** — only the
-`filter(PARAMCD == ...)` changes
--   The **age group filter** (from Exercise 1) is applied in the
-`advs_plot` join step
--   Different MAP formulas give **slightly different values** — same
-trend, different scale
+## Exercise 3: A Simple Visualisation
+
 
 ------------------------------------------------------------------------
 
@@ -1049,7 +905,3 @@ table engine
 
 Questions? Feedback?
 
-::: callout-tip
-The full solutions are in the `solutions/` folder — run them
-top-to-bottom to see the complete pipeline.
-:::

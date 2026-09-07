@@ -35,6 +35,7 @@ ex_ext <- ex %>%
   )
 
 adsl <- dm %>%
+  select(-DOMAIN) %>% 
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
   derive_vars_merged(
     dataset_add = ex_ext,
@@ -96,4 +97,4 @@ adsl %>% count(AGEGR2)
 adsl %>% count(HISOBPFL)
 
 # Save output ----
-save(adsl, file = file.path("data", "adsl.RDS"), compress = "bzip2")
+save(adsl, file = file.path("data", "adsl.rda"), compress = "bzip2")

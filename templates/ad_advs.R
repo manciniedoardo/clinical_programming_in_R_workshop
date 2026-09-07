@@ -33,7 +33,7 @@ library(stringr)
 vs   <- pharmaversesdtm::vs
 
 # ADSL — built in Exercise 1; provides treatment dates and subject-level variables.
-load(file.path("data", "adsl.RDS"))  # loads object named 'adsl'
+load(file.path("data", "adsl.rda"))  # loads object named 'adsl'
 
 # Quick look ----
 glimpse(vs)
@@ -44,13 +44,15 @@ glimpse(vs)
 # Note: VSTESTCD is the SDTM variable; PARAMCD is the ADaM equivalent.
 param_lookup <- tibble::tribble(
   ~VSTESTCD, ~PARAMCD,                            ~PARAM,
+  "HEIGHT",  "HEIGHT",                    "Height (cm)",
+  "WEIGHT",  "WEIGHT",                    "Weight (kg)",
+  "TEMP",    "TEMP",                     "Temp (deg C)",
   "SYSBP",   "SYSBP",  "Systolic Blood Pressure (mmHg)",
   "DIABP",   "DIABP", "Diastolic Blood Pressure (mmHg)",
   "PULSE",   "PULSE",          "Pulse Rate (beats/min)",
   "MAP",      "MAP",    "Mean Arterial Pressure (mmHg)",
   "MAPV2",  "MAPV2",  "Mean Arterial Pressure V2 (mmHg)"
 )
-
 # ADSL variables to carry into ADVS ----
 # These treatment-related variables from ADSL are needed:
 #   TRTSDT  - treatment start date (used to compute study day ADY)
@@ -95,36 +97,17 @@ advs <- vs %>%
   # AVAL is the primary numeric analysis variable in all BDS ADaM datasets.
   mutate(AVAL = VSSTRESN)
 
-
-# Exercise 2a: Derive Mean Arterial Pressure (MAP) ----
-# ---------------------------------------------------------------
-# MAP = (2 × DBP + SBP) / 3
-#
-# Admiral provides a dedicated function for this: derive_param_map()
-# It finds matching SBP and DBP rows (same subject, same timepoint) and creates
-# a new MAP row for each pair.
-#
-# by_vars lists every column that identifies a unique timepoint — admiral uses
-# these to match the SBP and DBP records that belong together.
-#
-# filter excludes rows where VSSTAT == "NOT DONE" (measurement was skipped and
-# VSSTRESN is blank). The | is.na(VSSTAT) keeps ordinary records where VSSTAT
-# was never populated.
-#
-# Hint — call structure:
-#   derive_param_map(
-#     by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
-#                           VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-#     set_values_to = exprs(PARAMCD = "MAP"),  # label the new rows as MAP
-#     get_unit_expr = VSSTRESU,                # carry the unit from the source rows
-#     filter        = VSSTAT != "NOT DONE" | is.na(VSSTAT)
-#   )
-
+# Add derived Mean Arterial Pressure (MAP) parameter ----
 advs <- advs %>%
-  # YOUR CODE HERE
+  derive_param_map(
+    by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
+                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+    set_values_to = exprs(PARAMCD = "MAP"),
+    get_unit_expr = VSSTRESU,
+    filter        = VSSTAT != "NOT DONE" | is.na(VSSTAT)
+  )
 
-
-# Exercise 2b: Derive alternative MAP (MAPV2) using a custom formula ----
+# Exercise 2a: Derive alternative MAP (MAPV2) using a custom formula ----
 # ---------------------------------------------------------------
 # Use the arithmetic mean of SBP and DBP as a simplified illustrative example:
 #   MAPV2 = (SBP + DBP) / 2
@@ -192,4 +175,4 @@ advs <- advs %>%
 advs %>% filter(PARAMCD %in% c("MAP", "MAPV2")) %>% count(PARAMCD)
 
 # Save output ----
-save(advs, file = file.path("data", "advs.RDS"), compress = "bzip2")
+save(advs, file = file.path("data", "advs.rda"), compress = "bzip2")
