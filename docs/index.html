@@ -1518,20 +1518,20 @@ Edoardo Mancini
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
 <div class="fragment">
-<p>As well as the {tidyverse} suite of packages, today we will be using another pharmaverse package, <code>{admiral}</code>, to help us create our ADaM datasets.</p>
+<p>As well as the <code>{tidyverse}</code> suite of packages, today we will be using another pharmaverse package, <code>{admiral}</code>, to help us create our ADaM datasets.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(admiral)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div class="fragment">
-<div title="Where does this data come from?">
+<div title="What's {admiral}">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Where does this data come from?</strong></p>
+<p><strong>What’s {admiral}</strong></p>
 </div>
 <div class="callout-content">
 <p><strong>Core idea:</strong> <code>{admiral}</code> <code>derive_*()</code> functions can be chained together with <code>{dplyr}</code> functions in a series of blocks, each modifying a dataset in some way, e.g.&nbsp;adding variables or rows.</p>
@@ -1550,6 +1550,7 @@ Edoardo Mancini
 <span id="cb4-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">"first"</span>,             </span>
 <span id="cb4-12"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Notice in particular the use of <code>exprs()</code> to pass column names, and <code>by_vars</code> to split the dataset into groups.</p>
 </div>
 </div>
 </div>
@@ -1618,7 +1619,7 @@ Edoardo Mancini
 <section id="exercise-1a-new-age-group-agegr2" class="slide level2">
 <h2>Exercise 1a — New Age Group (AGEGR2)</h2>
 <div class="fragment">
-<p><strong>Task:</strong> Add a variable <code>AGEGR2</code> with the following groups:</p>
+<p><strong>Task:</strong> Add a variable <code>AGEGR2</code> with the following categories:</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -1642,6 +1643,8 @@ Edoardo Mancini
 </tbody>
 </table>
 <p>How many patients are in each <code>AGEGR2</code> group?</p>
+</div>
+<div class="fragment">
 <div title="Tip">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -1664,20 +1667,19 @@ Edoardo Mancini
 <div class="fragment">
 <p>Solution:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Hint: follow the same pattern as AGEGR1</span></span>
-<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGEGR2 =</span> <span class="fu">case_when</span>(</span>
-<span id="cb5-5"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&lt;</span> <span class="dv">55</span>             <span class="sc">~</span> <span class="st">"&lt;55"</span>,</span>
-<span id="cb5-6"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(AGE, <span class="dv">55</span>, <span class="dv">65</span>) <span class="sc">~</span> <span class="st">"55-65"</span>,</span>
-<span id="cb5-7"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&gt;</span> <span class="dv">65</span>             <span class="sc">~</span> <span class="st">"&gt;65"</span>,</span>
-<span id="cb5-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                 <span class="sc">~</span> <span class="cn">NA_character_</span></span>
-<span id="cb5-9"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-10"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-11"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> </span>
-<span id="cb5-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AGEGR2) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-14"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGEGR2 =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&lt;</span> <span class="dv">55</span>             <span class="sc">~</span> <span class="st">"&lt;55"</span>,</span>
+<span id="cb5-5"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(AGE, <span class="dv">55</span>, <span class="dv">65</span>) <span class="sc">~</span> <span class="st">"55-65"</span>,</span>
+<span id="cb5-6"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&gt;</span> <span class="dv">65</span>             <span class="sc">~</span> <span class="st">"&gt;65"</span>,</span>
+<span id="cb5-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                 <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb5-8"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-9"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> </span>
+<span id="cb5-12"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AGEGR2) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>

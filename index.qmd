@@ -68,7 +68,7 @@ You may also want to clone the GitHub repository to your local session, or at le
 ## Agenda
 
 ::: fragment
-We have a lot to cover!
+We have a lot to cover:
 
 | Time | Topic                                                         |
 |------|---------------------------------------------------------------|
@@ -511,7 +511,7 @@ Luckily, you won't have to create anything from scratch: the `templates` folder 
 ## Packages
 
 ::: fragment
-As well as the {tidyverse} suite of packages, today we will be using another pharmaverse package, `{admiral}`, to help us create our ADaM datasets.
+As well as the `{tidyverse}` suite of packages, today we will be using another pharmaverse package, `{admiral}`, to help us create our ADaM datasets.
 
 ```{r}
 library(admiral)
@@ -519,7 +519,7 @@ library(admiral)
 :::
 
 ::: fragment
-:::{.callout-note title="Where does this data come from?"}
+:::{.callout-note title="What's the idea behind {admiral}"}
 **Core idea:** `{admiral}` `derive_*()` functions can be chained together with `{dplyr}` functions in a series of blocks, each modifying a dataset in some way, e.g. adding variables or rows.
 
 Take a look at the two blocks below:

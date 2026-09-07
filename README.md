@@ -12,7 +12,6 @@ No prior clinical trial experience required! Just bring your R skills.
 
 - **R** ≥ 4.1 — [download from CRAN](https://cran.r-project.org/)
 - **RStudio** ≥ 2022 — [download from Posit](https://posit.co/download/rstudio-desktop/)
-- **Quarto** (for the slides) — bundled with RStudio 2022+, or [download separately](https://quarto.org/docs/get-started/)
 
 ---
 
@@ -33,21 +32,31 @@ Run this **once** in the R console after opening the project:
 renv::restore()
 ```
 
-Agree to any prompts. This installs `admiral`, `pharmaversesdtm`, `ggplot2`,
+Agree to any prompts. This installs `{admiral}`, `{pharmaversesdtm}`, `{ggplot2}`,
 and all other dependencies. It may take a few minutes on the first run.
+
+Alternatively, you could just install the following packages, making sure to grab the most recent 
+versions from CRAN:
+
+```{r, eval=FALSE}
+install.packages("pharmaversesdtm") # test data
+install.packages("admiral") # tools for ADaM programming
+install.packages("ggplot2") # plots
+```
+
 
 ### 3. View the slides
 
-Open `slides/slides.qmd` in RStudio and click the **Render** button (or press
-`Ctrl+Shift+K`). The slides will open in your browser.
+The workshop slides have been rendered and published [here](https://manciniedoardo.github.io/clinical_programming_in_R_workshop).
 
-Alternatively, from a terminal in the project root:
+If you want to render the slides locally: open `index.qmd` in RStudio and click the **Render** button (or press
+`Ctrl+Shift+K`). The slides will open in your browser. Alternatively, from a terminal in the project root:
 
 ```bash
 quarto render slides/slides.qmd
 ```
 
-The rendered file is saved as `slides/slides.html` and can be reopened in any
+The rendered file is saved as `docs/index.html` and can be reopened in any
 browser at any time.
 
 ---
@@ -71,8 +80,7 @@ clinical_programming_in_R_workshop/
 │   ├── adsl.RDS         #   Subject-level dataset
 │   └── advs.RDS         #   Vital signs dataset
 │
-└── slides/
-    └── slides.qmd       # Workshop slide deck (render to view)
+└── index.qmd            # Workshop slide deck (render to view)
 ```
 
 ---
