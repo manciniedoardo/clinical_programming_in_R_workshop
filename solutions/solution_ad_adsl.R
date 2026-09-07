@@ -73,7 +73,7 @@ adsl <- dm %>%
     ),
     # Exercise 1a: Derive AGEGR2 
     AGEGR2 = case_when(
-      AGE < 55             ~ "<40",
+      AGE < 55             ~ "<55",
       between(AGE, 55, 65) ~ "55-65",
       AGE > 65             ~ ">65",
       TRUE                 ~ NA_character_

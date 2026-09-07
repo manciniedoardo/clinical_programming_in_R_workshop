@@ -260,7 +260,7 @@ Edoardo Mancini
 <section id="agenda" class="slide level2">
 <h2>Agenda</h2>
 <div class="fragment">
-<p>We have a lot to cover!</p>
+<p>We have a lot to cover:</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -1524,14 +1524,14 @@ Edoardo Mancini
 </div>
 </div>
 <div class="fragment">
-<div title="What's {admiral}">
+<div title="What's the idea behind {admiral}">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>What’s {admiral}</strong></p>
+<p><strong>What’s the idea behind {admiral}</strong></p>
 </div>
 <div class="callout-content">
 <p><strong>Core idea:</strong> <code>{admiral}</code> <code>derive_*()</code> functions can be chained together with <code>{dplyr}</code> functions in a series of blocks, each modifying a dataset in some way, e.g.&nbsp;adding variables or rows.</p>
@@ -1619,7 +1619,8 @@ Edoardo Mancini
 <section id="exercise-1a-new-age-group-agegr2" class="slide level2">
 <h2>Exercise 1a — New Age Group (AGEGR2)</h2>
 <div class="fragment">
-<p><strong>Task:</strong> Add a variable <code>AGEGR2</code> with the following categories:</p>
+<p><strong>Task:</strong> Your statistician is interested to learn the age ranges of the patients in your trial to understand whether the ranges of interest are appropriately represented. To support that request, add a variable <code>AGEGR2</code> to <code>ADSL</code> with the following categories:</p>
+<div class="small-table">
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -1642,6 +1643,7 @@ Edoardo Mancini
 </tr>
 </tbody>
 </table>
+</div>
 <p>How many patients are in each <code>AGEGR2</code> group?</p>
 </div>
 <div class="fragment">
@@ -1679,7 +1681,9 @@ Edoardo Mancini
 <span id="cb5-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-11"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> </span>
 <span id="cb5-12"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AGEGR2) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb5-14"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Answer: &lt;55: 5 patients; 55-65: 41 patients; &gt;65: 260 patients</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>

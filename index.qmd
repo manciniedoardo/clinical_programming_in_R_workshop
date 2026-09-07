@@ -582,13 +582,15 @@ Here are some of the key variables in the `ADSL` dataset:
 
 ## Exercise 1a — New Age Group (AGEGR2)
 ::: fragment
-**Task:** Add a variable `AGEGR2` with the following categories:
+**Task:** Your statistician is interested to learn the age ranges of the patients in your trial to understand whether the ranges of interest are appropriately represented. To support that request, add a variable `AGEGR2` to `ADSL` with the following categories:
 
+::: {.small-table}
 | Condition       | Value     |
 |-----------------|-----------|
 | `AGE < 55`      | `"<55"`   |
 | `55 ≤ AGE ≤ 65` | `"55-65"` |
 | `AGE > 65`      | `">65"`   |
+:::
 
 How many patients are in each `AGEGR2` group?
 :::
@@ -596,7 +598,6 @@ How many patients are in each `AGEGR2` group?
 ::: fragment
 :::{.callout-tip title="Tip"}
 - Follow the same pattern as `AGEGR1`
-- `between(x, lo, hi)` is equivalent to `x >= lo & x <= hi`.
 :::
 :::
 
@@ -616,6 +617,8 @@ adsl <- adsl %>%
 adsl %>% 
   group_by(AGEGR2) %>% 
   summarise(Count = n())
+
+# Answer: <55: 5 patients; 55-65: 41 patients; >65: 260 patients
 ```
 ::: 
 
