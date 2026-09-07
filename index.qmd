@@ -764,7 +764,7 @@ Which patient has the highest MAP and at what visit?
 
 ------------------------------------------------------------------------
 
-## Exercise 2a — Derive MAPV2 (custom formula)
+## Exercise 2a — Derive `MAPV2` (custom formula)
 
 ::: fragment
 **Solution:** 
@@ -836,7 +836,7 @@ ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
                         colour = TRTA, group = TRTA)) +
   geom_line() + geom_point(size = 2) +
   labs(title = "Mean Arterial Pressure Over Time",
-       subtitle = "Age group: >65 years",
+       subtitle = "Age group: 55-65 years",
        x = "Visit (week)", y = "Mean MAP (mmHg)", colour = "Treatment") +
   theme_bw()
 ```
@@ -844,64 +844,103 @@ ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
 Repeat for `PARAMCD == "MAPV2"`.
 :::
 
-## Exercise 3: A Simple Visualisation
+## Exercise 3: Solution Plots
 
-
-------------------------------------------------------------------------
-
-## Wrap-up & Next Steps {.center background-color="#E8F4FD"}
-
-------------------------------------------------------------------------
-
-## Key Takeaways
-
+::: fragment
 ::::: columns
 ::: {.column width="50%"}
-**The pipeline:**
-
--   Raw → SDTM → ADaM → TLGs
--   Each layer adds structure and derived content
--   CDISC standards make studies comparable
-
-**ADSL vs BDS:**
-
--   ADSL: one row per subject
--   BDS (e.g. ADVS): one row per subject × parameter × visit
+![](images/solution_map.png){width="100%" fig-align="center"}
 :::
 
 ::: {.column width="50%"}
-**`{admiral}` patterns you used:**
-
--   `mutate()` + `case_when()` — categorise any continuous variable
--   `derive_var_merged_exist_flag()` — cross-dataset Y/N flags
--   `derive_param_map()` — built-in MAP derivation
--   `derive_param_computed()` — any custom computed parameter
+![](images/solution_mapv2.png){width="100%" fig-align="center"}
 :::
 :::::
+:::
+
+::: fragment
+[**🤔Open question:** How could you further enhance/improve these plots?]({style="color:blue;"})
+:::
+------------------------------------------------------------------------
+
+## Exercise 3 (Optional): Faceted by `HISOBPFL`
+
+::: fragment
+**Solution:**
+```{r}
+ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
+                        colour = TRT01A, group = TRT01A)) +
+  geom_line() + geom_point(size = 2) +
+  facet_wrap(~HISOBPFL) +
+  labs(title = "Mean Arterial Pressure Over Time",
+       subtitle = "Age group: 55-65 years, split by high SBP flag",
+       x = "Visit (week)", y = "Mean MAP (mmHg)", colour = "Treatment") +
+  theme_bw()
+```
+
+Repeat for `PARAMCD == "MAPV2"`. See `solutions/solution_g_vs_map_faceted.R` for the full solution.
+:::
+
+::: fragment
+::::: columns
+::: {.column width="50%"}
+![](images/solution_map_faceted.png){width="100%" fig-align="center"}
+:::
+
+::: {.column width="50%"}
+![](images/solution_mapv2_faceted.png){width="100%" fig-align="center"}
+:::
+:::::
+:::
 
 ------------------------------------------------------------------------
 
-## Where to go next
-
-**Pharmaverse** — the R ecosystem for clinical reporting:
-
--   [`{admiral}`](https://pharmaverse.github.io/admiral/) — ADaM datasets
--   [`pharmaversesdtm`](https://pharmaverse.github.io/pharmaversesdtm/)
-— example SDTM data
--   [`gtsummary`](https://www.danieldsjoberg.com/gtsummary/) — summary
-tables
--   [`tfrmt`](https://gsk-biostatistics.github.io/tfrmt/) — clinical
-table formatting
--   [`rtables`](https://roche.github.io/rtables/) — production-grade
-table engine
-
-**CDISC standards:**
-
--   <https://www.cdisc.org/standards/foundational/adam>
+## Wrap-up {.center background-color="#E8F4FD"}
 
 ------------------------------------------------------------------------
 
-## Thank You {.center}
+## Summary and links for further reading
+
+::: fragment
+**What we learned today:**
+:::
+
+::: fragment
+- The Clinical Data Pipeline (Raw → SDTM → ADaM → TLGs)...
+:::
+
+::: fragment
+- Some pharmaverse packages that help support it
+:::
+
+::: fragment
+- Examples of SDTM and ADaM datasets
+  - `DM`, `VS`, `AE`, `EX`
+  - `ADSL`, `ADVS`, `ADAE`
+:::
+
+::: fragment
+- How to add variables to `ADSL` and parameters to `ADVS` to support analysis
+:::
+
+::: fragment
+- How to use our datasets to generate a simple plot.
+:::
+
+::: fragment
+**To go further:**
+:::
+
+::: fragment
+- **Pharmaverse** — [https://pharmaverse.org/](https://pharmaverse.org/)
+:::
+
+::: fragment
+- More in-depth examples - [https://pharmaverse.github.io/examples/](https://pharmaverse.github.io/examples/)
+:::
+
+------------------------------------------------------------------------
+
+## Thank You 🙏 {.center}
 
 Questions? Feedback?
-

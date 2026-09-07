@@ -13,3 +13,18 @@
 #advs-showcase td:nth-child(4) {
   min-width: 14em;
 }
+
+/* Cover image, placed between the subtitle and author name on the title slide.
+   .quarto-title-authors is a flex row, so the image is attached to .subtitle
+   instead (via ::after) to keep it stacked, not laid out beside the author name. */
+#title-slide .subtitle::after {
+  content: "";
+  display: block;
+  background-image: url("images/cover_map_hisobpfl_y.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 60%;
+  height: 220px;
+  margin: 0.5em auto;
+}

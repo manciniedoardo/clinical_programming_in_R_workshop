@@ -1909,7 +1909,7 @@ Edoardo Mancini
 </div>
 </section>
 <section id="exercise-2a-derive-mapv2-custom-formula-1" class="slide level2">
-<h2>Exercise 2a — Derive MAPV2 (custom formula)</h2>
+<h2>Exercise 2a — Derive <code>MAPV2</code> (custom formula)</h2>
 <div class="fragment">
 <p><strong>Solution:</strong></p>
 <div class="cell">
@@ -1985,61 +1985,121 @@ Edoardo Mancini
 <span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>                        <span class="at">colour =</span> TRTA, <span class="at">group =</span> TRTA)) <span class="sc">+</span></span>
 <span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
 <span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
-<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Age group: &gt;65 years"</span>,</span>
+<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years"</span>,</span>
 <span id="cb10-6"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
 <span id="cb10-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Repeat for <code>PARAMCD == "MAPV2"</code>.</p>
 </div>
 </section>
-<section id="exercise-3-a-simple-visualisation-2" class="slide level2">
-<h2>Exercise 3: A Simple Visualisation</h2>
-</section>
-<section id="wrap-up-next-steps" class="slide level2 center" data-background-color="#E8F4FD">
-<h2>Wrap-up &amp; Next Steps</h2>
-</section>
-<section id="key-takeaways" class="slide level2">
-<h2>Key Takeaways</h2>
+<section id="exercise-3-solution-plots" class="slide level2">
+<h2>Exercise 3: Solution Plots</h2>
+<div class="fragment">
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><strong>The pipeline:</strong></p>
-<ul>
-<li>Raw → SDTM → ADaM → TLGs</li>
-<li>Each layer adds structure and derived content</li>
-<li>CDISC standards make studies comparable</li>
-</ul>
-<p><strong>ADSL vs BDS:</strong></p>
-<ul>
-<li>ADSL: one row per subject</li>
-<li>BDS (e.g.&nbsp;ADVS): one row per subject × parameter × visit</li>
-</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/solution_map.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
 </div><div class="column" style="width:50%;">
-<p><strong><code>{admiral}</code> patterns you used:</strong></p>
-<ul>
-<li><code>mutate()</code> + <code>case_when()</code> — categorise any continuous variable</li>
-<li><code>derive_var_merged_exist_flag()</code> — cross-dataset Y/N flags</li>
-<li><code>derive_param_map()</code> — built-in MAP derivation</li>
-<li><code>derive_param_computed()</code> — any custom computed parameter</li>
-</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/solution_mapv2.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
 </div></div>
+</div>
+<div class="fragment">
+<p><a href="%7Bstyle=%22color:blue;%22%7D"><strong>🤔Open question:</strong> How could you further enhance/improve these plots?</a></p>
+</div>
 </section>
-<section id="where-to-go-next" class="slide level2">
-<h2>Where to go next</h2>
-<p><strong>Pharmaverse</strong> — the R ecosystem for clinical reporting:</p>
+<section id="exercise-3-optional-faceted-by-hisobpfl" class="slide level2">
+<h2>Exercise 3 (Optional): Faceted by <code>HISOBPFL</code></h2>
+<div class="fragment">
+<p><strong>Solution:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
+<span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a>                        <span class="at">colour =</span> TRT01A, <span class="at">group =</span> TRT01A)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>HISOBPFL) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
+<span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years, split by high SBP flag"</span>,</span>
+<span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Repeat for <code>PARAMCD == "MAPV2"</code>. See <code>solutions/solution_g_vs_map_faceted.R</code> for the full solution.</p>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/solution_map_faceted.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/solution_mapv2_faceted.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
+</div></div>
+</div>
+</section>
+<section id="wrap-up" class="slide level2 center" data-background-color="#E8F4FD">
+<h2>Wrap-up</h2>
+</section>
+<section id="summary-and-links-for-further-reading" class="slide level2">
+<h2>Summary and links for further reading</h2>
+<div class="fragment">
+<p><strong>What we learned today:</strong></p>
+</div>
+<div class="fragment">
 <ul>
-<li><a href="https://pharmaverse.github.io/admiral/"><code>{admiral}</code></a> — ADaM datasets</li>
-<li><a href="https://pharmaverse.github.io/pharmaversesdtm/"><code>pharmaversesdtm</code></a> — example SDTM data</li>
-<li><a href="https://www.danieldsjoberg.com/gtsummary/"><code>gtsummary</code></a> — summary tables</li>
-<li><a href="https://gsk-biostatistics.github.io/tfrmt/"><code>tfrmt</code></a> — clinical table formatting</li>
-<li><a href="https://roche.github.io/rtables/"><code>rtables</code></a> — production-grade table engine</li>
+<li>The Clinical Data Pipeline (Raw → SDTM → ADaM → TLGs)…</li>
 </ul>
-<p><strong>CDISC standards:</strong></p>
+</div>
+<div class="fragment">
 <ul>
-<li><a href="https://www.cdisc.org/standards/foundational/adam" class="uri">https://www.cdisc.org/standards/foundational/adam</a></li>
+<li>Some pharmaverse packages that help support it</li>
 </ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Examples of SDTM and ADaM datasets
+<ul>
+<li><code>DM</code>, <code>VS</code>, <code>AE</code>, <code>EX</code></li>
+<li><code>ADSL</code>, <code>ADVS</code>, <code>ADAE</code></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>How to add variables to <code>ADSL</code> and parameters to <code>ADVS</code> to support analysis</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>How to use our datasets to generate a simple plot.</li>
+</ul>
+</div>
+<div class="fragment">
+<p><strong>To go further:</strong></p>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Pharmaverse</strong> — <a href="https://pharmaverse.org/">https://pharmaverse.org/</a></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>More in-depth examples - <a href="https://pharmaverse.github.io/examples/">https://pharmaverse.github.io/examples/</a></li>
+</ul>
+</div>
 </section>
 <section id="thank-you" class="slide level2 center">
-<h2>Thank You</h2>
+<h2>Thank You 🙏</h2>
 <p>Questions? Feedback?</p>
 
 </section>
