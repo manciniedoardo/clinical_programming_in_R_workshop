@@ -53,7 +53,7 @@ If you want to render the slides locally: open `index.qmd` in RStudio and click 
 `Ctrl+Shift+K`). The slides will open in your browser. Alternatively, from a terminal in the project root:
 
 ```bash
-quarto render slides/slides.qmd
+quarto render index.qmd
 ```
 
 The rendered file is saved as `docs/index.html` and can be reopened in any
@@ -66,21 +66,28 @@ browser at any time.
 ```
 clinical_programming_in_R_workshop/
 │
-├── templates/           # Your starting files — open these for the exercises
-│   ├── ad_adsl.R        #   Exercise 1: ADSL derivations
-│   ├── ad_advs.R        #   Exercise 2: ADVS + MAP derivations
-│   └── g_vs_map.R       #   Exercise 3: MAP visualisation
+├── templates/                        # Your starting files — open these for the exercises
+│   ├── ad_adsl.R                     #   Exercise 1: ADSL derivations
+│   ├── ad_advs.R                     #   Exercise 2: ADVS + MAP derivations
+│   └── g_vs_map.R                    #   Exercise 3: MAP visualisation
 │
-├── solutions/           # Model solutions — try the exercises first!
-│   ├── ad_adsl.R
-│   ├── ad_advs.R
-│   └── g_vs_map.R
+├── solutions/                        # Model solutions — try the exercises first!
+│   ├── solution_ad_adsl.R
+│   ├── solution_ad_advs.R
+│   ├── solution_g_vs_map.R
+│   └── solution_g_vs_map_faceted.R   #   Optional: faceted by HISOBPFL
 │
-├── data/                # Pre-built datasets (updated when you run exercises)
-│   ├── adsl.rda         #   Subject-level dataset
-│   └── advs.rda         #   Vital signs dataset
+├── data/                             # Pre-built datasets (updated when you run exercises)
+│   ├── adsl.rda                      #   Subject-level dataset
+│   └── advs.rda                      #   Vital signs dataset
 │
-└── index.qmd            # Workshop slide deck (render to view)
+├── images/                           # Diagrams and screenshots used in the slides
+│
+├── index.qmd                         # Workshop slide deck (render to view)
+├── custom.css                        # Slide styling used by index.qmd
+├── _quarto.yml                       # Quarto project config (renders to docs/)
+├── renv.lock                         # Locked package versions for renv::restore()
+└── clinical_programming_in_R_workshop.Rproj
 ```
 
 ---
@@ -107,6 +114,6 @@ are complete, annotated, and executable top-to-bottom.
 The exercises use the **CDISC Pilot Study**, a realistic synthetic dataset
 maintained by the pharmaverse and available via the `{pharmaversesdtm}` package.
 
-Pre-built versions of `adsl.RDS` and `advs.RDS` are provided in `data/` so
+Pre-built versions of `adsl.rda` and `advs.rda` are provided in `data/` so
 that you can open any exercise independently. Running the exercises will
 overwrite these files with your own derived versions.

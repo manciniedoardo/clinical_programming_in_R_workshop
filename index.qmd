@@ -9,6 +9,8 @@ format:
     slide-number: true
     code-line-numbers: false
     highlight-style: github
+    preview-links: true
+    chalkboard: true
     footer: "Clinical Programming in R — Workshop for Ukraine - Edoardo Mancini"
 execute:
   echo: true
@@ -18,7 +20,7 @@ editor:
     wrap: 72
 ---
 
-## About Me
+## About Me & This Workshop
 
 ::::: columns
 ::: {.column width="40%"}
@@ -35,6 +37,8 @@ as maintainer for the `{admiral}` R package.
 Outside of work, I enjoy playing chess, reading, and running.
 :::
 :::::
+
+Donations for sign-ups to this workshop will be used to support the Ukraine War Effort.
 
 ------------------------------------------------------------------------
 
@@ -491,6 +495,7 @@ We will be using test data today. The source for the test data is the `{pharmave
 `{pharmaversesdtm}` is one of the package maintained by members of the [pharmaverse](https://pharmaverse.org/), which is an Open-Source effort to set up a toolset for End-to-End clinical reporting in R. You can access the test datasets like so:
 
 ```{r}
+#| code-line-numbers: true
 library(pharmaversesdtm)
 
 # Demographics
@@ -524,6 +529,7 @@ library(admiral)
 
 Take a look at the two blocks below:
 ```{r}
+#| code-line-numbers: true
 adsl_start <- dm %>%
   ## Derive treatment arm variables
   mutate(TRT01P = ARM, TRT01A = ACTARM) %>%
@@ -580,8 +586,8 @@ Here are some of the key variables in the `ADSL` dataset:
 
 ------------------------------------------------------------------------
 
-## Exercise 1a — New Age Group (`AGEGR2`)
-::: fragment
+## Exercise 1a — New Age Group (`AGEGR2`) {auto-animate="true"}
+
 **Task:** Your statistician is interested to learn the age ranges of the patients in your trial to understand whether the ranges of interest are appropriately represented. To support that request, add a variable `AGEGR2` to `ADSL` with the following categories:
 
 ::: {.small-table}
@@ -593,17 +599,18 @@ Here are some of the key variables in the `ADSL` dataset:
 :::
 
 How many patients are in each `AGEGR2` group?
-:::
 
-::: fragment
 :::{.callout-tip title="Hints"}
 - Follow the same pattern as `AGEGR1`.
 :::
-:::
 
-::: fragment
+------------------------------------------------------------------------
+
+## Exercise 1a — New Age Group (`AGEGR2`) {auto-animate="true"}
+
 **Solution:**
 ```{r}
+#| code-line-numbers: true
 adsl <- adsl %>%
   mutate(
     AGEGR2 = case_when(
@@ -614,33 +621,32 @@ adsl <- adsl %>%
     )
   )
 
-adsl %>% 
-  group_by(AGEGR2) %>% 
+adsl %>%
+  group_by(AGEGR2) %>%
   summarise(Count = n())
 
 # Answer: <55: 5 patients; 55-65: 41 patients; >65: 260 patients
 ```
-::: 
 
 ------------------------------------------------------------------------
 
-## Exercise 1b — High Systolic Blood Pressure Flag (`HISOBPFL`)
+## Exercise 1b — High Systolic Blood Pressure Flag (`HISOBPFL`) {auto-animate="true"}
 
-::: fragment
 **Task:** Your safety scientist is interested in patients who have high systolic blood pressure (SBP) readings and may want to see some future TLGs generated for only those patients. Ahead of this requirement, create a new variable `HISOBPFL` in `ADSL` that flags patients who have *any* SBP measurement \> 160 mmHg. The flag should be `"Y"` if the patient has at least one SBP reading > 160, and `"N"` otherwise.
 
 How many patients have a high SBP reading?
-:::
 
-::: fragment
 :::{.callout-tip title="Hints"}
 - `admiral::derive_var_merged_exist_flag()` is your friend! The function creates a flag in a dataset based on whether records exist in another dataset. Check out the function's documentation and examples with `?derive_var_merged_exist_flag`.
 :::
-:::
 
-::: fragment
+------------------------------------------------------------------------
+
+## Exercise 1b — High Systolic Blood Pressure Flag (`HISOBPFL`) {auto-animate="true"}
+
 **Solution:**
 ```{r}
+#| code-line-numbers: true
 adsl <- adsl %>%
   derive_var_merged_exist_flag(
     dataset_add   = vs,
@@ -656,7 +662,6 @@ adsl %>% count(HISOBPFL)
 
 # Answer: 87 patients have an SBP > 160 mmHg
 ```
-::: 
 
 ------------------------------------------------------------------------
 
@@ -716,6 +721,7 @@ $$\text{MAP} = \frac{2 \times \text{DBP} + \text{SBP}}{3}$$
 Since MAP is a common measurement to compute, `{admiral}` provides a dedicated function for this common derivation:
 
 ```{r}
+#| code-line-numbers: true
 advs <- advs %>%
   derive_param_map(
     by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
@@ -743,33 +749,29 @@ measurements are passed to the formula and produce `NA`.
 
 ------------------------------------------------------------------------
 
-## Exercise 2a — Derive `MAPV2` (custom formula)
+## Exercise 2a — Derive `MAPV2` (custom formula) {auto-animate="true"}
 
-::: fragment
 **Task:** A particularly enterprising safety scientist on your trial wants to test out a new formula for deriving MAP using the arithmetic mean:
 
 $$\text{MAPV2} = \frac{\text{SBP} + \text{DBP}}{2}$$
 Ahead of analysis, add a `"MAPV2"` parameter to the dataset that calculates this new MAP at each timepoint using `admiral::derive_param_computed()` with `parameters = c("SYSBP", "DIABP")`.
 
 Which patient has the highest MAPV2 and at what visit?
-:::
 
-::: fragment
 :::{.callout-tip title="Tip"}
 - Example 1a in the reference page `?derive_param_computed` shows how to compute generic MAP using `derive_param_computed()`.
 - You can copy the `by_vars` and `filter` arguments from the `derive_param_map()` call for the standard MAP.
 - Remember to update the parameter lookup table at the top of the script!
 :::
-:::
 
 ------------------------------------------------------------------------
 
-## Exercise 2a — Derive `MAPV2` (custom formula)
+## Exercise 2a — Derive `MAPV2` (custom formula) {auto-animate="true"}
 
-::: fragment
-**Solution:** 
+**Solution:**
 
 ```{r}
+#| code-line-numbers: true
 param_lookup <- tibble::tribble(
   ~VSTESTCD, ~PARAMCD,                            ~PARAM,
   "HEIGHT",  "HEIGHT",                    "Height (cm)",
@@ -795,7 +797,6 @@ advs <- advs %>%
 
 # Highest MAPV2 is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)
 ```
-:::
 
 ::: fragment
 [Now let's put everything into practice with a visualisation!]{style="color:blue;"}
@@ -807,16 +808,13 @@ advs <- advs %>%
 
 ------------------------------------------------------------------------
 
-## Exercise 3: A Simple Visualisation
+## Exercise 3: A Simple Visualisation {auto-animate="true"}
 
-::: fragment
 :::{.callout-note title="ADVS"}
 - This exercise will use the `ADVS` dataset you created in Exercise 2. You can also download it from the GitHub repo if you haven't completed the exercise.
 :::
-:::
 
-::: fragment
-**Task:** Starting from **`templates/g_vs_map.R`**, create two plots of mean `"MAP"`/`"MAPV2"` over time (use visit number `AVISITN`), split by treatment arm ,(`TRT01A`) and restricted to patients aged **55-65**. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (`HISOBPFL == "Y"`) and those who do not (`HISOBPFL == "N"`).
+**Task:** Starting from **`templates/g_vs_map.R`**, create two plots of mean `"MAP"`/`"MAPV2"` over time (use visit number `AVISITN`), split by treatment arm (`TRT01A`) and restricted to patients aged **55-65**. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (`HISOBPFL == "Y"`) and those who do not (`HISOBPFL == "N"`).
 
 You'll need to pre-process `ADVS` as follows first to compute the data points for the plot:
 
@@ -826,12 +824,14 @@ map_summary <- advs %>%
   group_by(AVISITN, AVISIT, TRT01A) %>%
   summarise(mean_aval = mean(AVAL, na.rm = TRUE), .groups = "drop")
 ```
-:::
 
+------------------------------------------------------------------------
 
-::: fragment
+## Exercise 3: A Simple Visualisation {auto-animate="true"}
+
 **Solution:**
 ```{r}
+#| code-line-numbers: true
 ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
                         colour = TRTA, group = TRTA)) +
   geom_line() + geom_point(size = 2) +
@@ -842,7 +842,8 @@ ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
 ```
 
 Repeat for `PARAMCD == "MAPV2"`.
-:::
+
+------------------------------------------------------------------------
 
 ## Exercise 3: Solution Plots
 
@@ -868,6 +869,7 @@ Repeat for `PARAMCD == "MAPV2"`.
 ::: fragment
 **Solution:**
 ```{r}
+#| code-line-numbers: true
 ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
                         colour = TRT01A, group = TRT01A)) +
   geom_line() + geom_point(size = 2) +

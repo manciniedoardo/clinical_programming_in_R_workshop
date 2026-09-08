@@ -100,6 +100,8 @@
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
     .reveal div.sourceCode {
@@ -206,8 +208,8 @@ Edoardo Mancini
 </div>
 
 </section>
-<section id="about-me" class="slide level2">
-<h2>About Me</h2>
+<section id="about-me-this-workshop" class="slide level2">
+<h2>About Me &amp; This Workshop</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="quarto-figure quarto-figure-center">
@@ -219,6 +221,7 @@ Edoardo Mancini
 <p>I am a Senior Data Scientist working at Roche in the UK. My work involves leading statistical programming activities in early and late-stage clinical trials. I am also a passionate advocate for R and Open Source, and am able to pursue these interests in my current role as maintainer for the <code>{admiral}</code> R package.</p>
 <p>Outside of work, I enjoy playing chess, reading, and running.</p>
 </div></div>
+<p>Donations for sign-ups to this workshop will be used to support the Ukraine War Effort.</p>
 </section>
 <section id="welcome" class="slide level2">
 <h2>Welcome!</h2>
@@ -1498,13 +1501,13 @@ Edoardo Mancini
 <div class="callout-content">
 <p><code>{pharmaversesdtm}</code> is one of the package maintained by members of the <a href="https://pharmaverse.org/">pharmaverse</a>, which is an Open-Source effort to set up a toolset for End-to-End clinical reporting in R. You can access the test datasets like so:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pharmaversesdtm)</span>
-<span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Demographics</span></span>
-<span id="cb2-4"><a href="" aria-hidden="true" tabindex="-1"></a>pharmaversesdtm<span class="sc">::</span>dm</span>
-<span id="cb2-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Vital signs</span></span>
-<span id="cb2-7"><a href="" aria-hidden="true" tabindex="-1"></a>pharmaversesdtm<span class="sc">::</span>vs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(pharmaversesdtm)</span>
+<span id="cb2-2"><a href=""></a></span>
+<span id="cb2-3"><a href=""></a><span class="co"># Demographics</span></span>
+<span id="cb2-4"><a href=""></a>pharmaversesdtm<span class="sc">::</span>dm</span>
+<span id="cb2-5"><a href=""></a></span>
+<span id="cb2-6"><a href=""></a><span class="co"># Vital signs</span></span>
+<span id="cb2-7"><a href=""></a>pharmaversesdtm<span class="sc">::</span>vs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1537,18 +1540,18 @@ Edoardo Mancini
 <p><strong>Core idea:</strong> <code>{admiral}</code> <code>derive_*()</code> functions can be chained together with <code>{dplyr}</code> functions in a series of blocks, each modifying a dataset in some way, e.g.&nbsp;adding variables or rows.</p>
 <p>Take a look at the two blocks below:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl_start <span class="ot">&lt;-</span> dm <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Derive treatment arm variables</span></span>
-<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TRT01P =</span> ARM, <span class="at">TRT01A =</span> ACTARM) <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Derive treatment start datetime / date </span></span>
-<span id="cb4-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_vars_merged</span>(</span>
-<span id="cb4-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataset_add =</span> ex,</span>
-<span id="cb4-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter_add =</span> (EXDOSE <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">|</span> (EXDOSE <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> <span class="fu">str_detect</span>(EXTRT, <span class="st">"PLACEBO"</span>))) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(EXSTDTM),</span>
-<span id="cb4-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
-<span id="cb4-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">new_vars =</span> <span class="fu">exprs</span>(<span class="at">TRTSDTM =</span> EXSTDTM),</span>
-<span id="cb4-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">exprs</span>(EXSTDTM, EXSEQ),</span>
-<span id="cb4-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">"first"</span>,             </span>
-<span id="cb4-12"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>adsl_start <span class="ot">&lt;-</span> dm <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href=""></a>  <span class="do">## Derive treatment arm variables</span></span>
+<span id="cb4-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">TRT01P =</span> ARM, <span class="at">TRT01A =</span> ACTARM) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href=""></a>  <span class="do">## Derive treatment start datetime / date </span></span>
+<span id="cb4-5"><a href=""></a>  <span class="fu">derive_vars_merged</span>(</span>
+<span id="cb4-6"><a href=""></a>    <span class="at">dataset_add =</span> ex,</span>
+<span id="cb4-7"><a href=""></a>    <span class="at">filter_add =</span> (EXDOSE <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">|</span> (EXDOSE <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> <span class="fu">str_detect</span>(EXTRT, <span class="st">"PLACEBO"</span>))) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(EXSTDTM),</span>
+<span id="cb4-8"><a href=""></a>    <span class="at">by_vars =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
+<span id="cb4-9"><a href=""></a>    <span class="at">new_vars =</span> <span class="fu">exprs</span>(<span class="at">TRTSDTM =</span> EXSTDTM),</span>
+<span id="cb4-10"><a href=""></a>    <span class="at">order =</span> <span class="fu">exprs</span>(EXSTDTM, EXSEQ),</span>
+<span id="cb4-11"><a href=""></a>    <span class="at">mode =</span> <span class="st">"first"</span>,             </span>
+<span id="cb4-12"><a href=""></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice in particular the use of <code>exprs()</code> to pass column names, and <code>by_vars</code> to split the dataset into groups.</p>
 </div>
@@ -1616,9 +1619,8 @@ Edoardo Mancini
 <p><span style="color:blue;">Let’s open <code>templates/ad_adsl.R</code> and see how a simple <code>ADSL</code> is created…</span></p>
 </div>
 </section>
-<section id="exercise-1a-new-age-group-agegr2" class="slide level2">
-<h2>Exercise 1a — New Age Group (<code>AGEGR2</code>)</h2>
-<div class="fragment">
+<section id="exercise-1a-new-age-group-agegr2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise 1a — New Age Group (<code>AGEGR2</code>)</h2>
 <p><strong>Task:</strong> Your statistician is interested to learn the age ranges of the patients in your trial to understand whether the ranges of interest are appropriately represented. To support that request, add a variable <code>AGEGR2</code> to <code>ADSL</code> with the following categories:</p>
 <div class="small-table">
 <table class="caption-top">
@@ -1645,8 +1647,6 @@ Edoardo Mancini
 </table>
 </div>
 <p>How many patients are in each <code>AGEGR2</code> group?</p>
-</div>
-<div class="fragment">
 <div title="Hints">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -1664,35 +1664,32 @@ Edoardo Mancini
 </div>
 </div>
 </div>
-</div>
-<div class="fragment">
+</section>
+<section id="exercise-1a-new-age-group-agegr2-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise 1a — New Age Group (<code>AGEGR2</code>)</h2>
 <p><strong>Solution:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGEGR2 =</span> <span class="fu">case_when</span>(</span>
-<span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&lt;</span> <span class="dv">55</span>             <span class="sc">~</span> <span class="st">"&lt;55"</span>,</span>
-<span id="cb5-5"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(AGE, <span class="dv">55</span>, <span class="dv">65</span>) <span class="sc">~</span> <span class="st">"55-65"</span>,</span>
-<span id="cb5-6"><a href="" aria-hidden="true" tabindex="-1"></a>      AGE <span class="sc">&gt;</span> <span class="dv">65</span>             <span class="sc">~</span> <span class="st">"&gt;65"</span>,</span>
-<span id="cb5-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                 <span class="sc">~</span> <span class="cn">NA_character_</span></span>
-<span id="cb5-8"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-9"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> </span>
-<span id="cb5-12"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AGEGR2) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
-<span id="cb5-14"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Answer: &lt;55: 5 patients; 55-65: 41 patients; &gt;65: 260 patients</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb5-1" class="hljs-ln-code"><a href=""></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
+<span id="cb5-2" class="hljs-ln-code"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-3" class="hljs-ln-code"><a href=""></a>    <span class="at">AGEGR2 =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-4" class="hljs-ln-code"><a href=""></a>      AGE <span class="sc">&lt;</span> <span class="dv">55</span>             <span class="sc">~</span> <span class="st">"&lt;55"</span>,</span>
+<span id="cb5-5" class="hljs-ln-code"><a href=""></a>      <span class="fu">between</span>(AGE, <span class="dv">55</span>, <span class="dv">65</span>) <span class="sc">~</span> <span class="st">"55-65"</span>,</span>
+<span id="cb5-6" class="hljs-ln-code"><a href=""></a>      AGE <span class="sc">&gt;</span> <span class="dv">65</span>             <span class="sc">~</span> <span class="st">"&gt;65"</span>,</span>
+<span id="cb5-7" class="hljs-ln-code"><a href=""></a>      <span class="cn">TRUE</span>                 <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb5-8" class="hljs-ln-code"><a href=""></a>    )</span>
+<span id="cb5-9" class="hljs-ln-code"><a href=""></a>  )</span>
+<span id="cb5-10" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb5-11" class="hljs-ln-code"><a href=""></a>adsl <span class="sc">%&gt;%</span></span>
+<span id="cb5-12" class="hljs-ln-code"><a href=""></a>  <span class="fu">group_by</span>(AGEGR2) <span class="sc">%&gt;%</span></span>
+<span id="cb5-13" class="hljs-ln-code"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span>
+<span id="cb5-14" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb5-15" class="hljs-ln-code"><a href=""></a><span class="co"># Answer: &lt;55: 5 patients; 55-65: 41 patients; &gt;65: 260 patients</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="exercise-1b-high-systolic-blood-pressure-flag-hisobpfl" class="slide level2">
-<h2>Exercise 1b — High Systolic Blood Pressure Flag (<code>HISOBPFL</code>)</h2>
-<div class="fragment">
+<section id="exercise-1b-high-systolic-blood-pressure-flag-hisobpfl" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise 1b — High Systolic Blood Pressure Flag (<code>HISOBPFL</code>)</h2>
 <p><strong>Task:</strong> Your safety scientist is interested in patients who have high systolic blood pressure (SBP) readings and may want to see some future TLGs generated for only those patients. Ahead of this requirement, create a new variable <code>HISOBPFL</code> in <code>ADSL</code> that flags patients who have <em>any</em> SBP measurement &gt; 160 mmHg. The flag should be <code>"Y"</code> if the patient has at least one SBP reading &gt; 160, and <code>"N"</code> otherwise.</p>
 <p>How many patients have a high SBP reading?</p>
-</div>
-<div class="fragment">
 <div title="Hints">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -1710,25 +1707,25 @@ Edoardo Mancini
 </div>
 </div>
 </div>
-</div>
-<div class="fragment">
+</section>
+<section id="exercise-1b-high-systolic-blood-pressure-flag-hisobpfl-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise 1b — High Systolic Blood Pressure Flag (<code>HISOBPFL</code>)</h2>
 <p><strong>Solution:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_var_merged_exist_flag</span>(</span>
-<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataset_add   =</span> vs,</span>
-<span id="cb6-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
-<span id="cb6-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">new_var       =</span> HISOBPFL,</span>
-<span id="cb6-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition     =</span> VSTESTCD <span class="sc">==</span> <span class="st">"SYSBP"</span> <span class="sc">&amp;</span> VSSTRESN <span class="sc">&gt;</span> <span class="dv">160</span>,</span>
-<span id="cb6-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">false_value   =</span> <span class="st">"N"</span>,</span>
-<span id="cb6-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_value =</span> <span class="st">"N"</span></span>
-<span id="cb6-9"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb6-10"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Check results:</span></span>
-<span id="cb6-12"><a href="" aria-hidden="true" tabindex="-1"></a>adsl <span class="sc">%&gt;%</span> <span class="fu">count</span>(HISOBPFL)</span>
-<span id="cb6-13"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Answer: 87 patients have an SBP &gt; 160 mmHg</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb6-1" class="hljs-ln-code"><a href=""></a>adsl <span class="ot">&lt;-</span> adsl <span class="sc">%&gt;%</span></span>
+<span id="cb6-2" class="hljs-ln-code"><a href=""></a>  <span class="fu">derive_var_merged_exist_flag</span>(</span>
+<span id="cb6-3" class="hljs-ln-code"><a href=""></a>    <span class="at">dataset_add   =</span> vs,</span>
+<span id="cb6-4" class="hljs-ln-code"><a href=""></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
+<span id="cb6-5" class="hljs-ln-code"><a href=""></a>    <span class="at">new_var       =</span> HISOBPFL,</span>
+<span id="cb6-6" class="hljs-ln-code"><a href=""></a>    <span class="at">condition     =</span> VSTESTCD <span class="sc">==</span> <span class="st">"SYSBP"</span> <span class="sc">&amp;</span> VSSTRESN <span class="sc">&gt;</span> <span class="dv">160</span>,</span>
+<span id="cb6-7" class="hljs-ln-code"><a href=""></a>    <span class="at">false_value   =</span> <span class="st">"N"</span>,</span>
+<span id="cb6-8" class="hljs-ln-code"><a href=""></a>    <span class="at">missing_value =</span> <span class="st">"N"</span></span>
+<span id="cb6-9" class="hljs-ln-code"><a href=""></a>  )</span>
+<span id="cb6-10" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb6-11" class="hljs-ln-code"><a href=""></a><span class="co"># Check results:</span></span>
+<span id="cb6-12" class="hljs-ln-code"><a href=""></a>adsl <span class="sc">%&gt;%</span> <span class="fu">count</span>(HISOBPFL)</span>
+<span id="cb6-13" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb6-14" class="hljs-ln-code"><a href=""></a><span class="co"># Answer: 87 patients have an SBP &gt; 160 mmHg</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="exercise-2-working-with-advs" class="slide level2 center" data-background-color="#E8F4FD">
@@ -1835,14 +1832,14 @@ Edoardo Mancini
 <div class="fragment">
 <p>Since MAP is a common measurement to compute, <code>{admiral}</code> provides a dedicated function for this common derivation:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_map</span>(</span>
-<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
-<span id="cb7-4"><a href="" aria-hidden="true" tabindex="-1"></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
-<span id="cb7-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(<span class="at">PARAMCD =</span> <span class="st">"MAP"</span>),</span>
-<span id="cb7-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">get_unit_expr =</span> VSSTRESU,</span>
-<span id="cb7-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter        =</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span>
-<span id="cb7-8"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href=""></a>  <span class="fu">derive_param_map</span>(</span>
+<span id="cb7-3"><a href=""></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
+<span id="cb7-4"><a href=""></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
+<span id="cb7-5"><a href=""></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(<span class="at">PARAMCD =</span> <span class="st">"MAP"</span>),</span>
+<span id="cb7-6"><a href=""></a>    <span class="at">get_unit_expr =</span> VSSTRESU,</span>
+<span id="cb7-7"><a href=""></a>    <span class="at">filter        =</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span>
+<span id="cb7-8"><a href=""></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div class="fragment">
@@ -1879,14 +1876,11 @@ Edoardo Mancini
 <p><span style="color:blue;">Let’s open <code>templates/ad_advs.R</code> and see how a simple <code>ADVS</code> is created - in particular the derivation of the mean arterial pressure…</span></p>
 </div>
 </section>
-<section id="exercise-2a-derive-mapv2-custom-formula" class="slide level2">
-<h2>Exercise 2a — Derive <code>MAPV2</code> (custom formula)</h2>
-<div class="fragment">
+<section id="exercise-2a-derive-mapv2-custom-formula" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise 2a — Derive <code>MAPV2</code> (custom formula)</h2>
 <p><strong>Task:</strong> A particularly enterprising safety scientist on your trial wants to test out a new formula for deriving MAP using the arithmetic mean:</p>
 <p><span class="math display">\[\text{MAPV2} = \frac{\text{SBP} + \text{DBP}}{2}\]</span> Ahead of analysis, add a <code>"MAPV2"</code> parameter to the dataset that calculates this new MAP at each timepoint using <code>admiral::derive_param_computed()</code> with <code>parameters = c("SYSBP", "DIABP")</code>.</p>
 <p>Which patient has the highest MAPV2 and at what visit?</p>
-</div>
-<div class="fragment">
 <div title="Tip">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -1906,38 +1900,35 @@ Edoardo Mancini
 </div>
 </div>
 </div>
-</div>
 </section>
-<section id="exercise-2a-derive-mapv2-custom-formula-1" class="slide level2">
-<h2>Exercise 2a — Derive <code>MAPV2</code> (custom formula)</h2>
-<div class="fragment">
+<section id="exercise-2a-derive-mapv2-custom-formula-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise 2a — Derive <code>MAPV2</code> (custom formula)</h2>
 <p><strong>Solution:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a>param_lookup <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
-<span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>VSTESTCD, <span class="sc">~</span>PARAMCD,                            <span class="sc">~</span>PARAM,</span>
-<span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="st">"HEIGHT"</span>,  <span class="st">"HEIGHT"</span>,                    <span class="st">"Height (cm)"</span>,</span>
-<span id="cb8-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="st">"WEIGHT"</span>,  <span class="st">"WEIGHT"</span>,                    <span class="st">"Weight (kg)"</span>,</span>
-<span id="cb8-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="st">"TEMP"</span>,    <span class="st">"TEMP"</span>,                     <span class="st">"Temp (deg C)"</span>,</span>
-<span id="cb8-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="st">"SYSBP"</span>,   <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,</span>
-<span id="cb8-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="st">"DIABP"</span>,   <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,</span>
-<span id="cb8-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PULSE"</span>,   <span class="st">"PULSE"</span>,          <span class="st">"Pulse Rate (beats/min)"</span>,</span>
-<span id="cb8-9"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MAP"</span>,      <span class="st">"MAP"</span>,    <span class="st">"Mean Arterial Pressure (mmHg)"</span>,</span>
-<span id="cb8-10"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="st">"MAPV2"</span>,  <span class="st">"MAPV2"</span>,  <span class="st">"Mean Arterial Pressure V2 (mmHg)"</span> <span class="co"># new line</span></span>
-<span id="cb8-11"><a href="" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-12"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="" aria-hidden="true" tabindex="-1"></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span> </span>
-<span id="cb8-14"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">derive_param_computed</span>(</span>
-<span id="cb8-15"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
-<span id="cb8-16"><a href="" aria-hidden="true" tabindex="-1"></a>                        VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
-<span id="cb8-17"><a href="" aria-hidden="true" tabindex="-1"></a>   <span class="at">parameters    =</span> <span class="fu">c</span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>),</span>
-<span id="cb8-18"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(</span>
-<span id="cb8-19"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">AVAL    =</span> (AVAL.SYSBP <span class="sc">+</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">2</span>,</span>
-<span id="cb8-20"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">PARAMCD =</span> <span class="st">"MAPV2"</span></span>
-<span id="cb8-21"><a href="" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb8-22"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-23"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Highest MAPV2 is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb8-1" class="hljs-ln-code"><a href=""></a>param_lookup <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb8-2" class="hljs-ln-code"><a href=""></a>  <span class="sc">~</span>VSTESTCD, <span class="sc">~</span>PARAMCD,                            <span class="sc">~</span>PARAM,</span>
+<span id="cb8-3" class="hljs-ln-code"><a href=""></a>  <span class="st">"HEIGHT"</span>,  <span class="st">"HEIGHT"</span>,                    <span class="st">"Height (cm)"</span>,</span>
+<span id="cb8-4" class="hljs-ln-code"><a href=""></a>  <span class="st">"WEIGHT"</span>,  <span class="st">"WEIGHT"</span>,                    <span class="st">"Weight (kg)"</span>,</span>
+<span id="cb8-5" class="hljs-ln-code"><a href=""></a>  <span class="st">"TEMP"</span>,    <span class="st">"TEMP"</span>,                     <span class="st">"Temp (deg C)"</span>,</span>
+<span id="cb8-6" class="hljs-ln-code"><a href=""></a>  <span class="st">"SYSBP"</span>,   <span class="st">"SYSBP"</span>,  <span class="st">"Systolic Blood Pressure (mmHg)"</span>,</span>
+<span id="cb8-7" class="hljs-ln-code"><a href=""></a>  <span class="st">"DIABP"</span>,   <span class="st">"DIABP"</span>, <span class="st">"Diastolic Blood Pressure (mmHg)"</span>,</span>
+<span id="cb8-8" class="hljs-ln-code"><a href=""></a>  <span class="st">"PULSE"</span>,   <span class="st">"PULSE"</span>,          <span class="st">"Pulse Rate (beats/min)"</span>,</span>
+<span id="cb8-9" class="hljs-ln-code"><a href=""></a>  <span class="st">"MAP"</span>,      <span class="st">"MAP"</span>,    <span class="st">"Mean Arterial Pressure (mmHg)"</span>,</span>
+<span id="cb8-10" class="hljs-ln-code"><a href=""></a>  <span class="st">"MAPV2"</span>,  <span class="st">"MAPV2"</span>,  <span class="st">"Mean Arterial Pressure V2 (mmHg)"</span> <span class="co"># new line</span></span>
+<span id="cb8-11" class="hljs-ln-code"><a href=""></a>)</span>
+<span id="cb8-12" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb8-13" class="hljs-ln-code"><a href=""></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span> </span>
+<span id="cb8-14" class="hljs-ln-code"><a href=""></a>  <span class="fu">derive_param_computed</span>(</span>
+<span id="cb8-15" class="hljs-ln-code"><a href=""></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
+<span id="cb8-16" class="hljs-ln-code"><a href=""></a>                        VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
+<span id="cb8-17" class="hljs-ln-code"><a href=""></a>   <span class="at">parameters    =</span> <span class="fu">c</span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>),</span>
+<span id="cb8-18" class="hljs-ln-code"><a href=""></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(</span>
+<span id="cb8-19" class="hljs-ln-code"><a href=""></a>      <span class="at">AVAL    =</span> (AVAL.SYSBP <span class="sc">+</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb8-20" class="hljs-ln-code"><a href=""></a>      <span class="at">PARAMCD =</span> <span class="st">"MAPV2"</span></span>
+<span id="cb8-21" class="hljs-ln-code"><a href=""></a>    )</span>
+<span id="cb8-22" class="hljs-ln-code"><a href=""></a>  )</span>
+<span id="cb8-23" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb8-24" class="hljs-ln-code"><a href=""></a><span class="co"># Highest MAPV2 is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="fragment">
 <p><span style="color:blue;">Now let’s put everything into practice with a visualisation!</span></p>
@@ -1946,9 +1937,8 @@ Edoardo Mancini
 <section id="exercise-3-a-simple-visualisation" class="slide level2 center" data-background-color="#E8F4FD">
 <h2>Exercise 3: A Simple Visualisation</h2>
 </section>
-<section id="exercise-3-a-simple-visualisation-1" class="slide level2">
-<h2>Exercise 3: A Simple Visualisation</h2>
-<div class="fragment">
+<section id="exercise-3-a-simple-visualisation-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise 3: A Simple Visualisation</h2>
 <div title="ADVS">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
@@ -1966,30 +1956,28 @@ Edoardo Mancini
 </div>
 </div>
 </div>
-</div>
-<div class="fragment">
-<p><strong>Task:</strong> Starting from <strong><code>templates/g_vs_map.R</code></strong>, create two plots of mean <code>"MAP"</code>/<code>"MAPV2"</code> over time (use visit number <code>AVISITN</code>), split by treatment arm ,(<code>TRT01A</code>) and restricted to patients aged <strong>55-65</strong>. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (<code>HISOBPFL == "Y"</code>) and those who do not (<code>HISOBPFL == "N"</code>).</p>
+<p><strong>Task:</strong> Starting from <strong><code>templates/g_vs_map.R</code></strong>, create two plots of mean <code>"MAP"</code>/<code>"MAPV2"</code> over time (use visit number <code>AVISITN</code>), split by treatment arm (<code>TRT01A</code>) and restricted to patients aged <strong>55-65</strong>. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (<code>HISOBPFL == "Y"</code>) and those who do not (<code>HISOBPFL == "N"</code>).</p>
 <p>You’ll need to pre-process <code>ADVS</code> as follows first to compute the data points for the plot:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a>map_summary <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"MAP"</span> <span class="sc">&amp;</span> AGEGR2 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"55-65"</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(AVISITN)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AVISITN, AVISIT, TRT01A) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_aval =</span> <span class="fu">mean</span>(AVAL, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a href="" aria-hidden="true" tabindex="-1"></a>map_summary <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
+<span id="cb9-2" class="hljs-ln-code"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"MAP"</span> <span class="sc">&amp;</span> AGEGR2 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"55-65"</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(AVISITN)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3" class="hljs-ln-code"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AVISITN, AVISIT, TRT01A) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4" class="hljs-ln-code"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_aval =</span> <span class="fu">mean</span>(AVAL, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-<div class="fragment">
+</section>
+<section id="exercise-3-a-simple-visualisation-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise 3: A Simple Visualisation</h2>
 <p><strong>Solution:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
-<span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>                        <span class="at">colour =</span> TRTA, <span class="at">group =</span> TRTA)) <span class="sc">+</span></span>
-<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
-<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years"</span>,</span>
-<span id="cb10-6"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
-<span id="cb10-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb10-1" class="hljs-ln-code"><a href=""></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
+<span id="cb10-2" class="hljs-ln-code"><a href=""></a>                        <span class="at">colour =</span> TRTA, <span class="at">group =</span> TRTA)) <span class="sc">+</span></span>
+<span id="cb10-3" class="hljs-ln-code"><a href=""></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb10-4" class="hljs-ln-code"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
+<span id="cb10-5" class="hljs-ln-code"><a href=""></a>       <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years"</span>,</span>
+<span id="cb10-6" class="hljs-ln-code"><a href=""></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
+<span id="cb10-7" class="hljs-ln-code"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Repeat for <code>PARAMCD == "MAPV2"</code>.</p>
-</div>
 </section>
 <section id="exercise-3-solution-plots" class="slide level2">
 <h2>Exercise 3: Solution Plots</h2>
@@ -2018,14 +2006,14 @@ Edoardo Mancini
 <div class="fragment">
 <p><strong>Solution:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
-<span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a>                        <span class="at">colour =</span> TRT01A, <span class="at">group =</span> TRT01A)) <span class="sc">+</span></span>
-<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>HISOBPFL) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
-<span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years, split by high SBP flag"</span>,</span>
-<span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
-<span id="cb11-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
+<span id="cb11-2"><a href=""></a>                        <span class="at">colour =</span> TRT01A, <span class="at">group =</span> TRT01A)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>HISOBPFL) <span class="sc">+</span></span>
+<span id="cb11-5"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
+<span id="cb11-6"><a href=""></a>       <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years, split by high SBP flag"</span>,</span>
+<span id="cb11-7"><a href=""></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Repeat for <code>PARAMCD == "MAPV2"</code>. See <code>solutions/solution_g_vs_map_faceted.R</code> for the full solution.</p>
 </div>
@@ -2116,6 +2104,7 @@ Edoardo Mancini
   <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
   <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
   <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
@@ -2137,7 +2126,8 @@ Edoardo Mancini
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'jumpToSlide': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -2260,7 +2250,7 @@ Edoardo Mancini
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -2308,7 +2298,7 @@ Edoardo Mancini
         },
 
         // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
 
           RevealMath,
           RevealNotes,
