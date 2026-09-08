@@ -191,4 +191,4 @@ adsl %>% count(AGEGR2)
 adsl %>% count(HISOBPFL)
 
 # Save output ----
-save(adsl, file = file.path("data", "adsl.RDS"), compress = "bzip2")
+save(adsl, file = file.path("data", "adsl.rda"), compress = "bzip2")

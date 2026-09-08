@@ -72,12 +72,12 @@ We have a lot to cover:
 
 | Time | Topic                                                         |
 |------|---------------------------------------------------------------|
-| 0:00 | Background: The clinical trial data journey                   |
-| 0:15 | Exercise Setup, Test data and the packages we'll be using     |
-| 0:20 | **Exercise 1** — ADSL derivations                             |
-| 1:00 | **Exercise 2** — ADVS: deriving MAP                           |
-| 1:30 | **Exercise 3** — Plotting MAP over time                       |
-| 1:55 | Wrap-up and next steps                                        |
+| 0:00 | Background: The Clinical Trial Data Journey                   |
+| 0:15 | Exercise Setup, Test data and the Packages we'll be Using     |
+| 0:20 | **Exercise 1** — `ADSL` Derivations                           |
+| 1:00 | **Exercise 2** — `ADVS` Derivations                           |
+| 1:30 | **Exercise 3** — A Simple Plot                                |
+| 1:55 | Wrap-up and Next Steps                                        |
 :::
 
 ::: fragment
@@ -93,7 +93,7 @@ The background section will give you enough context to be able to do the three e
 ## The Clinical Trial Data Journey
 
 ::: fragment
-The journey of a data point from a patient to a regulator's report is long and complex! it can loosely be categorised into four stages:
+The journey of a data point from a patient to a regulator's report is long and complex! It can loosely be categorised into four stages:
 :::
 
 ::: fragment
@@ -101,7 +101,7 @@ The journey of a data point from a patient to a regulator's report is long and c
 :::
 
 ::: fragment
-[*Let's go through these stages one by one...*]({style="color:blue;"})
+[*Let's go through these stages one by one...*]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -126,7 +126,7 @@ infarction", or "cardiac event")
 :::
 
 ::: fragment
-[*So we process raw data into...*]({style="color:blue;"})
+[*So we process raw data into...*]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -160,7 +160,7 @@ E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset
 :::
 
 ::: fragment
-[*Let's see some examples...*]({style="color:blue;"})
+[*Let's see some examples...*]{style="color:blue;"}
 :::
 
 
@@ -276,7 +276,7 @@ table.attr = 'style="font-size:0.65em"')
 :::::
 
 ::: fragment
-[*But what if we want to combine data from different domains or compute new variables for analysis?*]({style="color:blue;"})
+[*But what if we want to combine data from different domains or compute new variables for analysis?*]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -292,7 +292,7 @@ The step from SDTM to ADaM can involve complex programming, as we are trying to 
 
 ::: fragment
 :::{.callout-note title="A typical example"}
-We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in ADAE (Adverse Event Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph.
+We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in `ADAE` (Adverse Events Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph.
 :::
 :::
 
@@ -309,7 +309,7 @@ Today, we'll start directly from the ADaM-building stage. For the first part of 
 :::
 
 ::: fragment
-[*But first, let's see what some typical ADAMs (ADSL, ADVS and ADAE) might look like...*]({style="color:blue;"})
+[*But first, let's see what some typical ADAMs (`ADSL`, `ADVS` and `ADAE`) might look like...*]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -340,7 +340,7 @@ adsl %>%
 ## ADaM in action: `ADAE`
 
 ::: fragment
-**ADAE (Adverse Events Analysis Dataset) ** — one row per patient per adverse event (derived from `AE` + `ADSL` + `EX`)
+**`ADAE` (Adverse Events Analysis Dataset)** — one row per patient per adverse event (derived from `AE` + `ADSL` + `EX`)
 
 ```{r}
 #| eval: true
@@ -424,7 +424,7 @@ df %>%
 :::
 
 ::: fragment
-[*And with these ADaMs, we can finally produce...*]({style="color:blue;"})
+[*And with these ADaMs, we can finally produce...*]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -452,7 +452,7 @@ In today's workshop's last exercise, we will focus on creating a vital signs plo
 :::
 
 ::: fragment
-[*But first, let's see a typical table and plot for a clinical trial...*]({style="color:blue;"})
+[*But first, let's see a typical table and plot for a clinical trial...*]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -554,7 +554,7 @@ We'll be using `{ggplot2}` for our plot... but you're all probably familiar with
 ## Exercise 1: Working with `ADSL`
 
 ::: fragment
-[Let's remind ourselves of what we can find in the `ADSL` dataset.]({style="color:blue;"})
+[Let's remind ourselves of what we can find in the `ADSL` dataset.]{style="color:blue;"}
 :::
 
 ::: fragment 
@@ -575,7 +575,7 @@ Here are some of the key variables in the `ADSL` dataset:
 :::
 
 ::: fragment
-[Let's open `templates/ad_adsl.R` and see how a simple `ADSL` is created...]({style="color:blue;"})
+[Let's open `templates/ad_adsl.R` and see how a simple `ADSL` is created...]{style="color:blue;"}
 ::: 
 
 ------------------------------------------------------------------------
@@ -624,7 +624,7 @@ adsl %>%
 
 ------------------------------------------------------------------------
 
-## Exercise 1b — High Systolic Blood Pressus Flag (`HISOBPFL`)
+## Exercise 1b — High Systolic Blood Pressure Flag (`HISOBPFL`)
 
 ::: fragment
 **Task:** Your safety scientist is interested in patients who have high systolic blood pressure (SBP) readings and may want to see some future TLGs generated for only those patients. Ahead of this requirement, create a new variable `HISOBPFL` in `ADSL` that flags patients who have *any* SBP measurement \> 160 mmHg. The flag should be `"Y"` if the patient has at least one SBP reading > 160, and `"N"` otherwise.
@@ -668,16 +668,16 @@ adsl %>% count(HISOBPFL)
 
 ::: fragment
 :::{.callout-note title="ADSL"}
-- This exercise will use the `ADS`L dataset you created in Exercise 1. You can also download it from the GitHub repo if you haven't completed the exercise.
+- This exercise will use the `ADSL` dataset you created in Exercise 1. You can also download it from the GitHub repo if you haven't completed the exercise.
 :::
 :::
 
 ::: fragment
-[Let's remind ourselves of what we can find in the `ADVS` dataset.]({style="color:blue;"})
+[Let's remind ourselves of what we can find in the `ADVS` dataset.]{style="color:blue;"}
 :::
 
 ::: fragment 
-`ADVS` contains **one row per patient per visit per vital sign measurement** - so each patient has multiple rows the the dataset 
+`ADVS` contains **one row per patient per visit per vital sign measurement** - so each patient has multiple rows in the dataset 
 (e.g pulse/blood pressure/weight at baseline, blood pressure at Week 2, Week 4, etc.).
 :::
 
@@ -685,21 +685,21 @@ adsl %>% count(HISOBPFL)
 Here are some of the key variables in the `ADVS` dataset:
 
 ::: {.small-table}
-| Variable             | Description                | Example                          |
-|----------------------|----------------------------|----------------------------------|
-| `USUBJID`            | Unique subject identifier  | `01-718-1371`                    |
-| `PARAMCD`            | Short code for the test    | `"SYSBP"`, `"DIABP"`, `"PULSE"`  |
-| `PARAM  `            | Long name for the test     | `"Systolic blood pressue (mmHg)` |
-| `AVISIT`             | Analysis Visit             | `"BASELINE"`, `"WEEK 2"`         |
-| `VSTPT`              | Timepoint for measurement  | `"AFTER LYING DOWN FOR 5 MINUTES"`, `"AFTER STANDING FOR 1 MINUTE"`, `"AFTER STANDING FOR 3 MINUTES" `         |
-| `AVAL`               | Numeric result of the test | `118`, `76`, `NA`                |
-| `AVALU`              | Unit of measurement        | `"mmHg"`, `"beats/min"`          |
-| `VSSTAT`             | Completion status          | `"NOT DONE"` if skipped          |
+| Variable             | Description                | Example                            |
+|----------------------|----------------------------|------------------------------------|
+| `USUBJID`            | Unique subject identifier  | `01-718-1371`                      |
+| `PARAMCD`            | Short code for the test    | `"SYSBP"`, `"DIABP"`, `"PULSE"`    |
+| `PARAM`              | Long name for the test     | `"Systolic blood pressure (mmHg)"` |
+| `AVISIT`             | Analysis Visit             | `"BASELINE"`, `"WEEK 2"`           |
+| `VSTPT`              | Timepoint for measurement  | `"AFTER LYING DOWN FOR 5 MINUTES"`, `"AFTER STANDING FOR 1 MINUTE"`, `"AFTER STANDING FOR 3 MINUTES"`|
+| `AVAL`               | Numeric result of the test | `118`, `76`, `NA`                  |
+| `AVALU`              | Unit of measurement        | `"mmHg"`, `"beats/min"`            |
+| `VSSTAT`             | Completion status          | `"NOT DONE"` if skipped            |
 :::
 :::
 
 ::: fragment
-[Unlike `ADSL`, `ADVS` can have whole new (derived) rows with measurements constructed as a combination of other measurements...]({style="color:blue;"})
+[Unlike `ADSL`, `ADVS` can have whole new (derived) rows with measurements constructed as a combination of other measurements...]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -738,7 +738,7 @@ measurements are passed to the formula and produce `NA`.
 :::
 
 ::: fragment
-[Let's open `templates/ad_advs.R` and see how a simple `ADVS` is created - in particular the derivation of the mean arterial pressure...]({style="color:blue;"})
+[Let's open `templates/ad_advs.R` and see how a simple `ADVS` is created - in particular the derivation of the mean arterial pressure...]{style="color:blue;"}
 ::: 
 
 ------------------------------------------------------------------------
@@ -751,7 +751,7 @@ measurements are passed to the formula and produce `NA`.
 $$\text{MAPV2} = \frac{\text{SBP} + \text{DBP}}{2}$$
 Ahead of analysis, add a `"MAPV2"` parameter to the dataset that calculates this new MAP at each timepoint using `admiral::derive_param_computed()` with `parameters = c("SYSBP", "DIABP")`.
 
-Which patient has the highest MAP and at what visit?
+Which patient has the highest MAPV2 and at what visit?
 :::
 
 ::: fragment
@@ -793,30 +793,30 @@ advs <- advs %>%
     )
   )
 
-# Highest MAP is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)
+# Highest MAPV2 is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)
 ```
 :::
 
 ::: fragment
-[Now let's put everything into practice with a visualisation!]({style="color:blue;"})
+[Now let's put everything into practice with a visualisation!]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
 
 ## Exercise 3: A Simple Visualisation {.center background-color="#E8F4FD"}
 
-Open **`templates/g_vs_map.R`**
+------------------------------------------------------------------------
 
 ## Exercise 3: A Simple Visualisation
 
 ::: fragment
-:::{.callout-note title="ADSL"}
-- This exercise will use the `ADVS` dataset you created in Exercise 1. You can also download it from the GitHub repo if you haven't completed the exercise.
+:::{.callout-note title="ADVS"}
+- This exercise will use the `ADVS` dataset you created in Exercise 2. You can also download it from the GitHub repo if you haven't completed the exercise.
 :::
 :::
 
 ::: fragment
-**Task:** Create two plots of mean `"MAP"`/`"MAPV2"` over time (use visit number `AVISITN`), split by treatment arm ,(`TRT01A"`) and restricted to patients aged **\>65**. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (`HISOBPFL == "Y"`) and those who do not (`HISOBPFL == "N"`).
+**Task:** Starting from **`templates/g_vs_map.R`**, create two plots of mean `"MAP"`/`"MAPV2"` over time (use visit number `AVISITN`), split by treatment arm ,(`TRT01A`) and restricted to patients aged **55-65**. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (`HISOBPFL == "Y"`) and those who do not (`HISOBPFL == "N"`).
 
 You'll need to pre-process `ADVS` as follows first to compute the data points for the plot:
 
@@ -859,7 +859,7 @@ Repeat for `PARAMCD == "MAPV2"`.
 :::
 
 ::: fragment
-[**🤔Open question:** How could you further enhance/improve these plots?]({style="color:blue;"})
+[**🤔Open question:** How could you further enhance/improve these plots?]{style="color:blue;"}
 :::
 ------------------------------------------------------------------------
 

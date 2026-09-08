@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>review</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="review_files/libs/clipboard/clipboard.min.js"></script>
+<script src="review_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="review_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="review_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="review_files/libs/quarto-html/popper.min.js"></script>
+<script src="review_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="review_files/libs/quarto-html/anchor.min.js"></script>
+<link href="review_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="review_files/libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="review_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="review_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="review_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="workshop-materials-review" class="level1">
+<h1>Workshop Materials Review</h1>
+<p>Reviewed: <code>index.qmd</code> (slides), <code>templates/*.R</code>, <code>solutions/*.R</code>, <code>README.md</code>, <code>custom.css</code>. No files were modified — this is a read-only review.</p>
+<hr>
+<section id="high-severity-issues-functional-bugs" class="level2">
+<h2 class="anchored" data-anchor-id="high-severity-issues-functional-bugs">1. High-severity issues (functional bugs)</h2>
+<section id="templatesad_adsl.r-saves-to-the-wrong-filename" class="level3">
+<h3 class="anchored" data-anchor-id="templatesad_adsl.r-saves-to-the-wrong-filename">1.1 <code>templates/ad_adsl.R</code> saves to the wrong filename</h3>
+<p><code>templates/ad_adsl.R:194</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(adsl, <span class="at">file =</span> <span class="fu">file.path</span>(<span class="st">"data"</span>, <span class="st">"adsl.RDS"</span>), <span class="at">compress =</span> <span class="st">"bzip2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This uses <code>save()</code> (an R-data/environment format, conventionally <code>.rda</code>/<code>.RData</code>) but names the file <code>adsl.RDS</code> (uppercase, the extension conventionally used for <code>saveRDS()</code>/<code>readRDS()</code> single-object files). Every other file in the project — <code>solutions/solution_ad_adsl.R:100</code>, <code>templates/ad_advs.R:178</code>, <code>solutions/solution_ad_advs.R:98</code>, and both <code>g_vs_map.R</code> files — correctly reads/writes lowercase <code>adsl.rda</code> / <code>advs.rda</code> with <code>save()</code>/<code>load()</code>.</p>
+<p><strong>Impact:</strong> if a participant fills in Exercise 1 correctly and runs the template top-to-bottom, it will write <code>data/adsl.RDS</code>, <em>not</em> <code>data/adsl.rda</code>. <code>templates/ad_advs.R:36</code> then does <code>load(file.path("data", "adsl.rda"))</code>, which will silently load the stale, pre-built <code>data/adsl.rda</code> that ships in the repo instead of the participant’s own output — Exercise 2 would quietly run against the wrong data (or fail outright for anyone who deletes/renames the pre-built file). This is currently masked only because a pre-built <code>data/adsl.rda</code> is checked into git.</p>
+<p><strong>Fix:</strong> change <code>"adsl.RDS"</code> → <code>"adsl.rda"</code> on <code>templates/ad_adsl.R:194</code>.</p>
+</section>
+<section id="exercise-3s-stated-age-filter-contradicts-the-code-everywhere" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3s-stated-age-filter-contradicts-the-code-everywhere">1.2 Exercise 3’s stated age filter contradicts the code everywhere</h3>
+<p>The task prose says one thing; every actual filter/plot uses another:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Location</th>
+<th>Says</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>index.qmd:819</code> (task text)</td>
+<td>“restricted to patients aged <strong>&gt;65</strong>”</td>
+</tr>
+<tr class="even">
+<td><code>README.md:98</code></td>
+<td>“restricted to the oldest age group”</td>
+</tr>
+<tr class="odd">
+<td><code>templates/g_vs_map.R:5</code> (header comment)</td>
+<td><code>restricted to patients in the "&gt;65" age group</code></td>
+</tr>
+<tr class="even">
+<td><code>index.qmd:825</code>, <code>templates/g_vs_map.R:20,25</code> (actual filter)</td>
+<td><code>AGEGR2 %in% c("55-65")</code></td>
+</tr>
+<tr class="odd">
+<td><code>solutions/solution_g_vs_map.R:12,17,27,42</code></td>
+<td><code>AGEGR2 == "55-65"</code>, subtitle “Age group: 55-65 years”</td>
+</tr>
+<tr class="even">
+<td><code>solutions/solution_g_vs_map_faceted.R:12,17,30,46</code></td>
+<td>same, “55-65”</td>
+</tr>
+</tbody>
+</table>
+<p>Every code path — template, both solutions, and the slide’s own code excerpt — actually filters to the <strong>middle</strong> age group (<code>"55-65"</code>), while the task description and README both tell participants (and the audience) they’re looking at the <strong>oldest</strong> group (<code>"&gt;65"</code>). This is the single most confusing inconsistency in the deck, since it appears directly above the contradicting code block on the same slide (<code>index.qmd:819</code> vs <code>:825</code>).</p>
+<p><strong>Fix:</strong> decide which age group Exercise 3 is meant to illustrate and make all six locations agree (probably easiest to update the prose/comments to “55-65” since the code, both solutions, and all four saved plot images already reflect that group).</p>
+<hr>
+</section>
+</section>
+<section id="typos" class="level2">
+<h2 class="anchored" data-anchor-id="typos">2. Typos</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Location</th>
+<th>Issue</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>index.qmd:627</code></td>
+<td>“High Systolic Blood <strong>Pressus</strong> Flag” → “Pressure”</td>
+</tr>
+<tr class="even">
+<td><code>index.qmd:671</code></td>
+<td><code>the `ADS`L dataset</code> — stray closing backtick splits “ADSL”; should be <code>the `ADSL` dataset</code></td>
+</tr>
+<tr class="odd">
+<td><code>index.qmd:680</code></td>
+<td>“each patient has multiple rows <strong>the the</strong> dataset” → “rows in the dataset”</td>
+</tr>
+<tr class="even">
+<td><code>index.qmd:692</code></td>
+<td><code>`"Systolic blood **pressue** (mmHg)`</code> → “pressure”; also missing the closing <code>"</code> before the backtick (every other example in that table cell is fully quote+backtick closed, e.g.&nbsp;<code>`"BASELINE"`</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>index.qmd:819</code></td>
+<td>“split by treatment arm <strong>,(</strong>`TRT01A”`<strong>)</strong>” — stray comma, and a stray <code>"</code> trapped inside the backticks (<code>`TRT01A"`</code>). Should read “split by treatment arm (<code>TRT01A</code>)”</td>
+</tr>
+<tr class="even">
+<td><code>index.qmd:96</code></td>
+<td>“…is long and complex! <strong>it</strong> can loosely be categorised…” — lowercase “it” starting a new sentence after “!”</td>
+</tr>
+<tr class="odd">
+<td><code>index.qmd:295</code> vs <code>:343</code></td>
+<td>ADAE is expanded twice with different wording: “Adverse <strong>Event</strong> Analysis Dataset” (295) vs “Adverse <strong>Events</strong> Analysis Dataset” (343) — pick one</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="formatting-inconsistencies" class="level2">
+<h2 class="anchored" data-anchor-id="formatting-inconsistencies">3. Formatting inconsistencies</h2>
+<section id="broken-blue-italic-aside-markup-used-14-times" class="level3">
+<h3 class="anchored" data-anchor-id="broken-blue-italic-aside-markup-used-14-times">3.1 Broken “blue italic aside” markup, used 14 times</h3>
+<p>Every “narrator aside” line in the deck uses this pattern, e.g.&nbsp;<code>index.qmd:104</code>:</p>
+<pre><code>[*Let's go through these stages one by one...*]({style="color:blue;"})</code></pre>
+<p>This is <strong>not valid Pandoc bracketed-span syntax</strong>. <code>[text]({attrs})</code> is parsed as a regular Markdown link <code>[text](url)</code> where the “URL” is the literal string <code>{style="color:blue;"}</code> — it does not apply a color style at all, it (at best) creates a dead/garbage link. The correct bracketed-span syntax has no parentheses:</p>
+<pre><code>[*Let's go through these stages one by one...*]{style="color:blue;"}</code></pre>
+<p>This same broken pattern appears at lines 104, 129, 163, 279, 312, 427, 455, 557, 578, 676, 702, 741, 801, and 862 — i.e.&nbsp;essentially every transition line in the whole deck. Worth a single find-and-replace once confirmed (removing the parentheses around <code>{style=...}</code>), after checking how it currently actually renders (it’s possible the extra <code>()</code> is silently swallowed by revealjs/pandoc rather than becoming a visible link — but it should be fixed either way since it’s not doing what was intended).</p>
+</section>
+<section id="bold-text-that-wont-render-as-bold" class="level3">
+<h3 class="anchored" data-anchor-id="bold-text-that-wont-render-as-bold">3.2 Bold text that won’t render as bold</h3>
+<p><code>index.qmd:343</code>:</p>
+<pre><code>**ADAE (Adverse Events Analysis Dataset) ** — one row per patient...</code></pre>
+<p>There’s a trailing space before the closing <code>**</code>. Per CommonMark’s flanking-delimiter rules, a closing <code>**</code> preceded by whitespace is not “right-flanking” and won’t close the emphasis — this will likely render as literal double-asterisks rather than bold, unlike the other ADaM section headers (<code>ADSL</code>/<code>ADVS</code>) which don’t have the extra space before their closing <code>**</code>.</p>
+</section>
+<section id="copy-pasted-callout-with-wrong-titlecontent" class="level3">
+<h3 class="anchored" data-anchor-id="copy-pasted-callout-with-wrong-titlecontent">3.3 Copy-pasted callout with wrong title/content</h3>
+<p><code>index.qmd:813-815</code>:</p>
+<pre><code>:::{.callout-note title="ADSL"}
+- This exercise will use the `ADVS` dataset you created in Exercise 1. ...</code></pre>
+<p>This callout is in the <strong>Exercise 3</strong> section but is a copy of the Exercise 2 callout (<code>index.qmd:670-671</code>) with the dataset name swapped but not the title or the “Exercise 1” reference. It should read <code>title="ADVS"</code> and “…you created in <strong>Exercise 2</strong>” (ADVS was built in Exercise 2, not Exercise 1).</p>
+</section>
+<section id="backtick-usage-for-datasetvariable-names-mostly-consistent-a-few-gaps" class="level3">
+<h3 class="anchored" data-anchor-id="backtick-usage-for-datasetvariable-names-mostly-consistent-a-few-gaps">3.4 Backtick usage for dataset/variable names — mostly consistent, a few gaps</h3>
+<p>The deck is otherwise very disciplined about backticking dataset names (<code>`DM`</code>, <code>`ADSL`</code>, <code>`ADVS`</code>…), variable names (<code>`AGEGR2`</code>, <code>`HISOBPFL`</code>…) and package names in curly braces (<code>`{admiral}`</code>, <code>`{ggplot2}`</code>…). The exceptions are the ones already listed above (§2 <code>`ADS`L</code>, and the unterminated <code>`"Systolic blood pressue (mmHg)`</code> cell). Also minor: <code>`PARAM  `</code> (index.qmd:692) and <code>`"AFTER STANDING FOR 3 MINUTES" `</code> (index.qmd:694) both have stray trailing spaces baked inside the backticks (presumably for source alignment) — harmless but slightly sloppy since the space is inside the code span and will render as part of it.</p>
+</section>
+<section id="exercise-3s-own-divider-slide-breaks-the-pattern-used-by-exercises-1-2" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3s-own-divider-slide-breaks-the-pattern-used-by-exercises-1-2">3.5 Exercise 3’s own divider slide breaks the pattern used by Exercises 1 &amp; 2</h3>
+<p>Exercises 1 and 2 each use a two-slide pattern: a <code>{.center background-color="#E8F4FD"}</code> divider slide containing <em>only</em> the title, then a <code>---</code> rule, then the content slide. Exercise 3’s divider slide (<code>index.qmd:806-810</code>) instead packs in an extra line (“Open <strong><code>templates/g_vs_map.R</code></strong>”) and has no <code>---</code> separating it from the next <code>##</code> slide:</p>
+<pre><code>## Exercise 3: A Simple Visualisation {.center background-color="#E8F4FD"}
+
+Open **`templates/g_vs_map.R`**
+
+## Exercise 3: A Simple Visualisation</code></pre>
+<p>Not wrong (Quarto revealjs starts a new slide at every <code>##</code> regardless), but it’s the only divider slide in the deck carrying content, which is a bit inconsistent visually/structurally.</p>
+</section>
+<section id="a-with-no-2b-mismatched-exercise-numbering-in-ad_advs.r" class="level3">
+<h3 class="anchored" data-anchor-id="a-with-no-2b-mismatched-exercise-numbering-in-ad_advs.r">3.6 “2a with no 2b” / mismatched exercise numbering in <code>ad_advs.R</code></h3>
+<p><code>templates/ad_advs.R:6-8</code> (header comment):</p>
+<pre><code># Exercises:
+#   2a) Derive Mean Arterial Pressure (MAP) using admiral's built-in function
+#   2b) Derive an alternative MAP (MAPV2) using a custom formula</code></pre>
+<p>But <code>derive_param_map()</code> (the “MAP” part) is fully provided in the template — it isn’t an exercise, there’s no blank/TODO for it. The one actual fill-in-the-blank in the file is the MAPV2 derivation, and it’s labelled <code># Exercise 2a:</code> in the body (<code>templates/ad_advs.R:110</code>), matching <code>index.qmd</code>’s “Exercise 2a — Derive <code>MAPV2</code>” heading. So the header comment’s “2a/2b” list doesn’t match the body, which only has a “2a”. Recommend simplifying the header comment to list just the one exercise, e.g.&nbsp;“2a) Derive an alternative MAP (MAPV2) using a custom formula”.</p>
+</section>
+<section id="readme-extension-typos" class="level3">
+<h3 class="anchored" data-anchor-id="readme-extension-typos">3.7 README extension typos</h3>
+<p><code>README.md:80-81,110</code>: refers to <code>adsl.RDS</code> / <code>advs.RDS</code>, but the files actually shipped in <code>data/</code> (and produced by <code>save()</code>/<code>load()</code>) are <code>adsl.rda</code> / <code>advs.rda</code>. Same root cause as §1.1 — worth fixing together.</p>
+</section>
+<section id="minor-capitalization-nit-in-the-agenda-table" class="level3">
+<h3 class="anchored" data-anchor-id="minor-capitalization-nit-in-the-agenda-table">3.8 Minor capitalization nit in the agenda table</h3>
+<p><code>index.qmd:76</code>: “Exercise Setup, <strong>T</strong>est <strong>d</strong>ata and the packages…” — inconsistent capitalization of “Test data” versus the Title Case used for the other agenda rows (“Background:”, “Exercise Setup”, “Wrap-up and next steps”).</p>
+<hr>
+</section>
+</section>
+<section id="contentclarity-suggestions-not-errors-but-worth-a-look" class="level2">
+<h2 class="anchored" data-anchor-id="contentclarity-suggestions-not-errors-but-worth-a-look">4. Content/clarity suggestions (not errors, but worth a look)</h2>
+<ul>
+<li><strong><code>index.qmd:754</code></strong> — the Exercise 2a task question asks “Which patient has the highest <strong>MAP</strong> and at what visit?” but the exercise is about deriving <strong>MAPV2</strong>; the answer given (<code>index.qmd:796</code>) is phrased as “Highest MAP is 158.0 mmHg…” Consider explicitly saying “MAPV2” in both the question and the answer so participants don’t wonder whether you mean the original <code>derive_param_map()</code> output or the new custom parameter.</li>
+<li>Exercise 2 has only a “2a” sub-part (no “2b”), while Exercise 1 has “1a” and “1b”. Since Exercise 2 is a single derivation, consider dropping the “a” suffix entirely (just “Exercise 2 — Derive <code>MAPV2</code>”) to avoid implying a missing second part.</li>
+<li>The workshop is titled “Workshop for Ukraine” in the subtitle (<code>index.qmd:3</code>) — worth double-checking this is still the intended framing/context before it goes out again, since nothing else in the deck currently references that context (no mention of why, or where proceeds/attendance are going, etc.) — might be worth a one-line callout on the title slide if this is a charity/fundraising angle, otherwise it may read as a stray subtitle to newcomers.</li>
+<li><code>templates/*.R</code> are excellent — the inline comments explaining <em>why</em> each <code>admiral</code> call is needed (not just what it does) are genuinely some of the best “teaching-code” comments I’ve seen; worth preserving that density when the age-group/filename fixes above are made.</li>
+</ul>
+<hr>
+</section>
+<section id="quartorevealjs-feature-suggestions" class="level2">
+<h2 class="anchored" data-anchor-id="quartorevealjs-feature-suggestions">5. Quarto/revealjs feature suggestions</h2>
+<p>A few <code>revealjs</code> features that could enhance the deck, given its current structure (heavy use of <code>::: fragment</code>, two-column layouts, callouts, code blocks):</p>
+<ol type="1">
+<li><strong>Speaker notes</strong> (<code>::: {.notes}</code>) — you could stash the answers/talking points (e.g.&nbsp;the “why” behind each derivation, or timing cues) as speaker notes rather than as visible slide text, then use the <code>S</code> key or <code>?speaker-view</code> during delivery. Keeps the audience-facing slide cleaner while still giving you a script.</li>
+<li><strong><code>auto-animate: true</code></strong> on consecutive slides — e.g.&nbsp;the <code>ad_adsl.R</code>/<code>ad_advs.R</code>/<code>g_vs_map.R</code> code blocks that get incrementally built up (task → hint → solution) could morph between slides instead of just appearing as a new block, which reads nicely for “watch this line get added” moments (like the <code>AGEGR2</code> and <code>MAPV2</code> additions).</li>
+<li><strong><code>code-line-numbers</code> with <code>{code-line-numbers="7-9"}</code></strong> on individual chunks — the deck currently sets <code>code-line-numbers: false</code> globally (<code>index.qmd:10</code>); consider re-enabling it selectively per-chunk on the longer <code>admiral</code> pipelines (e.g.&nbsp;the <code>derive_vars_merged</code> example around <code>index.qmd:527</code>) so you can highlight just the new/relevant lines during the walkthrough instead of the whole block.</li>
+<li><strong><code>menu</code> / <code>chalkboard</code> plugins</strong> — RevealJS’s chalkboard plugin (<code>revealjs-plugins: [chalkboard]</code>) lets you annotate live over the <code>admiral</code> pipeline diagrams or the SDTM→ADaM flow image during Q&amp;A, which could be handy for an interactive workshop format.</li>
+<li><strong><code>preview-links: true</code></strong> — since the deck links out to the GitHub repo and pharmaverse.org multiple times, this option opens external links in an in-deck iframe overlay instead of navigating away from the slideshow (useful if presenting full-screen).</li>
+<li><strong>Progressive <code>fragment</code> index control</strong> (<code>fragment-index</code>) — currently fragments reveal in document order; for the “Key features of SDTM” / “Key features of ADaM” callout+bullet combos, explicit <code>fragment-index</code> values would let you reveal the callout box before/after specific bullets rather than being locked to source order — probably not needed now but useful if you restructure those slides later.</li>
+<li><strong><code>smaller-table</code> class is already custom (<code>.small-table</code> in <code>custom.css</code>)</strong> — nice touch; consider also using Quarto’s built-in <code>tbl-colwidths</code> on the plain Markdown tables (e.g.&nbsp;the ADSL/ADVS variable tables) instead of relying on manual column padding with spaces (as seen in <code>index.qmd:687-698</code>), which would remove the need for things like the stray trailing-space-in-backticks issue noted in §3.4.</li>
+</ol>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

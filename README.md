@@ -77,8 +77,8 @@ clinical_programming_in_R_workshop/
 │   └── g_vs_map.R
 │
 ├── data/                # Pre-built datasets (updated when you run exercises)
-│   ├── adsl.RDS         #   Subject-level dataset
-│   └── advs.RDS         #   Vital signs dataset
+│   ├── adsl.rda         #   Subject-level dataset
+│   └── advs.rda         #   Vital signs dataset
 │
 └── index.qmd            # Workshop slide deck (render to view)
 ```
@@ -95,7 +95,7 @@ saves its output to `data/` for the next one to use.
 |---|------|-----------------|
 | 1 | `templates/ad_adsl.R` | Add a new age group (`AGEGR2`) and a high systolic BP flag (`HISOBPFL`) to the subject-level dataset |
 | 2 | `templates/ad_advs.R` | Derive Mean Arterial Pressure using a built-in admiral function (`MAP`) and a custom formula (`MAPV2`) |
-| 3 | `templates/g_vs_map.R` | Plot mean MAP and MAPV2 over time by treatment arm, restricted to the oldest age group |
+| 3 | `templates/g_vs_map.R` | Plot mean MAP and MAPV2 over time by treatment arm, restricted to the middle age group |
 
 If you get stuck, peek at the matching file in `solutions/` — the solutions
 are complete, annotated, and executable top-to-bottom.

@@ -2,7 +2,7 @@
 # Label: Vital Signs - Mean Arterial Pressure Over Time
 #
 # Exercise 3: Create two plots of MAP over time by treatment arm,
-#             restricted to patients in the ">65" age group.
+#             restricted to patients in the "55-65" age group.
 #
 # Note: run ad_adsl.R then ad_advs.R first — AGEGR2 and the MAP / MAPV2
 # parameters are added by those programs and saved to data/advs.RDS.

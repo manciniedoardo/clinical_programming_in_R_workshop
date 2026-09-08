@@ -4,8 +4,7 @@
 # Input: adsl (from Exercise 1), vs
 #
 # Exercises:
-#   2a) Derive Mean Arterial Pressure (MAP) using admiral's built-in function
-#   2b) Derive an alternative MAP (MAPV2) using a custom formula
+#   2a) Derive an alternative MAP (MAPV2) using a custom formula
 #
 # Note: run ad_adsl.R first so that data/adsl.RDS contains AGEGR2 and HISOBPFL.
 
