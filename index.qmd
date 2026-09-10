@@ -1,7 +1,7 @@
 ---
 title: "Clinical Programming in R"
 subtitle: "Workshop for Ukraine"
-author: "Edoardo Mancini"
+author: "Edoardo Mancini - 17th September 2026"
 format:
   revealjs:
     theme: simple
@@ -22,6 +22,7 @@ editor:
 
 ## About Me & This Workshop
 
+::: fragment
 ::::: columns
 ::: {.column width="40%"}
 ![](images/edoardomancini.jpg){width="90%" fig-align="center"}
@@ -34,11 +35,22 @@ late-stage clinical trials. I am also a passionate advocate for R and
 Open Source, and am able to pursue these interests in my current role
 as maintainer for the `{admiral}` R package.
 
-Outside of work, I enjoy playing chess, reading, and running.
+Outside of work, I enjoy playing chess♟️, reading📖, and running🏃.
 :::
 :::::
+:::
 
-Donations for sign-ups to this workshop will be used to support the Ukraine War Effort.
+::: fragment
+::::: columns
+::: {.column width="40%"}
+![](images/ukraine.png){width="90%" fig-align="center"}
+:::
+
+::: {.column width="60%"}
+Donations for sign-ups to this workshop (both live and in future) will be used to support the Ukraine War Effort 🙏.
+:::
+:::::
+:::
 
 ------------------------------------------------------------------------
 
@@ -149,6 +161,10 @@ infarction", or "cardiac event")
 | `EX`   | Exposure (drug dosing) |
 
 E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset.
+:::
+
+::: fragment
+[**🤔Open question:** Can you think of any other domains?]{style="color:#248C28;"}
 :::
 
 ::: fragment
@@ -321,7 +337,7 @@ Today, we'll start directly from the ADaM-building stage. For the first part of 
 ## ADaM in action: `ADSL`
 
 ::: fragment
-**ADSL (Subject-Level Analysis Dataset)** — one row per subject (derived from `DM`, `DS`, `AE`, etc.)
+**ADSL (Subject-Level Analysis Dataset)** — one row per subject (derived from `DM`, `DS`, `AE`, etc.). [Variables highlighted in yellow are derived]{style="background-color:#FAFF75;"}.
 ```{r}
 #| eval: true
 #| echo: false
@@ -331,7 +347,13 @@ vars <- c("USUBJID", "AGE", "SEX", "RACE", "TRT01A", "AGEGR1", "SAFFL", "RANDDT"
 labs <- sapply(adsl[vars], attr, "label")
 adsl %>%
   select(all_of(vars)) %>%
-  head(10) %>%
+    mutate(
+      across(
+        c( "TRT01A", "AGEGR1", "SAFFL", "RANDDT", "TRTSDTM", "TRTEDTM", "DTHDT"),
+       ~paste0('<span style="background:#FAFF75;display:block;padding:1px 3px">', .x, '</span>')
+      )
+    ) %>% 
+  head(7) %>%
   kable(format = "html",
         col.names = paste0(vars, "<br><em>", labs, "</em>"),
         escape = FALSE,
@@ -344,7 +366,7 @@ adsl %>%
 ## ADaM in action: `ADAE`
 
 ::: fragment
-**`ADAE` (Adverse Events Analysis Dataset)** — one row per patient per adverse event (derived from `AE` + `ADSL` + `EX`)
+**`ADAE` (Adverse Events Analysis Dataset)** — one row per patient per adverse event (derived from `AE` + `ADSL` + `EX`). [Variables highlighted in purple come from `ADSL`]{style="background-color:#bb90df;"}. [Variables highlighted in yellow are derived]{style="background-color:#FAFF75;"}.
 
 ```{r}
 #| eval: true
@@ -354,6 +376,16 @@ set.seed(1)
 adae %>%
   select(USUBJID, TRT01A, TRTSDTM, AEDECOD, AESTDTC, AESEV, AESER, ASTDY, TRTEMFL, LDOSEDTM) %>%
   mutate(LDOSEDTM = LDOSEDTM - floor(5*runif(1))) %>%
+  mutate(
+    across(
+      c("ASTDY", "TRTEMFL", "LDOSEDTM"),
+      ~paste0('<span style="background:#FAFF75;display:block;padding:1px 3px">', .x, '</span>')
+    ),
+    across(
+      c("TRT01A", "TRTSDTM"),
+      ~paste0('<span style="background:#bb90df;display:block;padding:1px 3px">', .x, '</span>')
+    ),
+  ) %>% 
   head(5) %>%
   kable(format = "html",
         col.names = c(
@@ -373,12 +405,16 @@ adae %>%
 ```
 :::
 
+::: fragment
+[**🤔Open question:** Can you think of any other information we may want to collect or derive about an adverse event?]{style="color:#248C28;"}
+:::
+
 ------------------------------------------------------------------------
 
 ## ADaM in action: `ADVS`
 
 ::: fragment
-**ADVS (Vital Signs Analysis Dataset)** — one row per patient per parameter per visit (derived from `VS` and `ADSL`)
+**ADVS (Vital Signs Analysis Dataset)** — one row per patient per parameter per visit (derived from `VS` and `ADSL`). [Records highlighted in yellow are derived]{style="background-color:#FAFF75;"}.
 
 ```{r}
 #| eval: true
@@ -417,7 +453,7 @@ is_map <- df$PARAMCD == "MAP"
 df <- df %>% mutate(across(everything(), as.character))
 df[is_map, ] <- df[is_map, ] %>%
   mutate(across(everything(),
-    ~paste0('<span style="background:#fff3cd;display:block;padding:1px 3px">', .x, '</span>')))
+    ~paste0('<span style="background:#FAFF75;display:block;padding:1px 3px">', .x, '</span>')))
 
 df %>%
   kable(format = "html",
@@ -560,7 +596,7 @@ We'll be using `{ggplot2}` for our plot... but you're all probably familiar with
 ## Exercise 1: Working with `ADSL`
 
 ::: fragment
-[Let's remind ourselves of what we can find in the `ADSL` dataset.]{style="color:blue;"}
+[*Let's remind ourselves of what we can find in the `ADSL` dataset.*]{style="color:blue;"}
 :::
 
 ::: fragment 
@@ -581,7 +617,7 @@ Here are some of the key variables in the `ADSL` dataset:
 :::
 
 ::: fragment
-[Let's open `templates/ad_adsl.R` and see how a simple `ADSL` is created...]{style="color:blue;"}
+[*Let's open `templates/ad_adsl.R` and see how a simple `ADSL` is created...*]{style="color:blue;"}
 ::: 
 
 ------------------------------------------------------------------------
@@ -678,7 +714,7 @@ adsl %>% count(HISOBPFL)
 :::
 
 ::: fragment
-[Let's remind ourselves of what we can find in the `ADVS` dataset.]{style="color:blue;"}
+[*Let's remind ourselves of what we can find in the `ADVS` dataset.*]{style="color:blue;"}
 :::
 
 ::: fragment 
@@ -704,7 +740,7 @@ Here are some of the key variables in the `ADVS` dataset:
 :::
 
 ::: fragment
-[Unlike `ADSL`, `ADVS` can have whole new (derived) rows with measurements constructed as a combination of other measurements...]{style="color:blue;"}
+[*Unlike `ADSL`, `ADVS` can have whole new (derived) rows with measurements constructed as a combination of other measurements...*]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -744,7 +780,7 @@ measurements are passed to the formula and produce `NA`.
 :::
 
 ::: fragment
-[Let's open `templates/ad_advs.R` and see how a simple `ADVS` is created - in particular the derivation of the mean arterial pressure...]{style="color:blue;"}
+[*Let's open `templates/ad_advs.R` and see how a simple `ADVS` is created - in particular the derivation of the mean arterial pressure...*]{style="color:blue;"}
 ::: 
 
 ------------------------------------------------------------------------
@@ -799,7 +835,7 @@ advs <- advs %>%
 ```
 
 ::: fragment
-[Now let's put everything into practice with a visualisation!]{style="color:blue;"}
+[*Now let's put everything into practice with a visualisation!*]{style="color:blue;"}
 :::
 
 ------------------------------------------------------------------------
@@ -810,12 +846,17 @@ advs <- advs %>%
 
 ## Exercise 3: A Simple Visualisation {auto-animate="true"}
 
+::: fragment
 :::{.callout-note title="ADVS"}
 - This exercise will use the `ADVS` dataset you created in Exercise 2. You can also download it from the GitHub repo if you haven't completed the exercise.
 :::
+::: 
 
+::: fragment
 **Task:** Starting from **`templates/g_vs_map.R`**, create two plots of mean `"MAP"`/`"MAPV2"` over time (use visit number `AVISITN`), split by treatment arm (`TRT01A`) and restricted to patients aged **55-65**. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (`HISOBPFL == "Y"`) and those who do not (`HISOBPFL == "N"`).
+:::
 
+::: fragment
 You'll need to pre-process `ADVS` as follows first to compute the data points for the plot:
 
 ```{r}
@@ -824,6 +865,7 @@ map_summary <- advs %>%
   group_by(AVISITN, AVISIT, TRT01A) %>%
   summarise(mean_aval = mean(AVAL, na.rm = TRUE), .groups = "drop")
 ```
+:::
 
 ------------------------------------------------------------------------
 
@@ -860,7 +902,7 @@ Repeat for `PARAMCD == "MAPV2"`.
 :::
 
 ::: fragment
-[**🤔Open question:** How could you further enhance/improve these plots?]{style="color:blue;"}
+[**🤔Open question:** How could you further enhance/improve these plots?]{style="color:#248C28;"}
 :::
 ------------------------------------------------------------------------
 

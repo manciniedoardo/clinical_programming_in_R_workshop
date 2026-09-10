@@ -9,7 +9,7 @@
 <link href="index_files/libs/quarto-html/quarto-syntax-highlighting-a6e161b2431e1f94a14e0f5d32135a3c.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.8.24">
 
-  <meta name="author" content="Edoardo Mancini">
+  <meta name="author" content="Edoardo Mancini - 17th September 2026">
   <title>Clinical Programming in R</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -202,7 +202,7 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Edoardo Mancini 
+Edoardo Mancini - 17th September 2026 
 </div>
 </div>
 </div>
@@ -210,6 +210,7 @@ Edoardo Mancini
 </section>
 <section id="about-me-this-workshop" class="slide level2">
 <h2>About Me &amp; This Workshop</h2>
+<div class="fragment">
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="quarto-figure quarto-figure-center">
@@ -219,9 +220,21 @@ Edoardo Mancini
 </div>
 </div><div class="column" style="width:60%;">
 <p>I am a Senior Data Scientist working at Roche in the UK. My work involves leading statistical programming activities in early and late-stage clinical trials. I am also a passionate advocate for R and Open Source, and am able to pursue these interests in my current role as maintainer for the <code>{admiral}</code> R package.</p>
-<p>Outside of work, I enjoy playing chess, reading, and running.</p>
+<p>Outside of work, I enjoy playing chess♟️, reading📖, and running🏃.</p>
 </div></div>
-<p>Donations for sign-ups to this workshop will be used to support the Ukraine War Effort.</p>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/ukraine.png" class="quarto-figure quarto-figure-center" style="width:90.0%"></p>
+</figure>
+</div>
+</div><div class="column" style="width:60%;">
+<p>Donations for sign-ups to this workshop (both live and in future) will be used to support the Ukraine War Effort 🙏.</p>
+</div></div>
+</div>
 </section>
 <section id="welcome" class="slide level2">
 <h2>Welcome!</h2>
@@ -392,6 +405,9 @@ Edoardo Mancini
 </tbody>
 </table>
 <p>E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset.</p>
+</div>
+<div class="fragment">
+<p><span style="color:#248C28;"><strong>🤔Open question:</strong> Can you think of any other domains?</span></p>
 </div>
 <div class="fragment">
 <div title="Key features of SDTM">
@@ -942,7 +958,7 @@ Edoardo Mancini
 <section id="adam-in-action-adsl" class="slide level2">
 <h2>ADaM in action: <code>ADSL</code></h2>
 <div class="fragment">
-<p><strong>ADSL (Subject-Level Analysis Dataset)</strong> — one row per subject (derived from <code>DM</code>, <code>DS</code>, <code>AE</code>, etc.)</p>
+<p><strong>ADSL (Subject-Level Analysis Dataset)</strong> — one row per subject (derived from <code>DM</code>, <code>DS</code>, <code>AE</code>, etc.). <span style="background-color:#FAFF75;">Variables highlighted in yellow are derived</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top" style="font-size:0.65em">
@@ -991,130 +1007,91 @@ Edoardo Mancini
 <td style="text-align: right;">63</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Placebo</td>
-<td style="text-align: left;">18-64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2014-01-02</td>
-<td style="text-align: left;">2014-01-02</td>
-<td style="text-align: left;">2014-07-02 23:59:59</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">18-64</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-01-02</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-01-02</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-07-02 23:59:59</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">01-701-1023</td>
 <td style="text-align: right;">64</td>
 <td style="text-align: left;">M</td>
 <td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Placebo</td>
-<td style="text-align: left;">18-64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2012-08-05</td>
-<td style="text-align: left;">2012-08-05</td>
-<td style="text-align: left;">2012-09-01 23:59:59</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">18-64</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2012-08-05</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2012-08-05</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2012-09-01 23:59:59</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">01-701-1028</td>
 <td style="text-align: right;">71</td>
 <td style="text-align: left;">M</td>
 <td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Xanomeline High Dose</td>
-<td style="text-align: left;">&gt;64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2013-07-19</td>
-<td style="text-align: left;">2013-07-19</td>
-<td style="text-align: left;">2014-01-14 23:59:59</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Xanomeline High Dose</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">&gt;64</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2013-07-19</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2013-07-19</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-01-14 23:59:59</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">01-701-1033</td>
 <td style="text-align: right;">74</td>
 <td style="text-align: left;">M</td>
 <td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Xanomeline Low Dose</td>
-<td style="text-align: left;">&gt;64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2014-03-18</td>
-<td style="text-align: left;">2014-03-18</td>
-<td style="text-align: left;">2014-03-31 23:59:59</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Xanomeline Low Dose</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">&gt;64</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-03-18</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-03-18</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-03-31 23:59:59</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">01-701-1034</td>
 <td style="text-align: right;">77</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Xanomeline High Dose</td>
-<td style="text-align: left;">&gt;64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2014-07-01</td>
-<td style="text-align: left;">2014-07-01</td>
-<td style="text-align: left;">2014-12-30 23:59:59</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Xanomeline High Dose</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">&gt;64</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-07-01</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-07-01</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-12-30 23:59:59</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">01-701-1047</td>
 <td style="text-align: right;">85</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Placebo</td>
-<td style="text-align: left;">&gt;64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2013-02-12</td>
-<td style="text-align: left;">2013-02-12</td>
-<td style="text-align: left;">2013-03-09 23:59:59</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">&gt;64</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2013-02-12</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2013-02-12</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2013-03-09 23:59:59</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">01-701-1057</td>
 <td style="text-align: right;">59</td>
 <td style="text-align: left;">F</td>
 <td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Screen Failure</td>
-<td style="text-align: left;">18-64</td>
-<td style="text-align: left;">N</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">01-701-1097</td>
-<td style="text-align: right;">68</td>
-<td style="text-align: left;">M</td>
-<td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Xanomeline Low Dose</td>
-<td style="text-align: left;">&gt;64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2014-01-01</td>
-<td style="text-align: left;">2014-01-01</td>
-<td style="text-align: left;">2014-07-09 23:59:59</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">01-701-1111</td>
-<td style="text-align: right;">81</td>
-<td style="text-align: left;">F</td>
-<td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Xanomeline Low Dose</td>
-<td style="text-align: left;">&gt;64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2012-09-07</td>
-<td style="text-align: left;">2012-09-07</td>
-<td style="text-align: left;">2012-09-16 23:59:59</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">01-701-1115</td>
-<td style="text-align: right;">84</td>
-<td style="text-align: left;">M</td>
-<td style="text-align: left;">WHITE</td>
-<td style="text-align: left;">Xanomeline Low Dose</td>
-<td style="text-align: left;">&gt;64</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2012-11-30</td>
-<td style="text-align: left;">2012-11-30</td>
-<td style="text-align: left;">2013-01-23 23:59:59</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Screen Failure</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">18-64</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">N</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
 </tr>
 </tbody>
 </table>
@@ -1125,7 +1102,7 @@ Edoardo Mancini
 <section id="adam-in-action-adae" class="slide level2">
 <h2>ADaM in action: <code>ADAE</code></h2>
 <div class="fragment">
-<p><strong><code>ADAE</code> (Adverse Events Analysis Dataset)</strong> — one row per patient per adverse event (derived from <code>AE</code> + <code>ADSL</code> + <code>EX</code>)</p>
+<p><strong><code>ADAE</code> (Adverse Events Analysis Dataset)</strong> — one row per patient per adverse event (derived from <code>AE</code> + <code>ADSL</code> + <code>EX</code>). <span style="background-color:#bb90df;">Variables highlighted in purple come from <code>ADSL</code></span>. <span style="background-color:#FAFF75;">Variables highlighted in yellow are derived</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top" style="font-size:0.65em">
@@ -1157,7 +1134,7 @@ Edoardo Mancini
 <em>Serious Event</em></th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">AESEV<br>
 <em>Severity/ Intensity</em></th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">ASTDY<br>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ASTDY<br>
 <em>Analysis Start Relative Day</em></th>
 <th style="text-align: left;" data-quarto-table-cell-role="th">TRTEMFL<br>
 <em>Treatment Emergent Flag</em></th>
@@ -1168,74 +1145,77 @@ Edoardo Mancini
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">01-701-1015</td>
-<td style="text-align: left;">Placebo</td>
-<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">2014-01-02</span></td>
 <td style="text-align: left;">APPLICATION SITE ERYTHEMA</td>
 <td style="text-align: left;">2014-01-03</td>
 <td style="text-align: left;">MILD</td>
 <td style="text-align: left;">N</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2014-01-02 23:59:59</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-01-02 23:59:59</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">01-701-1015</td>
-<td style="text-align: left;">Placebo</td>
-<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">2014-01-02</span></td>
 <td style="text-align: left;">APPLICATION SITE PRURITUS</td>
 <td style="text-align: left;">2014-01-03</td>
 <td style="text-align: left;">MILD</td>
 <td style="text-align: left;">N</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2014-01-02 23:59:59</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-01-02 23:59:59</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">01-701-1015</td>
-<td style="text-align: left;">Placebo</td>
-<td style="text-align: left;">2014-01-02</td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">2014-01-02</span></td>
 <td style="text-align: left;">DIARRHOEA</td>
 <td style="text-align: left;">2014-01-09</td>
 <td style="text-align: left;">MILD</td>
 <td style="text-align: left;">N</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2014-01-08 23:59:59</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">8</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2014-01-08 23:59:59</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">01-701-1023</td>
-<td style="text-align: left;">Placebo</td>
-<td style="text-align: left;">2012-08-05</td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">2012-08-05</span></td>
 <td style="text-align: left;">ERYTHEMA</td>
 <td style="text-align: left;">2012-08-07</td>
 <td style="text-align: left;">MODERATE</td>
 <td style="text-align: left;">N</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2012-08-06 23:59:59</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">3</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2012-08-06 23:59:59</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">01-701-1023</td>
-<td style="text-align: left;">Placebo</td>
-<td style="text-align: left;">2012-08-05</td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#bb90df;display:block;padding:1px 3px">2012-08-05</span></td>
 <td style="text-align: left;">ERYTHEMA</td>
 <td style="text-align: left;">2012-08-07</td>
 <td style="text-align: left;">MILD</td>
 <td style="text-align: left;">N</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">Y</td>
-<td style="text-align: left;">2012-08-06 23:59:59</td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">3</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2012-08-06 23:59:59</span></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
+<div class="fragment">
+<p><span style="color:#248C28;"><strong>🤔Open question:</strong> Can you think of any other information we may want to collect or derive about an adverse event?</span></p>
+</div>
 </section>
 <section id="adam-in-action-advs" class="slide level2">
 <h2>ADaM in action: <code>ADVS</code></h2>
 <div class="fragment">
-<p><strong>ADVS (Vital Signs Analysis Dataset)</strong> — one row per patient per parameter per visit (derived from <code>VS</code> and <code>ADSL</code>)</p>
+<p><strong>ADVS (Vital Signs Analysis Dataset)</strong> — one row per patient per parameter per visit (derived from <code>VS</code> and <code>ADSL</code>). <span style="background-color:#FAFF75;">Records highlighted in yellow are derived</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table id="advs-showcase" class="caption-top" style="font-size:0.65em">
@@ -1306,17 +1286,17 @@ Edoardo Mancini
 <td style="text-align: left;">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">01-701-1015</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Placebo</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">MAP</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">DERIVED</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Baseline</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">0</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Y</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">86</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">86</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">0</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">01-701-1015</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">MAP</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">DERIVED</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Baseline</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">0</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Y</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">86</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">86</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">0</span></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">01-701-1015</td>
@@ -1345,17 +1325,17 @@ Edoardo Mancini
 <td style="text-align: left;">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">01-701-1015</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Placebo</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">MAP</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">DERIVED</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Week 2</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">2</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">NA</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">85.5</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">86</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">-0.5</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">01-701-1015</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">MAP</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">DERIVED</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Week 2</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">2</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">85.5</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">86</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">-0.5</span></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">01-701-1015</td>
@@ -1384,17 +1364,17 @@ Edoardo Mancini
 <td style="text-align: left;">16</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">01-701-1015</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Placebo</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">MAP</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">DERIVED</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">Week 4</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">4</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">NA</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">96</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">86</span></td>
-<td style="text-align: left;"><span style="background:#fff3cd;display:block;padding:1px 3px">10</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">01-701-1015</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Placebo</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">MAP</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Mean Arterial Pressure</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">DERIVED</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">Week 4</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">4</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">NA</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">96</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">86</span></td>
+<td style="text-align: left;"><span style="background:#FAFF75;display:block;padding:1px 3px">10</span></td>
 </tr>
 </tbody>
 </table>
@@ -1569,7 +1549,7 @@ Edoardo Mancini
 <section id="exercise-1-working-with-adsl-1" class="slide level2">
 <h2>Exercise 1: Working with <code>ADSL</code></h2>
 <div class="fragment">
-<p><span style="color:blue;">Let’s remind ourselves of what we can find in the <code>ADSL</code> dataset.</span></p>
+<p><span style="color:blue;"><em>Let’s remind ourselves of what we can find in the <code>ADSL</code> dataset.</em></span></p>
 </div>
 <div class="fragment">
 <p><code>ADSL</code> contains <strong>one row per patient</strong> - so the number of rows of the dataset is equal to the total number of patients in the trial.</p>
@@ -1616,7 +1596,7 @@ Edoardo Mancini
 </table>
 </div>
 <div class="fragment">
-<p><span style="color:blue;">Let’s open <code>templates/ad_adsl.R</code> and see how a simple <code>ADSL</code> is created…</span></p>
+<p><span style="color:blue;"><em>Let’s open <code>templates/ad_adsl.R</code> and see how a simple <code>ADSL</code> is created…</em></span></p>
 </div>
 </section>
 <section id="exercise-1a-new-age-group-agegr2" class="slide level2" data-auto-animate="true">
@@ -1753,7 +1733,7 @@ Edoardo Mancini
 </div>
 </div>
 <div class="fragment">
-<p><span style="color:blue;">Let’s remind ourselves of what we can find in the <code>ADVS</code> dataset.</span></p>
+<p><span style="color:blue;"><em>Let’s remind ourselves of what we can find in the <code>ADVS</code> dataset.</em></span></p>
 </div>
 <div class="fragment">
 <p><code>ADVS</code> contains <strong>one row per patient per visit per vital sign measurement</strong> - so each patient has multiple rows in the dataset (e.g pulse/blood pressure/weight at baseline, blood pressure at Week 2, Week 4, etc.).</p>
@@ -1820,7 +1800,7 @@ Edoardo Mancini
 </div>
 </div>
 <div class="fragment">
-<p><span style="color:blue;">Unlike <code>ADSL</code>, <code>ADVS</code> can have whole new (derived) rows with measurements constructed as a combination of other measurements…</span></p>
+<p><span style="color:blue;"><em>Unlike <code>ADSL</code>, <code>ADVS</code> can have whole new (derived) rows with measurements constructed as a combination of other measurements…</em></span></p>
 </div>
 </section>
 <section id="exercise-2-working-with-advs-2" class="slide level2">
@@ -1873,7 +1853,7 @@ Edoardo Mancini
 </div>
 </div>
 <div class="fragment">
-<p><span style="color:blue;">Let’s open <code>templates/ad_advs.R</code> and see how a simple <code>ADVS</code> is created - in particular the derivation of the mean arterial pressure…</span></p>
+<p><span style="color:blue;"><em>Let’s open <code>templates/ad_advs.R</code> and see how a simple <code>ADVS</code> is created - in particular the derivation of the mean arterial pressure…</em></span></p>
 </div>
 </section>
 <section id="exercise-2a-derive-mapv2-custom-formula" class="slide level2" data-auto-animate="true">
@@ -1931,7 +1911,7 @@ Edoardo Mancini
 <span id="cb8-24" class="hljs-ln-code"><a href=""></a><span class="co"># Highest MAPV2 is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="fragment">
-<p><span style="color:blue;">Now let’s put everything into practice with a visualisation!</span></p>
+<p><span style="color:blue;"><em>Now let’s put everything into practice with a visualisation!</em></span></p>
 </div>
 </section>
 <section id="exercise-3-a-simple-visualisation" class="slide level2 center" data-background-color="#E8F4FD">
@@ -1939,6 +1919,7 @@ Edoardo Mancini
 </section>
 <section id="exercise-3-a-simple-visualisation-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Exercise 3: A Simple Visualisation</h2>
+<div class="fragment">
 <div title="ADVS">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
@@ -1956,13 +1937,18 @@ Edoardo Mancini
 </div>
 </div>
 </div>
+</div>
+<div class="fragment">
 <p><strong>Task:</strong> Starting from <strong><code>templates/g_vs_map.R</code></strong>, create two plots of mean <code>"MAP"</code>/<code>"MAPV2"</code> over time (use visit number <code>AVISITN</code>), split by treatment arm (<code>TRT01A</code>) and restricted to patients aged <strong>55-65</strong>. Optional: facet each plot into two, splitting by patients who have high systolic blood pressure (<code>HISOBPFL == "Y"</code>) and those who do not (<code>HISOBPFL == "N"</code>).</p>
+</div>
+<div class="fragment">
 <p>You’ll need to pre-process <code>ADVS</code> as follows first to compute the data points for the plot:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a href="" aria-hidden="true" tabindex="-1"></a>map_summary <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
 <span id="cb9-2" class="hljs-ln-code"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PARAMCD <span class="sc">==</span> <span class="st">"MAP"</span> <span class="sc">&amp;</span> AGEGR2 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"55-65"</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(AVISITN)) <span class="sc">%&gt;%</span></span>
 <span id="cb9-3" class="hljs-ln-code"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AVISITN, AVISIT, TRT01A) <span class="sc">%&gt;%</span></span>
 <span id="cb9-4" class="hljs-ln-code"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_aval =</span> <span class="fu">mean</span>(AVAL, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </div>
 </section>
 <section id="exercise-3-a-simple-visualisation-2" class="slide level2" data-auto-animate="true">
@@ -1998,7 +1984,7 @@ Edoardo Mancini
 </div></div>
 </div>
 <div class="fragment">
-<p><span style="color:blue;"><strong>🤔Open question:</strong> How could you further enhance/improve these plots?</span></p>
+<p><span style="color:#248C28;"><strong>🤔Open question:</strong> How could you further enhance/improve these plots?</span></p>
 </div>
 </section>
 <section id="exercise-3-optional-faceted-by-hisobpfl" class="slide level2">
