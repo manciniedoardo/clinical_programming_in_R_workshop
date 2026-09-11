@@ -88,9 +88,10 @@ We have a lot to cover:
 
 | Time | Topic                                                         |
 |------|---------------------------------------------------------------|
-| 0:00 | Background: The Clinical Trial Data Journey                   |
-| 0:15 | Exercise Setup, Test data and the Packages we'll be Using     |
-| 0:20 | **Exercise 1** — `ADSL` Derivations                           |
+| 0:00 | Welcome and Intro                                             |
+| 0:05 | Background: The Clinical Trial Data Journey                   |
+| 0:25 | Exercise Setup, Test data and the Packages we'll be Using     |
+| 0:30 | **Exercise 1** — `ADSL` Derivations                           |
 | 1:00 | **Exercise 2** — `ADVS` Derivations                           |
 | 1:30 | **Exercise 3** — A Simple Plot                                |
 | 1:55 | Wrap-up and Next Steps                                        |
@@ -164,10 +165,6 @@ E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset
 :::
 
 ::: fragment
-[**🤔Open question:** Can you think of any other domains?]{style="color:#248C28;"}
-:::
-
-::: fragment
 :::{.callout-tip title="Key features of SDTM"}
 - One row per observation, e.g.:
   - In `DM`: one row per patient
@@ -175,8 +172,12 @@ E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset
   - In `AE`: one row per patient per adverse event
 - Standard variable names across all studies
 - Standardised units
-- Data is coded where appropriate (e.g. "Heart attack", "Cardiac arrest" → "Myocardial Infarction").
+- Reported terms are coded where appropriate (e.g. "Heart attack", "Cardiac arrest" → "Myocardial Infarction").
 :::
+:::
+
+::: fragment
+[**🤔Open question:** Can you think of any other domains?]{style="color:#248C28;"}
 :::
 
 ::: fragment
@@ -312,7 +313,7 @@ The step from SDTM to ADaM can involve complex programming, as we are trying to 
 
 ::: fragment
 :::{.callout-note title="A typical example"}
-We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in `ADAE` (Adverse Events Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph.
+We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in `ADAE` (Adverse Events Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph. This would need to use information from `ADSL` and/or `EX`.
 :::
 :::
 
@@ -476,18 +477,6 @@ The final TLGs (tables, listings and graphs) that answer questions about the tri
 :::
 
 ::: fragment
-:::{.callout-tip title="There are lots of packages to choose from!"}
-Many different R packages can be used to produce TLGs. Here are some TLG examples and the packages you could use to make them.
-
-|              | Example Contents                                  | Common R packages             |
-|--------------|---------------------------------------------------|-------------------------------|
-| **Tables**   | Demographics, AE counts, lab shifts               | `{gtsummary}`, `{rtables}`    |
-| **Listings** | Individual patient data, AE narratives            | `{flextable}`, `{gt}`         |
-| **Graphs**   | Biomarkers over time, KM curves, forest plots     | `{ggplot2}`                   |
-:::
-:::
-
-::: fragment
 In today's workshop's last exercise, we will focus on creating a vital signs plot.
 :::
 
@@ -572,11 +561,11 @@ adsl_start <- dm %>%
   ## Derive treatment start datetime / date 
   derive_vars_merged(
     dataset_add = ex,
-    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDTM),
     by_vars = exprs(STUDYID, USUBJID),
-    new_vars = exprs(TRTSDTM = EXSTDTM),
+    filter_add = (EXDOSE > 0 | (EXDOSE == 0 & str_detect(EXTRT, "PLACEBO"))) & !is.na(EXSTDTM),
     order = exprs(EXSTDTM, EXSEQ),
-    mode = "first",             
+    mode = "first",       
+    new_vars = exprs(TRTSDTM = EXSTDTM)
   )
 ```
 Notice in particular the use of `exprs()` to pass column names, and `by_vars` to split the dataset into groups.
@@ -624,6 +613,7 @@ Here are some of the key variables in the `ADSL` dataset:
 
 ## Exercise 1a — New Age Group (`AGEGR2`) {auto-animate="true"}
 
+::: fragment
 **Task:** Your statistician is interested to learn the age ranges of the patients in your trial to understand whether the ranges of interest are appropriately represented. To support that request, add a variable `AGEGR2` to `ADSL` with the following categories:
 
 ::: {.small-table}
@@ -636,8 +626,12 @@ Here are some of the key variables in the `ADSL` dataset:
 
 How many patients are in each `AGEGR2` group?
 
+:::
+
+::: fragment
 :::{.callout-tip title="Hints"}
 - Follow the same pattern as `AGEGR1`.
+:::
 :::
 
 ------------------------------------------------------------------------
@@ -668,12 +662,17 @@ adsl %>%
 
 ## Exercise 1b — High Systolic Blood Pressure Flag (`HISOBPFL`) {auto-animate="true"}
 
+::: fragment
 **Task:** Your safety scientist is interested in patients who have high systolic blood pressure (SBP) readings and may want to see some future TLGs generated for only those patients. Ahead of this requirement, create a new variable `HISOBPFL` in `ADSL` that flags patients who have *any* SBP measurement \> 160 mmHg. The flag should be `"Y"` if the patient has at least one SBP reading > 160, and `"N"` otherwise.
 
 How many patients have a high SBP reading?
 
+:::
+
+::: fragment
 :::{.callout-tip title="Hints"}
 - `admiral::derive_var_merged_exist_flag()` is your friend! The function creates a flag in a dataset based on whether records exist in another dataset. Check out the function's documentation and examples with `?derive_var_merged_exist_flag`.
+:::
 :::
 
 ------------------------------------------------------------------------
@@ -760,11 +759,12 @@ Since MAP is a common measurement to compute, `{admiral}` provides a dedicated f
 #| code-line-numbers: true
 advs <- advs %>%
   derive_param_map(
-    by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
-                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
+    by_vars = exprs(
+      STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM
+    ),
     set_values_to = exprs(PARAMCD = "MAP"),
     get_unit_expr = VSSTRESU,
-    filter        = VSSTAT != "NOT DONE" | is.na(VSSTAT)
+    filter = VSSTAT != "NOT DONE" | is.na(VSSTAT)
   )
 ```
 :::
@@ -822,9 +822,10 @@ param_lookup <- tibble::tribble(
 
 advs <- advs %>% 
   derive_param_computed(
-    by_vars       = exprs(STUDYID, USUBJID, !!!adsl_vars,
-                        VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),
-   parameters    = c("SYSBP", "DIABP"),
+    by_vars = exprs(
+      STUDYID, USUBJID, !!!adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM
+    ),
+   parameters = c("SYSBP", "DIABP"),
     set_values_to = exprs(
       AVAL    = (AVAL.SYSBP + AVAL.DIABP) / 2,
       PARAMCD = "MAPV2"
@@ -874,12 +875,15 @@ map_summary <- advs %>%
 **Solution:**
 ```{r}
 #| code-line-numbers: true
-ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
-                        colour = TRTA, group = TRTA)) +
+ggplot(map_summary, aes(x = AVISITN, y = mean_aval, colour = TRTA, group = TRTA)) +
   geom_line() + geom_point(size = 2) +
-  labs(title = "Mean Arterial Pressure Over Time",
-       subtitle = "Age group: 55-65 years",
-       x = "Visit (week)", y = "Mean MAP (mmHg)", colour = "Treatment") +
+  labs(
+    title = "Mean Arterial Pressure Over Time",
+    subtitle = "Age group: 55-65 years",
+    x = "Visit (week)", 
+    y = "Mean MAP (mmHg)", 
+    colour = "Treatment"
+  ) +
   theme_bw()
 ```
 
@@ -904,6 +908,7 @@ Repeat for `PARAMCD == "MAPV2"`.
 ::: fragment
 [**🤔Open question:** How could you further enhance/improve these plots?]{style="color:#248C28;"}
 :::
+
 ------------------------------------------------------------------------
 
 ## Exercise 3 (Optional): Faceted by `HISOBPFL`
@@ -912,13 +917,17 @@ Repeat for `PARAMCD == "MAPV2"`.
 **Solution:**
 ```{r}
 #| code-line-numbers: true
-ggplot(map_summary, aes(x = AVISITN, y = mean_aval,
-                        colour = TRT01A, group = TRT01A)) +
-  geom_line() + geom_point(size = 2) +
+ggplot(map_summary, aes(x = AVISITN, y = mean_aval, colour = TRT01A, group = TRT01A)) +
+  geom_line() + 
+  geom_point(size = 2) +
   facet_wrap(~HISOBPFL) +
-  labs(title = "Mean Arterial Pressure Over Time",
-       subtitle = "Age group: 55-65 years, split by high SBP flag",
-       x = "Visit (week)", y = "Mean MAP (mmHg)", colour = "Treatment") +
+  labs(
+    title = "Mean Arterial Pressure Over Time",
+    subtitle = "Age group: 55-65 years, split by high SBP flag",
+    x = "Visit (week)",
+    y = "Mean MAP (mmHg)", 
+    colour = "Treatment"
+  ) +
   theme_bw()
 ```
 

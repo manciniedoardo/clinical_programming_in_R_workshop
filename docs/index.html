@@ -287,25 +287,29 @@ Edoardo Mancini - 17th September 2026
 <tbody>
 <tr class="odd">
 <td>0:00</td>
+<td>Welcome and Intro</td>
+</tr>
+<tr class="even">
+<td>0:05</td>
 <td>Background: The Clinical Trial Data Journey</td>
 </tr>
-<tr class="even">
-<td>0:15</td>
+<tr class="odd">
+<td>0:25</td>
 <td>Exercise Setup, Test data and the Packages we’ll be Using</td>
 </tr>
-<tr class="odd">
-<td>0:20</td>
+<tr class="even">
+<td>0:30</td>
 <td><strong>Exercise 1</strong> — <code>ADSL</code> Derivations</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>1:00</td>
 <td><strong>Exercise 2</strong> — <code>ADVS</code> Derivations</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>1:30</td>
 <td><strong>Exercise 3</strong> — A Simple Plot</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>1:55</td>
 <td>Wrap-up and Next Steps</td>
 </tr>
@@ -407,9 +411,6 @@ Edoardo Mancini - 17th September 2026
 <p>E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset.</p>
 </div>
 <div class="fragment">
-<p><span style="color:#248C28;"><strong>🤔Open question:</strong> Can you think of any other domains?</span></p>
-</div>
-<div class="fragment">
 <div title="Key features of SDTM">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -429,12 +430,15 @@ Edoardo Mancini - 17th September 2026
 </ul></li>
 <li>Standard variable names across all studies</li>
 <li>Standardised units</li>
-<li>Data is coded where appropriate (e.g.&nbsp;“Heart attack”, “Cardiac arrest” → “Myocardial Infarction”).</li>
+<li>Reported terms are coded where appropriate (e.g.&nbsp;“Heart attack”, “Cardiac arrest” → “Myocardial Infarction”).</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
+</div>
+<div class="fragment">
+<p><span style="color:#248C28;"><strong>🤔Open question:</strong> Can you think of any other domains?</span></p>
 </div>
 <div class="fragment">
 <p><span style="color:blue;"><em>Let’s see some examples…</em></span></p>
@@ -921,7 +925,7 @@ Edoardo Mancini - 17th September 2026
 <p><strong>A typical example</strong></p>
 </div>
 <div class="callout-content">
-<p>We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in <code>ADAE</code> (Adverse Events Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph.</p>
+<p>We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in <code>ADAE</code> (Adverse Events Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph. This would need to use information from <code>ADSL</code> and/or <code>EX</code>.</p>
 </div>
 </div>
 </div>
@@ -1391,54 +1395,6 @@ Edoardo Mancini - 17th September 2026
 <p>The final TLGs (tables, listings and graphs) that answer questions about the trial’s safety and efficacy. These are provided to regulators and used in publications.</p>
 </div>
 <div class="fragment">
-<div title="There are lots of packages to choose from!">
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>There are lots of packages to choose from!</strong></p>
-</div>
-<div class="callout-content">
-<p>Many different R packages can be used to produce TLGs. Here are some TLG examples and the packages you could use to make them.</p>
-<table class="caption-top">
-<colgroup>
-<col style="width: 14%">
-<col style="width: 53%">
-<col style="width: 32%">
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th>Example Contents</th>
-<th>Common R packages</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Tables</strong></td>
-<td>Demographics, AE counts, lab shifts</td>
-<td><code>{gtsummary}</code>, <code>{rtables}</code></td>
-</tr>
-<tr class="even">
-<td><strong>Listings</strong></td>
-<td>Individual patient data, AE narratives</td>
-<td><code>{flextable}</code>, <code>{gt}</code></td>
-</tr>
-<tr class="odd">
-<td><strong>Graphs</strong></td>
-<td>Biomarkers over time, KM curves, forest plots</td>
-<td><code>{ggplot2}</code></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment">
 <p>In today’s workshop’s last exercise, we will focus on creating a vital signs plot.</p>
 </div>
 <div class="fragment">
@@ -1526,11 +1482,11 @@ Edoardo Mancini - 17th September 2026
 <span id="cb4-4"><a href=""></a>  <span class="do">## Derive treatment start datetime / date </span></span>
 <span id="cb4-5"><a href=""></a>  <span class="fu">derive_vars_merged</span>(</span>
 <span id="cb4-6"><a href=""></a>    <span class="at">dataset_add =</span> ex,</span>
-<span id="cb4-7"><a href=""></a>    <span class="at">filter_add =</span> (EXDOSE <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">|</span> (EXDOSE <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> <span class="fu">str_detect</span>(EXTRT, <span class="st">"PLACEBO"</span>))) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(EXSTDTM),</span>
-<span id="cb4-8"><a href=""></a>    <span class="at">by_vars =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
-<span id="cb4-9"><a href=""></a>    <span class="at">new_vars =</span> <span class="fu">exprs</span>(<span class="at">TRTSDTM =</span> EXSTDTM),</span>
-<span id="cb4-10"><a href=""></a>    <span class="at">order =</span> <span class="fu">exprs</span>(EXSTDTM, EXSEQ),</span>
-<span id="cb4-11"><a href=""></a>    <span class="at">mode =</span> <span class="st">"first"</span>,             </span>
+<span id="cb4-7"><a href=""></a>    <span class="at">by_vars =</span> <span class="fu">exprs</span>(STUDYID, USUBJID),</span>
+<span id="cb4-8"><a href=""></a>    <span class="at">filter_add =</span> (EXDOSE <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">|</span> (EXDOSE <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> <span class="fu">str_detect</span>(EXTRT, <span class="st">"PLACEBO"</span>))) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(EXSTDTM),</span>
+<span id="cb4-9"><a href=""></a>    <span class="at">order =</span> <span class="fu">exprs</span>(EXSTDTM, EXSEQ),</span>
+<span id="cb4-10"><a href=""></a>    <span class="at">mode =</span> <span class="st">"first"</span>,       </span>
+<span id="cb4-11"><a href=""></a>    <span class="at">new_vars =</span> <span class="fu">exprs</span>(<span class="at">TRTSDTM =</span> EXSTDTM)</span>
 <span id="cb4-12"><a href=""></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Notice in particular the use of <code>exprs()</code> to pass column names, and <code>by_vars</code> to split the dataset into groups.</p>
@@ -1601,6 +1557,7 @@ Edoardo Mancini - 17th September 2026
 </section>
 <section id="exercise-1a-new-age-group-agegr2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Exercise 1a — New Age Group (<code>AGEGR2</code>)</h2>
+<div class="fragment">
 <p><strong>Task:</strong> Your statistician is interested to learn the age ranges of the patients in your trial to understand whether the ranges of interest are appropriately represented. To support that request, add a variable <code>AGEGR2</code> to <code>ADSL</code> with the following categories:</p>
 <div class="small-table">
 <table class="caption-top">
@@ -1627,6 +1584,8 @@ Edoardo Mancini - 17th September 2026
 </table>
 </div>
 <p>How many patients are in each <code>AGEGR2</code> group?</p>
+</div>
+<div class="fragment">
 <div title="Hints">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -1640,6 +1599,7 @@ Edoardo Mancini - 17th September 2026
 <ul>
 <li>Follow the same pattern as <code>AGEGR1</code>.</li>
 </ul>
+</div>
 </div>
 </div>
 </div>
@@ -1668,8 +1628,11 @@ Edoardo Mancini - 17th September 2026
 </section>
 <section id="exercise-1b-high-systolic-blood-pressure-flag-hisobpfl" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Exercise 1b — High Systolic Blood Pressure Flag (<code>HISOBPFL</code>)</h2>
+<div class="fragment">
 <p><strong>Task:</strong> Your safety scientist is interested in patients who have high systolic blood pressure (SBP) readings and may want to see some future TLGs generated for only those patients. Ahead of this requirement, create a new variable <code>HISOBPFL</code> in <code>ADSL</code> that flags patients who have <em>any</em> SBP measurement &gt; 160 mmHg. The flag should be <code>"Y"</code> if the patient has at least one SBP reading &gt; 160, and <code>"N"</code> otherwise.</p>
 <p>How many patients have a high SBP reading?</p>
+</div>
+<div class="fragment">
 <div title="Hints">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
@@ -1683,6 +1646,7 @@ Edoardo Mancini - 17th September 2026
 <ul>
 <li><code>admiral::derive_var_merged_exist_flag()</code> is your friend! The function creates a flag in a dataset based on whether records exist in another dataset. Check out the function’s documentation and examples with <code>?derive_var_merged_exist_flag</code>.</li>
 </ul>
+</div>
 </div>
 </div>
 </div>
@@ -1814,12 +1778,13 @@ Edoardo Mancini - 17th September 2026
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href=""></a>  <span class="fu">derive_param_map</span>(</span>
-<span id="cb7-3"><a href=""></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
-<span id="cb7-4"><a href=""></a>                          VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
-<span id="cb7-5"><a href=""></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(<span class="at">PARAMCD =</span> <span class="st">"MAP"</span>),</span>
-<span id="cb7-6"><a href=""></a>    <span class="at">get_unit_expr =</span> VSSTRESU,</span>
-<span id="cb7-7"><a href=""></a>    <span class="at">filter        =</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span>
-<span id="cb7-8"><a href=""></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-3"><a href=""></a>    <span class="at">by_vars =</span> <span class="fu">exprs</span>(</span>
+<span id="cb7-4"><a href=""></a>      STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM</span>
+<span id="cb7-5"><a href=""></a>    ),</span>
+<span id="cb7-6"><a href=""></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(<span class="at">PARAMCD =</span> <span class="st">"MAP"</span>),</span>
+<span id="cb7-7"><a href=""></a>    <span class="at">get_unit_expr =</span> VSSTRESU,</span>
+<span id="cb7-8"><a href=""></a>    <span class="at">filter =</span> VSSTAT <span class="sc">!=</span> <span class="st">"NOT DONE"</span> <span class="sc">|</span> <span class="fu">is.na</span>(VSSTAT)</span>
+<span id="cb7-9"><a href=""></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div class="fragment">
@@ -1899,16 +1864,17 @@ Edoardo Mancini - 17th September 2026
 <span id="cb8-12" class="hljs-ln-code"><a href=""></a></span>
 <span id="cb8-13" class="hljs-ln-code"><a href=""></a>advs <span class="ot">&lt;-</span> advs <span class="sc">%&gt;%</span> </span>
 <span id="cb8-14" class="hljs-ln-code"><a href=""></a>  <span class="fu">derive_param_computed</span>(</span>
-<span id="cb8-15" class="hljs-ln-code"><a href=""></a>    <span class="at">by_vars       =</span> <span class="fu">exprs</span>(STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars,</span>
-<span id="cb8-16" class="hljs-ln-code"><a href=""></a>                        VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM),</span>
-<span id="cb8-17" class="hljs-ln-code"><a href=""></a>   <span class="at">parameters    =</span> <span class="fu">c</span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>),</span>
-<span id="cb8-18" class="hljs-ln-code"><a href=""></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(</span>
-<span id="cb8-19" class="hljs-ln-code"><a href=""></a>      <span class="at">AVAL    =</span> (AVAL.SYSBP <span class="sc">+</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">2</span>,</span>
-<span id="cb8-20" class="hljs-ln-code"><a href=""></a>      <span class="at">PARAMCD =</span> <span class="st">"MAPV2"</span></span>
-<span id="cb8-21" class="hljs-ln-code"><a href=""></a>    )</span>
-<span id="cb8-22" class="hljs-ln-code"><a href=""></a>  )</span>
-<span id="cb8-23" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb8-24" class="hljs-ln-code"><a href=""></a><span class="co"># Highest MAPV2 is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-15" class="hljs-ln-code"><a href=""></a>    <span class="at">by_vars =</span> <span class="fu">exprs</span>(</span>
+<span id="cb8-16" class="hljs-ln-code"><a href=""></a>      STUDYID, USUBJID, <span class="sc">!!!</span>adsl_vars, VISIT, VISITNUM, ADT, ADY, VSTPT, VSTPTNUM</span>
+<span id="cb8-17" class="hljs-ln-code"><a href=""></a>    ),</span>
+<span id="cb8-18" class="hljs-ln-code"><a href=""></a>   <span class="at">parameters =</span> <span class="fu">c</span>(<span class="st">"SYSBP"</span>, <span class="st">"DIABP"</span>),</span>
+<span id="cb8-19" class="hljs-ln-code"><a href=""></a>    <span class="at">set_values_to =</span> <span class="fu">exprs</span>(</span>
+<span id="cb8-20" class="hljs-ln-code"><a href=""></a>      <span class="at">AVAL    =</span> (AVAL.SYSBP <span class="sc">+</span> AVAL.DIABP) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb8-21" class="hljs-ln-code"><a href=""></a>      <span class="at">PARAMCD =</span> <span class="st">"MAPV2"</span></span>
+<span id="cb8-22" class="hljs-ln-code"><a href=""></a>    )</span>
+<span id="cb8-23" class="hljs-ln-code"><a href=""></a>  )</span>
+<span id="cb8-24" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb8-25" class="hljs-ln-code"><a href=""></a><span class="co"># Highest MAPV2 is 158.0 mmHg for 01-718-1355 at Week 24 visit (timepoint: AFTER STANDING FOR 1 MINUTE)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="fragment">
 <p><span style="color:blue;"><em>Now let’s put everything into practice with a visualisation!</em></span></p>
@@ -1955,13 +1921,16 @@ Edoardo Mancini - 17th September 2026
 <h2 data-id="quarto-animate-title">Exercise 3: A Simple Visualisation</h2>
 <p><strong>Solution:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb10-1" class="hljs-ln-code"><a href=""></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
-<span id="cb10-2" class="hljs-ln-code"><a href=""></a>                        <span class="at">colour =</span> TRTA, <span class="at">group =</span> TRTA)) <span class="sc">+</span></span>
-<span id="cb10-3" class="hljs-ln-code"><a href=""></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb10-4" class="hljs-ln-code"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
-<span id="cb10-5" class="hljs-ln-code"><a href=""></a>       <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years"</span>,</span>
-<span id="cb10-6" class="hljs-ln-code"><a href=""></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
-<span id="cb10-7" class="hljs-ln-code"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb10-1" class="hljs-ln-code"><a href=""></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval, <span class="at">colour =</span> TRTA, <span class="at">group =</span> TRTA)) <span class="sc">+</span></span>
+<span id="cb10-2" class="hljs-ln-code"><a href=""></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb10-3" class="hljs-ln-code"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-4" class="hljs-ln-code"><a href=""></a>    <span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
+<span id="cb10-5" class="hljs-ln-code"><a href=""></a>    <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years"</span>,</span>
+<span id="cb10-6" class="hljs-ln-code"><a href=""></a>    <span class="at">x =</span> <span class="st">"Visit (week)"</span>, </span>
+<span id="cb10-7" class="hljs-ln-code"><a href=""></a>    <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, </span>
+<span id="cb10-8" class="hljs-ln-code"><a href=""></a>    <span class="at">colour =</span> <span class="st">"Treatment"</span></span>
+<span id="cb10-9" class="hljs-ln-code"><a href=""></a>  ) <span class="sc">+</span></span>
+<span id="cb10-10" class="hljs-ln-code"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Repeat for <code>PARAMCD == "MAPV2"</code>.</p>
 </section>
@@ -1992,14 +1961,18 @@ Edoardo Mancini - 17th September 2026
 <div class="fragment">
 <p><strong>Solution:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval,</span>
-<span id="cb11-2"><a href=""></a>                        <span class="at">colour =</span> TRT01A, <span class="at">group =</span> TRT01A)) <span class="sc">+</span></span>
-<span id="cb11-3"><a href=""></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">ggplot</span>(map_summary, <span class="fu">aes</span>(<span class="at">x =</span> AVISITN, <span class="at">y =</span> mean_aval, <span class="at">colour =</span> TRT01A, <span class="at">group =</span> TRT01A)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
 <span id="cb11-4"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>HISOBPFL) <span class="sc">+</span></span>
-<span id="cb11-5"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
-<span id="cb11-6"><a href=""></a>       <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years, split by high SBP flag"</span>,</span>
-<span id="cb11-7"><a href=""></a>       <span class="at">x =</span> <span class="st">"Visit (week)"</span>, <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, <span class="at">colour =</span> <span class="st">"Treatment"</span>) <span class="sc">+</span></span>
-<span id="cb11-8"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-5"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-6"><a href=""></a>    <span class="at">title =</span> <span class="st">"Mean Arterial Pressure Over Time"</span>,</span>
+<span id="cb11-7"><a href=""></a>    <span class="at">subtitle =</span> <span class="st">"Age group: 55-65 years, split by high SBP flag"</span>,</span>
+<span id="cb11-8"><a href=""></a>    <span class="at">x =</span> <span class="st">"Visit (week)"</span>,</span>
+<span id="cb11-9"><a href=""></a>    <span class="at">y =</span> <span class="st">"Mean MAP (mmHg)"</span>, </span>
+<span id="cb11-10"><a href=""></a>    <span class="at">colour =</span> <span class="st">"Treatment"</span></span>
+<span id="cb11-11"><a href=""></a>  ) <span class="sc">+</span></span>
+<span id="cb11-12"><a href=""></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Repeat for <code>PARAMCD == "MAPV2"</code>. See <code>solutions/solution_g_vs_map_faceted.R</code> for the full solution.</p>
 </div>
