@@ -66,13 +66,16 @@ Donations for sign-ups to this workshop (both live and in future) will be used t
 
 ::: fragment
 ::: {.callout-note title="Workshop materials"}
-For slides, template and data, please see the workshop GitHub repo [here](https://github.com/manciniedoardo/clinical_programming_in_R_workshop).
+For slides, templates and data, please see the workshop GitHub repo [here](https://github.com/manciniedoardo/clinical_programming_in_R_workshop).
 :::
 :::
 
 ::: fragment
 Please install the following packages in R while we go through the background section:
 ```{r, eval=FALSE}
+install.packages("dplyr")
+install.packages("tidyr")
+install.palchges("stringr")
 install.packages("pharmaversesdtm") # test data
 install.packages("admiral") # tools for ADaM programming
 install.packages("ggplot2") # plots
@@ -170,7 +173,7 @@ E.g. the labs domain groups all the blood tests, urinalysis etc into one dataset
   - In `DM`: one row per patient
   - In `LB`: one row per patient per lab test per visit;
   - In `AE`: one row per patient per adverse event
-- Standard variable names across all studies
+- Standard variable names across all datasets
 - Standardised units
 - Reported terms are coded where appropriate (e.g. "Heart attack", "Cardiac arrest" → "Myocardial Infarction").
 :::
@@ -313,7 +316,7 @@ The step from SDTM to ADaM can involve complex programming, as we are trying to 
 
 ::: fragment
 :::{.callout-note title="A typical example"}
-We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in `ADAE` (Adverse Events Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph. This would need to use information from `ADSL` and/or `EX`.
+We may be interested in exploring whether patients are likely to have an adverse event after being exposed to the drug. So in `ADAE` (Adverse Events Analysis Dataset) we would compute the time since last dose for every adverse event - ready to then be used in a table/graph. This would need to use information from `EX`.
 :::
 :::
 
